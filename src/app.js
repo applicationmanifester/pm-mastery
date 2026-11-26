@@ -1281,6 +1281,7 @@ function addRisk() {
 }
 function delRisk(i) { persistRisks(risks().filter((_, k) => k !== i)); playSound('click'); render(); }
 function resetRisks() { store.risks = null; save(); playSound('click'); toast('Risks reset to defaults'); render(); }
+window.resetRisks = resetRisks;
 
 /* ============ Stakeholders ============ */
 V.stake = () => `
