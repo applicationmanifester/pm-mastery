@@ -8,6 +8,7 @@ import {
   FIELD_GUIDES, PRINCIPLE_DETAILS, STUDY_RESOURCES, PRINCIPLES
 } from '../src/data/knowledge.js';
 import { QUIZ } from '../src/data/quiz.js';
+import { PM_LIFECYCLE, PM_DEEP_DIVES, PM_CASE_PROMPTS, PM_SCENARIOS } from '../src/data/product.js';
 import {
   CPM_PRESETS, parseTasks, cpm, calcEVMMetrics, runMonteCarlo,
   calcPert, calcPTA, sm2Rate, sampleECOExam, buildAdaptivePlan,
@@ -161,4 +162,20 @@ test('Built public/index.html meets accessibility and PWA standards', () => {
   assert.ok(html.includes('id="theme" onclick="toggleTheme()" title="Switch Theme" aria-label="Switch Theme"'));
   // SW update prompt is wired
   assert.ok(html.includes('Update available'));
+});
+
+test('Product Mastery dataset integrity', () => {
+  assert.ok(PM_LIFECYCLE.length >= 5);
+  assert.ok(Object.keys(PM_DEEP_DIVES).length >= 10);
+  Object.values(PM_DEEP_DIVES).forEach(d => assert.ok(d.stage && d.caseStudy && d.pitfall));
+  ['circles', 'starl', 'jtbd', 'ost', 'leancanvas'].forEach(k => {
+    assert.ok(Array.isArray(PM_CASE_PROMPTS[k]) && PM_CASE_PROMPTS[k].length >= 1, `Missing PM_CASE_PROMPTS.${k}`);
+    PM_CASE_PROMPTS[k].forEach(p => {
+      assert.ok(p.label && p.prompt && p.steps.length >= 3 && p.rubric.length >= 2);
+    });
+  });
+  assert.ok(PM_SCENARIOS.length >= 5);
+  PM_SCENARIOS.forEach(s => {
+    assert.ok(s.q && Array.isArray(s.opts) && s.opts.length === 4 && Number.isInteger(s.ans) && s.why);
+  });
 });

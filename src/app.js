@@ -2,9 +2,10 @@ import {
   PRINCIPLES, DOMAINS, PROCESS_GROUPS, METHODS, AGILE, GLOSSARY, FORMULAS,
   AI_TOPICS, REVISE, DOM_DEEP, CH_LESSONS, IO, TAILOR, MMA, KNOWLEDGE_AREAS,
   PROCESS_MATRIX, PEOPLE_CASES, PROCESS_DETAILS, FIELD_GUIDES,
-  PRINCIPLE_DETAILS, STUDY_RESOURCES, DNAME, CHN
+  PRINCIPLE_DETAILS, STUDY_RESOURCES, PM_FRAMEWORKS, DNAME, CHN
 } from './data/knowledge.js';
 import { QUIZ } from './data/quiz.js';
+import { PM_LIFECYCLE, PM_DEEP_DIVES, PM_CASE_PROMPTS, PM_SCENARIOS } from './data/product.js';
 import {
   DAY, CPM_PRESETS, EVM_PRESETS, RISK_PRESET, STAKE_PRESET, LAB_CHALLENGES,
   parseTasks, cpm, calcEVMMetrics, getCorrectiveAction, runMonteCarlo,
@@ -76,9 +77,10 @@ function recordActivity(points = 1) {
 const PILLARS = [
   { id: 'today', label: 'Today', views: [{ id: 'dash', label: 'Dashboard' }, { id: 'revise', label: 'Checklist & Backup' }, { id: 'legal', label: 'Legal & Privacy' }] },
   { id: 'learn', label: 'Learn', views: [{ id: 'learn', label: 'Principles & Domains' }, { id: 'guide', label: 'Chapter Map' }, { id: 'lessons', label: 'Lessons' }] },
-  { id: 'labs', label: 'Labs', views: [{ id: 'cpm', label: 'CPM Network' }, { id: 'evm', label: 'EVM & Advisor' }, { id: 'risk', label: 'Monte Carlo & Risk' }, { id: 'method', label: 'Agile & Kanban' }, { id: 'formulas', label: 'Formulas' }, { id: 'stake', label: 'Stakeholders' }] },
+  { id: 'labs', label: 'Labs', views: [{ id: 'cpm', label: 'CPM Network' }, { id: 'evm', label: 'EVM & Advisor' }, { id: 'risk', label: 'Monte Carlo & Risk' }, { id: 'method', label: 'Agile & Kanban' }, { id: 'formulas', label: 'Formulas' }, { id: 'stake', label: 'Stakeholders' }, { id: 'frameworks', label: 'Frameworks Lab' }] },
   { id: 'practise', label: 'Practise', views: [{ id: 'flash', label: 'Flashcards' }, { id: 'quiz', label: 'Quiz Drills' }, { id: 'exam', label: 'Exam Simulator' }] },
-  { id: 'ref', label: 'Reference', views: [{ id: 'process', label: '49-Process Grid' }, { id: 'ref', label: 'ITTOs & Tailoring' }, { id: 'glossary', label: 'Glossary' }, { id: 'ai', label: 'AI Coach & Prompts' }] }
+  { id: 'product', label: 'Product Mastery', views: [{ id: 'pm-hub', label: 'Frameworks & Deep Dives' }, { id: 'pm-prio', label: 'Prioritization Studio' }, { id: 'pm-metrics', label: 'Metrics & Growth Lab' }, { id: 'pm-cases', label: 'Cases & Drills' }] },
+  { id: 'ref', label: 'Reference', views: [{ id: 'process', label: '49-Process Grid' }, { id: 'ref', label: 'ITTOs, Frameworks & Resources' }, { id: 'glossary', label: 'Glossary' }, { id: 'ai', label: 'AI Coach & Prompts' }] }
 ];
 
 const cur = () => location.hash.slice(1) || 'dash';
@@ -130,7 +132,8 @@ function openAbout() {
       <strong>Shortcuts &amp; Data</strong>
       <div class="m" style="font-size:12.5px;margin-top:4px">
         Press <code>/</code> to search anywhere · <code>Space</code> to flip flashcards · <code>1–4</code> to rate cards or answer quiz questions.<br>
-        All progress is saved locally in your browser. Use <strong>Today → Checklist &amp; Backup</strong> to export/import your progress as JSON.
+        All progress is saved locally in your browser. Use <strong>Today → Checklist &amp; Backup</strong> to export/import your progress as JSON.<br>
+        <strong>Contact &amp; Feedback:</strong> <a href="mailto:applicationmanifester@gmail.com">applicationmanifester@gmail.com</a>
       </div>
     </div>
   `);
@@ -271,6 +274,14 @@ function getFlashDeck(deckKey = store.fcDeck) {
     return AGILE.map(([t, d], idx) => ({
       id: `a_${idx}`,
       t, d, tag: 'AGILE'
+    }));
+  }
+  if (deckKey === 'frameworks') {
+    return PM_FRAMEWORKS.map((f, idx) => ({
+      id: `fw_${idx}`,
+      t: `${f.name} (${f.acronym})`,
+      d: `${f.desc} When: ${f.when} How: ${f.steps}`,
+      tag: f.cat.toUpperCase()
     }));
   }
   if (deckKey === 'custom') {
@@ -455,6 +466,7 @@ function buildIndex() {
   PROCESS_GROUPS.forEach(([n, d, l]) => { x.push({ v: 'process', t: n, d }); l.forEach(p => x.push({ v: 'process', t: p, d: n })); });
   IO.forEach(([p, i, o]) => x.push({ v: 'ref', t: 'ITTO: ' + p, d: `Inputs: ${i} · Outputs: ${o}` }));
   METHODS.concat(AGILE).forEach(([t, d]) => x.push({ v: 'method', t, d }));
+  PM_FRAMEWORKS.forEach(f => x.push({ v: 'ref', t: `${f.name} (${f.cat})`, d: `${f.acronym} — ${f.desc} ${f.steps}` }));
   FORMULAS.forEach(([a, b, c]) => x.push({ v: 'formulas', t: a, d: b + ' · ' + c }));
   GLOSSARY.forEach(([t, d]) => x.push({ v: 'glossary', t, d }));
   AI_TOPICS.forEach(([t, d]) => x.push({ v: 'ai', t, d }));
@@ -1308,18 +1320,679 @@ function stakeUpd(i) {
   store.stakes = list; save(); render();
 }
 
+/* ============ Product Mastery Pillar ============ */
+const INACTIVE_BTN = 'opacity:0.6;background:var(--bg);color:var(--t);border:1px solid var(--b)';
+
+function pmStageFor(f) {
+  if (PM_DEEP_DIVES[f.name]?.stage) return PM_DEEP_DIVES[f.name].stage;
+  if (f.cat === 'Prioritization') return 'Prioritization';
+  if (f.cat === 'Problem-Solving & Interviews') return 'Interviews';
+  return 'Discovery';
+}
+
+V['pm-hub'] = () => `
+  <h2>Product Mastery: Frameworks &amp; Deep Dives</h2>
+  <p class="m" style="font-size:13px;margin-top:0">Master building the <strong>right product</strong>—from discovery and prioritization to growth metrics and executive storytelling. Click any card for a real-world case study &amp; pitfalls.</p>
+  <div class="card" style="overflow-x:auto">
+    <h3 style="margin-bottom:8px">End-to-End Product Lifecycle Flow</h3>
+    <svg viewBox="0 0 760 88" style="width:100%;min-width:540px;height:88px;display:block">
+      <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="currentColor" opacity="0.45"/></marker></defs>
+      ${[
+        ['1. Discovery', 'JTBD · OST · Lean Canvas', 8, '#2563eb'],
+        ['2. Prioritize', 'RICE · WSJF · Kano · MoSCoW', 160, '#7c3aed'],
+        ['3. Measure', 'AARRR · HEART · NSM · PMF', 312, '#059669'],
+        ['4. Execute', 'DACI · RACI · DORA · OKRs', 464, '#d97706'],
+        ['5. Case / Story', 'CIRCLES · STARL · 5 Whys', 616, '#dc2626']
+      ].map(([t, s, x, c], i) => `
+        <rect x="${x}" y="12" width="136" height="62" rx="10" fill="${c}" fill-opacity="0.1" stroke="${c}" stroke-width="1.5"/>
+        <text x="${x + 68}" y="36" text-anchor="middle" font-size="12" font-weight="700" fill="${c}">${esc(t)}</text>
+        <text x="${x + 68}" y="54" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.8">${esc(s)}</text>
+        ${i < 4 ? `<path d="M${x + 138} 43 L${x + 150} 43" stroke="currentColor" stroke-opacity="0.4" stroke-width="2" marker-end="url(#arr)"/>` : ''}
+      `).join('')}
+    </svg>
+  </div>
+  <div class="row" style="margin-bottom:12px;gap:6px;flex-wrap:wrap" id="pm-hub-cats">
+    ${PM_LIFECYCLE.map((s, i) => `<button class="btn ${i === 0 ? 'primary' : ''}" style="${i === 0 ? '' : INACTIVE_BTN}" onclick="filterPmHub('${esc(s.id)}', this)">${esc(s.label)}</button>`).join('')}
+  </div>
+  <div class="grid" id="pm-hub-grid">
+    ${PM_FRAMEWORKS.map((f, idx) => {
+      const st = pmStageFor(f);
+      const hasDeep = !!PM_DEEP_DIVES[f.name];
+      return `
+      <div class="card pm-hub-card" data-stage="${esc(st)}" style="margin:0;cursor:pointer" onclick="openPmDeepDive(${idx})">
+        <div class="row" style="justify-content:space-between;align-items:flex-start;gap:8px">
+          <strong style="font-size:15px">${esc(f.name)}</strong>
+          <span class="tag">${esc(st)}</span>
+        </div>
+        <div class="m" style="font-size:12px;color:var(--a);margin-top:4px;font-weight:600">${esc(f.acronym)}</div>
+        <p style="font-size:13px;margin:8px 0 6px">${esc(f.desc)}</p>
+        <div class="m" style="font-size:12px"><strong>When:</strong> ${esc(f.when)}</div>
+        <div class="m" style="font-size:11px;margin-top:8px;color:var(--a)">${hasDeep ? 'Click for Case Study &amp; Pitfalls →' : 'Click for Details →'}</div>
+      </div>`;
+    }).join('')}
+  </div>
+`;
+
+window.filterPmHub = function (stage, btn) {
+  document.querySelectorAll('#pm-hub-cats .btn').forEach(b => { b.classList.remove('primary'); b.style.cssText = INACTIVE_BTN; });
+  if (btn) { btn.classList.add('primary'); btn.style.cssText = ''; }
+  document.querySelectorAll('#pm-hub-grid .pm-hub-card').forEach(el => {
+    el.style.display = (stage === 'All' || el.dataset.stage === stage) ? '' : 'none';
+  });
+};
+
+window.openPmDeepDive = function (idx) {
+  const f = PM_FRAMEWORKS[idx];
+  if (!f) return;
+  const d = PM_DEEP_DIVES[f.name];
+  showInspector(f.name, `
+    <p><span class="tag">${esc(f.cat)}</span> <strong style="color:var(--a);margin-left:6px">${esc(f.acronym)}</strong></p>
+    <p>${esc(f.desc)}</p>
+    <div class="note" style="margin:10px 0"><strong>When to use:</strong> ${esc(f.when)}<br><strong>How to apply:</strong> ${esc(f.steps)}</div>
+    ${d ? `
+      <div class="card" style="background:var(--bg);margin:10px 0"><strong>Real-World Case Study</strong><p style="margin:6px 0 0;font-size:13px">${esc(d.caseStudy)}</p></div>
+      <div class="card" style="background:var(--bg);border-left:3px solid #dc2626;margin:10px 0"><strong>Common Pitfall / Anti-Pattern</strong><p style="margin:6px 0 0;font-size:13px">${esc(d.pitfall)}</p></div>
+    ` : ''}
+  `);
+};
+
+/* ---- 2. Prioritization Studio ---- */
+V['pm-prio'] = () => `
+  <h2>Prioritization Studio</h2>
+  <p class="m" style="font-size:13px;margin-top:0">Compare backlog bets objectively with <strong>RICE / WSJF</strong>, plot a live <strong>2×2 Value vs. Effort Matrix</strong>, and negotiate MVP scope with <strong>MoSCoW</strong>.</p>
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <h3 style="margin:0">1. Quantitative Scorer (RICE &amp; WSJF)</h3>
+      <button class="btn" onclick="exportPrioCSV()">Export CSV</button>
+    </div>
+    <div class="row" style="margin:10px 0">
+      <button class="btn primary" id="pm-rice-btn" onclick="setPrioMode('rice')">RICE (Reach × Impact × Conf ÷ Effort)</button>
+      <button class="btn" id="pm-wsjf-btn" style="${INACTIVE_BTN}" onclick="setPrioMode('wsjf')">WSJF (Cost of Delay ÷ Job Size)</button>
+    </div>
+    <div id="prio-inputs" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px">
+      <div><label>Feature / Initiative</label><input id="pr-name" placeholder="e.g., SSO Login" value="AI Status Digest"></div>
+      <div><label id="pr-l1">Reach (users/qtr)</label><input id="pr-v1" type="number" value="1000" min="1"></div>
+      <div><label id="pr-l2">Impact (0.25–3)</label><input id="pr-v2" type="number" value="2" step="0.25" min="0.25"></div>
+      <div><label id="pr-l3">Confidence (%)</label><input id="pr-v3" type="number" value="80" min="1" max="100"></div>
+      <div><label id="pr-l4">Effort (person-mo)</label><input id="pr-v4" type="number" value="2" step="0.5" min="0.25"></div>
+    </div>
+    <button class="btn primary" onclick="addPrioItem()">Add &amp; Rank Item</button>
+    <button class="btn" onclick="loadPrioExample()" style="margin-left:6px">Load Example</button>
+    <button class="btn" onclick="clearPrioItems()" style="margin-left:6px">Clear</button>
+    <button class="btn" onclick="resetPrioLab()" style="margin-left:6px">Reset</button>
+    <div id="prio-table" class="table-wrap" style="margin-top:12px"></div>
+  </div>
+
+  <div class="card">
+    <h3>2. Interactive 2×2 Value vs. Effort Matrix</h3>
+    <p class="m" style="font-size:12px;margin-top:0">Plot initiatives on Business Value (1–10) vs. Implementation Effort (1–10) to spot <strong>Quick Wins</strong> immediately.</p>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px">
+      <div><label>Item Name</label><input id="m2-name" placeholder="e.g., One-click Export"></div>
+      <div><label>Value (1–10)</label><input id="m2-val" type="number" min="1" max="10" value="8"></div>
+      <div><label>Effort (1–10)</label><input id="m2-eff" type="number" min="1" max="10" value="3"></div>
+    </div>
+    <button class="btn primary" onclick="addMatrix2x2()">Plot Item</button>
+    <button class="btn" onclick="loadMatrix2x2Example()" style="margin-left:6px">Load Example</button>
+    <button class="btn" onclick="clearMatrix2x2()" style="margin-left:6px">Clear</button>
+    <div id="m2-visual" style="margin-top:12px"></div>
+  </div>
+
+  <div class="card">
+    <h3>3. MoSCoW Scope Negotiator (60% Must-Have Rule)</h3>
+    <p class="m" style="font-size:12px;margin-top:0">Keep <strong>Must-Have</strong> items ≤ 60% of sprint capacity so your release has a healthy buffer.</p>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:10px">
+      <div><label>Backlog Item</label><input id="mos-name" placeholder="e.g., OAuth2 Login"></div>
+      <div><label>Story Points</label><input id="mos-pts" type="number" min="1" max="40" value="5"></div>
+      <div><label>Category</label><select id="mos-cat"><option value="M">Must Have</option><option value="S">Should Have</option><option value="C">Could Have</option><option value="W">Won't Have</option></select></div>
+    </div>
+    <button class="btn primary" onclick="addMoscowItem()">Add Item</button>
+    <button class="btn" onclick="loadMoscowExample()" style="margin-left:6px">Load Example</button>
+    <button class="btn" onclick="clearMoscow()" style="margin-left:6px">Clear</button>
+    <div id="mos-out" style="margin-top:12px"></div>
+  </div>
+`;
+
+const DEF_M2 = [
+  { name: 'Onboarding Checklist', val: 9, eff: 2 },
+  { name: 'AI Copilot Rewrite', val: 9, eff: 8 },
+  { name: 'Custom Theme Colors', val: 3, eff: 2 },
+  { name: 'Legacy XML Exporter', val: 2, eff: 9 }
+];
+let matrix2x2 = store.matrix2x2 || DEF_M2.slice();
+window.addMatrix2x2 = function () {
+  const name = ($('m2-name')?.value || '').trim() || 'Feature';
+  const val = Math.min(10, Math.max(1, +$('m2-val').value || 5));
+  const eff = Math.min(10, Math.max(1, +$('m2-eff').value || 5));
+  matrix2x2.push({ name, val, eff });
+  store.matrix2x2 = matrix2x2; save();
+  if ($('m2-name')) $('m2-name').value = '';
+  renderMatrix2x2();
+};
+window.loadMatrix2x2Example = function () { matrix2x2 = DEF_M2.map(x => ({ ...x })); store.matrix2x2 = matrix2x2; save(); renderMatrix2x2(); };
+window.clearMatrix2x2 = function () { matrix2x2 = []; store.matrix2x2 = matrix2x2; save(); renderMatrix2x2(); };
+function renderMatrix2x2() {
+  const el = $('m2-visual');
+  if (!el) return;
+  const W = 520, H = 300, pad = 36;
+  const dots = matrix2x2.map((d, i) => {
+    const cx = pad + ((d.eff - 0.5) / 10) * (W - pad * 2);
+    const cy = H - pad - ((d.val - 0.5) / 10) * (H - pad * 2);
+    const col = d.val >= 5.5 && d.eff <= 5.5 ? '#059669' : d.val >= 5.5 ? '#2563eb' : d.eff <= 5.5 ? '#d97706' : '#dc2626';
+    const flip = d.eff > 7;
+    return `<circle cx="${cx}" cy="${cy}" r="7" fill="${col}"/><text x="${flip ? cx - 10 : cx + 10}" y="${cy + 4}" text-anchor="${flip ? 'end' : 'start'}" font-size="11" fill="currentColor">${esc(d.name)} (${d.val}/${d.eff})</text>`;
+  }).join('');
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:560px;border:1px solid var(--b);border-radius:10px;background:var(--bg)">
+    <rect x="${pad}" y="${pad}" width="${(W - pad * 2) / 2}" height="${(H - pad * 2) / 2}" fill="#059669" fill-opacity="0.08"/>
+    <rect x="${W / 2}" y="${pad}" width="${(W - pad * 2) / 2}" height="${(H - pad * 2) / 2}" fill="#2563eb" fill-opacity="0.07"/>
+    <rect x="${pad}" y="${H / 2}" width="${(W - pad * 2) / 2}" height="${(H - pad * 2) / 2}" fill="#d97706" fill-opacity="0.06"/>
+    <rect x="${W / 2}" y="${H / 2}" width="${(W - pad * 2) / 2}" height="${(H - pad * 2) / 2}" fill="#dc2626" fill-opacity="0.07"/>
+    <line x1="${W / 2}" y1="${pad}" x2="${W / 2}" y2="${H - pad}" stroke="currentColor" stroke-opacity="0.25" stroke-dasharray="4"/>
+    <line x1="${pad}" y1="${H / 2}" x2="${W - pad}" y2="${H / 2}" stroke="currentColor" stroke-opacity="0.25" stroke-dasharray="4"/>
+    <text x="${pad + 8}" y="${pad + 16}" font-size="11" font-weight="700" fill="#059669">QUICK WINS (Do First)</text>
+    <text x="${W / 2 + 8}" y="${pad + 16}" font-size="11" font-weight="700" fill="#2563eb">BIG BETS (Plan)</text>
+    <text x="${pad + 8}" y="${H - pad - 8}" font-size="11" font-weight="700" fill="#d97706">FILL-INS (Defer)</text>
+    <text x="${W / 2 + 8}" y="${H - pad - 8}" font-size="11" font-weight="700" fill="#dc2626">TIME SINKS (Cut)</text>
+    <text x="${W / 2}" y="${H - 10}" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7">Effort (1 → 10) →</text>
+    <text x="14" y="${H / 2}" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7" transform="rotate(-90 14 ${H / 2})">Value (1 → 10) →</text>
+    ${dots}
+  </svg>`;
+}
+
+const DEF_MOS = [
+  { name: 'User Auth & RBAC', pts: 13, cat: 'M' },
+  { name: 'Core Search & Filter', pts: 8, cat: 'M' },
+  { name: 'Slack Webhook Alerts', pts: 8, cat: 'S' },
+  { name: 'PDF Theme Presets', pts: 5, cat: 'C' },
+  { name: 'Native Mobile Widget', pts: 8, cat: 'W' }
+];
+let moscowItems = store.moscowItems || DEF_MOS.slice();
+window.addMoscowItem = function () {
+  const name = ($('mos-name')?.value || '').trim() || 'Backlog Item';
+  const pts = Math.max(1, +$('mos-pts').value || 3);
+  const cat = $('mos-cat').value || 'M';
+  moscowItems.push({ name, pts, cat });
+  store.moscowItems = moscowItems; save();
+  if ($('mos-name')) $('mos-name').value = '';
+  renderMoscow();
+};
+window.loadMoscowExample = function () { moscowItems = DEF_MOS.map(x => ({ ...x })); store.moscowItems = moscowItems; save(); renderMoscow(); };
+window.clearMoscow = function () { moscowItems = []; store.moscowItems = moscowItems; save(); renderMoscow(); };
+window.setMoscowCat = function (idx, cat) { moscowItems[idx].cat = cat; store.moscowItems = moscowItems; save(); renderMoscow(); };
+function renderMoscow() {
+  const el = $('mos-out');
+  if (!el) return;
+  if (!moscowItems.length) { el.innerHTML = '<p class="m" style="font-size:13px">No items yet. Add one or click Load Example.</p>'; return; }
+  const activePts = moscowItems.filter(x => x.cat !== 'W').reduce((a, b) => a + b.pts, 0) || 1;
+  const mustPts = moscowItems.filter(x => x.cat === 'M').reduce((a, b) => a + b.pts, 0);
+  const mustPct = Math.round((mustPts / activePts) * 100);
+  const ok = mustPct <= 60;
+  const labels = { M: 'Must', S: 'Should', C: 'Could', W: "Won't" };
+  el.innerHTML = `
+    <div class="note" style="margin-bottom:10px;border-left:3px solid ${ok ? '#059669' : '#dc2626'}">
+      <strong>Must-Have Share: ${mustPct}%</strong> (${mustPts} / ${activePts} active pts) — ${ok ? 'Healthy buffer (≤ 60% rule).' : 'Over-committed! Move some Must-Haves to Should/Could.'}
+      <div style="height:8px;background:var(--b);border-radius:4px;margin-top:6px;overflow:hidden"><div style="width:${Math.min(100, mustPct)}%;height:100%;background:${ok ? '#059669' : '#dc2626'}"></div></div>
+    </div>
+    <table><tr><th>Item</th><th>Pts</th><th>Priority</th></tr>
+      ${moscowItems.map((it, i) => `<tr><td>${esc(it.name)}</td><td>${it.pts}</td><td>${['M', 'S', 'C', 'W'].map(c => `<button class="btn" style="padding:2px 8px;font-size:11px;margin-right:4px;${it.cat === c ? '' : INACTIVE_BTN}" onclick="setMoscowCat(${i},'${c}')">${labels[c]}</button>`).join('')}</td></tr>`).join('')}
+    </table>`;
+}
+
+window.exportPrioCSV = function () {
+  const rows = prioItems.filter(x => x.mode === prioMode).sort((a, b) => b.score - a.score);
+  const csv = ['Rank,Mode,Initiative,Score'].concat(rows.map((r, i) => `${i + 1},${r.mode.toUpperCase()},"${r.name.replace(/"/g, '""')}",${r.score}`)).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+  a.download = `${prioMode}-prioritization.csv`;
+  a.click();
+};
+
+/* ---- 3. Metrics & Growth Lab ---- */
+V['pm-metrics'] = () => `
+  <h2>Metrics &amp; Growth Lab</h2>
+  <p class="m" style="font-size:13px;margin-top:0">Simulate funnel bottlenecks with <strong>AARRR</strong>, test Product-Market Fit with the <strong>Sean Ellis 40% Rule</strong>, and design balanced <strong>HEART</strong> metrics.</p>
+  <div class="card">
+    <h3>1. AARRR (Pirate Metrics) Funnel Simulator</h3>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+      <div><label>Monthly Visitors: <strong id="ar-v-lbl">10000</strong></label><input id="ar-vis" type="range" min="1000" max="50000" step="1000" value="10000" oninput="calcAARRR()"></div>
+      <div><label>Activation (%): <strong id="ar-a-lbl">30%</strong></label><input id="ar-act" type="range" min="5" max="90" value="30" oninput="calcAARRR()"></div>
+      <div><label>Retention (%): <strong id="ar-r-lbl">40%</strong></label><input id="ar-ret" type="range" min="5" max="90" value="40" oninput="calcAARRR()"></div>
+      <div><label>Referral (%): <strong id="ar-f-lbl">15%</strong></label><input id="ar-ref" type="range" min="1" max="60" value="15" oninput="calcAARRR()"></div>
+      <div><label>Paid Conv (%): <strong id="ar-p-lbl">20%</strong></label><input id="ar-rev" type="range" min="1" max="80" value="20" oninput="calcAARRR()"></div>
+      <div><label>ARPU ($/mo)</label><input id="ar-arpu" type="number" value="49" min="1" oninput="calcAARRR()"></div>
+    </div>
+    <div id="aarrr-out" style="margin-top:12px"></div>
+  </div>
+
+  <div class="card">
+    <h3>2. Sean Ellis PMF Survey Calculator (40% Benchmark)</h3>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+      <div><label>Very Disappointed</label><input id="pmf-v" type="number" min="0" value="44" oninput="calcPMF()"></div>
+      <div><label>Somewhat Disappointed</label><input id="pmf-s" type="number" min="0" value="38" oninput="calcPMF()"></div>
+      <div><label>Not Disappointed</label><input id="pmf-n" type="number" min="0" value="18" oninput="calcPMF()"></div>
+    </div>
+    <div id="pmf-out" style="margin-top:12px"></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <h3 style="margin:0">3. HEART &amp; Guardrail Metrics Builder</h3>
+      <div class="row" style="gap:6px">
+        <button class="btn" onclick="loadHeartPreset('saas')">SaaS Preset</button>
+        <button class="btn" onclick="loadHeartPreset('ecom')">E-Commerce Preset</button>
+      </div>
+    </div>
+    <div id="heart-out" class="table-wrap" style="margin-top:10px"></div>
+  </div>
+`;
+
+window.calcAARRR = function () {
+  const vis = +($('ar-vis')?.value || 10000);
+  const act = +($('ar-act')?.value || 30) / 100;
+  const ret = +($('ar-ret')?.value || 40) / 100;
+  const ref = +($('ar-ref')?.value || 15) / 100;
+  const rev = +($('ar-rev')?.value || 20) / 100;
+  const arpu = +($('ar-arpu')?.value || 49);
+  if ($('ar-v-lbl')) {
+    $('ar-v-lbl').textContent = vis;
+    $('ar-a-lbl').textContent = Math.round(act * 100) + '%';
+    $('ar-r-lbl').textContent = Math.round(ret * 100) + '%';
+    $('ar-f-lbl').textContent = Math.round(ref * 100) + '%';
+    $('ar-p-lbl').textContent = Math.round(rev * 100) + '%';
+  }
+  const activated = Math.round(vis * act);
+  const retained = Math.round(activated * ret);
+  const referred = Math.round(retained * ref);
+  const paid = Math.round(retained * rev);
+  const mrr = paid * arpu;
+  const stages = [
+    ['Acquisition (Visitors)', vis, '#2563eb'],
+    ['Activation', activated, '#7c3aed'],
+    ['Retention', retained, '#059669'],
+    ['Referral (Advocates)', referred, '#d97706'],
+    ['Revenue (Paid Users)', paid, '#dc2626']
+  ];
+  const weakest = [['Activation', act], ['Retention', ret], ['Paid Conversion', rev]].sort((a, b) => a[1] - b[1])[0];
+  const out = $('aarrr-out');
+  if (!out) return;
+  out.innerHTML = `
+    <div class="row" style="gap:12px;margin-bottom:10px;flex-wrap:wrap">
+      <div class="stat" style="font-size:20px">Est. MRR: $${money(mrr)}</div>
+      <div class="note" style="margin:0;flex:1"><strong>Biggest Bottleneck:</strong> ${weakest[0]} (${Math.round(weakest[1] * 100)}%). Lifting ${weakest[0]} by +10 pts increases MRR to <strong>$${money(Math.round(mrr * ((weakest[1] + 0.1) / weakest[1])))}</strong>.</div>
+    </div>
+    ${stages.map(([lbl, val, col]) => {
+      const pct = Math.max(4, Math.round((val / vis) * 100));
+      return `<div style="margin-bottom:6px"><div class="row" style="justify-content:space-between;font-size:12px"><span>${lbl}</span><strong>${val.toLocaleString()} (${Math.round((val / vis) * 100)}%)</strong></div><div style="height:10px;background:var(--b);border-radius:5px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${col}"></div></div></div>`;
+    }).join('')}`;
+};
+
+window.calcPMF = function () {
+  const v = +($('pmf-v')?.value || 0), s = +($('pmf-s')?.value || 0), n = +($('pmf-n')?.value || 0);
+  const tot = v + s + n || 1;
+  const pct = Math.round((v / tot) * 100);
+  const ok = pct >= 40;
+  const out = $('pmf-out');
+  if (!out) return;
+  out.innerHTML = `
+    <div class="row" style="align-items:center;gap:12px;flex-wrap:wrap">
+      <div class="stat" style="font-size:22px;color:${ok ? '#059669' : '#d97706'}">${pct}% Very Disappointed</div>
+      <span class="tag">${ok ? 'PMF Achieved (≥ 40%)' : 'Pre-PMF (< 40%)'}</span>
+    </div>
+    <div style="position:relative;height:12px;background:var(--b);border-radius:6px;margin:10px 0;overflow:hidden">
+      <div style="width:${Math.min(100, pct)}%;height:100%;background:${ok ? '#059669' : '#d97706'}"></div>
+      <div style="position:absolute;left:40%;top:0;bottom:0;width:2px;background:var(--t)"></div>
+    </div>
+    <p class="m" style="font-size:12px;margin:0">${ok ? 'Strong Product-Market Fit! Focus on scaling acquisition and converting "Somewhat Disappointed" users.' : 'Do not scale paid acquisition yet. Interview "Very Disappointed" users to double down on your core value proposition.'}</p>`;
+};
+
+const HEART_PRESETS = {
+  saas: [
+    ['Happiness', 'Users find workflow effortless', 'In-app CSAT / NPS', 'Support ticket rate < 3%'],
+    ['Engagement', 'Teams collaborate weekly', 'Weekly Active Teams (WAT)', 'Notification opt-out < 5%'],
+    ['Adoption', 'New workspaces import data', '% completing setup in 48h', 'Setup drop-off rate'],
+    ['Retention', 'Teams renew month-over-month', '90-day Logo Retention', 'Seat contraction rate'],
+    ['Task Success', 'Users ship reports quickly', 'Median time-to-publish (< 3m)', 'Error / retry rate < 1%']
+  ],
+  ecom: [
+    ['Happiness', 'Shoppers trust delivery & quality', 'Post-delivery CSAT ≥ 4.6/5', 'Return / refund rate < 4%'],
+    ['Engagement', 'Shoppers browse personalized picks', 'Sessions per MAU', 'Bounce rate'],
+    ['Adoption', 'New users try saved lists', '% creating ≥ 1 wishlist', 'Page load time < 1.5s'],
+    ['Retention', 'Repeat monthly orders', '60-day Repeat Purchase Rate', 'Unsubscribe rate'],
+    ['Task Success', 'Fast, frictionless checkout', 'Checkout Completion Rate', 'Payment failure rate < 0.5%']
+  ]
+};
+let heartRows = store.heartRows || HEART_PRESETS.saas.map(r => [...r]);
+window.loadHeartPreset = function (k) { heartRows = (HEART_PRESETS[k] || HEART_PRESETS.saas).map(r => [...r]); store.heartRows = heartRows; save(); renderHeartTable(); };
+window.updateHeartCell = function (i, j, val) { heartRows[i][j] = val; store.heartRows = heartRows; save(); };
+function renderHeartTable() {
+  const el = $('heart-out');
+  if (!el) return;
+  el.innerHTML = `<table><tr><th>Dimension</th><th>Goal</th><th>Signal / Metric</th><th>Guardrail</th></tr>
+    ${heartRows.map(([d, g, m, gr], i) => `<tr><td><strong>${esc(d)}</strong></td><td><input value="${esc(g)}" onchange="updateHeartCell(${i},1,this.value)"></td><td><input value="${esc(m)}" onchange="updateHeartCell(${i},2,this.value)"></td><td><input value="${esc(gr)}" onchange="updateHeartCell(${i},3,this.value)"></td></tr>`).join('')}
+  </table>`;
+}
+
+/* ---- 4. Cases & Drills ---- */
+V['pm-cases'] = () => `
+  <h2>Product Cases &amp; Scenario Drills</h2>
+  <p class="m" style="font-size:13px;margin-top:0">Practise structured product interviews (<strong>CIRCLES</strong>, <strong>STARL</strong>, <strong>JTBD</strong>, <strong>OST</strong>, <strong>Lean Canvas</strong>) with auto-saved drafts &amp; self-grading rubrics, plus real-world PM decision drills.</p>
+  <div class="card">
+    <h3>1. Guided Case Worksheet (Auto-Saved)</h3>
+    <div class="row" style="margin-bottom:10px;gap:6px;flex-wrap:wrap">
+      <select id="case-fw-sel" onchange="onCaseFwChange()">
+        <option value="circles">CIRCLES (Product Design)</option>
+        <option value="starl">STARL (Behavioral / Leadership)</option>
+        <option value="jtbd">JTBD (Jobs-to-be-Done)</option>
+        <option value="ost">Opportunity Solution Tree (OST)</option>
+        <option value="leancanvas">Lean Canvas (0-to-1 Business)</option>
+      </select>
+      <select id="case-pr-sel" onchange="renderCaseWorksheet()"></select>
+      <button class="btn" onclick="loadCaseExample()">Load Example</button>
+      <button class="btn" onclick="clearCaseWorksheet()">Clear</button>
+      <button class="btn primary" id="case-copy-btn" onclick="copyCaseWorksheet()">Copy Answer</button>
+    </div>
+    <div id="case-ws-body"></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <h3 style="margin:0">2. Product Sense &amp; Execution Drills</h3>
+      <span class="tag" id="pm-sc-score">Score: 0 / ${PM_SCENARIOS.length}</span>
+    </div>
+    <div id="pm-sc-body" style="margin-top:10px"></div>
+  </div>
+`;
+
+window.onCaseFwChange = function () {
+  const fw = $('case-fw-sel')?.value || 'circles';
+  const prSel = $('case-pr-sel');
+  if (prSel) {
+    prSel.innerHTML = (PM_CASE_PROMPTS[fw] || []).map((p, i) => `<option value="${i}">${esc(p.label)}</option>`).join('');
+  }
+  renderCaseWorksheet();
+};
+
+window.renderCaseWorksheet = function () {
+  const fwSel = $('case-fw-sel'), prSel = $('case-pr-sel'), body = $('case-ws-body');
+  if (!fwSel || !prSel || !body) return;
+  if (!prSel.options.length) {
+    prSel.innerHTML = (PM_CASE_PROMPTS[fwSel.value] || []).map((p, i) => `<option value="${i}">${esc(p.label)}</option>`).join('');
+  }
+  const idx = +prSel.value || 0;
+  const item = (PM_CASE_PROMPTS[fwSel.value] || [])[idx];
+  if (!item) return;
+  const draftKey = `${fwSel.value}_${idx}`;
+  const drafts = (store.caseDrafts && store.caseDrafts[draftKey]) || [];
+  body.innerHTML = `<div class="note" style="margin-bottom:10px"><strong>Prompt:</strong> ${esc(item.prompt)}</div>` +
+    item.steps.map(([lbl, hint], i) => `<div style="margin-bottom:8px"><label><strong>${esc(lbl)}</strong> <span class="m" style="font-weight:400">(${esc(hint)})</span></label><textarea id="case-step-${i}" rows="2" placeholder="Write your response..." oninput="saveCaseDraft('${draftKey}',${i},this.value)">${esc(drafts[i] || '')}</textarea></div>`).join('') +
+    `<div class="card" style="background:var(--bg);margin-top:10px"><strong>Self-Grading Rubric</strong>${item.rubric.map(r => `<label style="display:flex;align-items:center;gap:8px;margin-top:6px;font-weight:400"><input type="checkbox" style="width:auto"> ${esc(r)}</label>`).join('')}</div>`;
+};
+
+window.saveCaseDraft = function (k, i, val) {
+  store.caseDrafts = store.caseDrafts || {};
+  store.caseDrafts[k] = store.caseDrafts[k] || [];
+  store.caseDrafts[k][i] = val;
+  save();
+};
+
+window.loadCaseExample = function () {
+  const fw = $('case-fw-sel')?.value || 'circles', idx = +($('case-pr-sel')?.value || 0);
+  const item = (PM_CASE_PROMPTS[fw] || [])[idx];
+  if (!item) return;
+  item.steps.forEach(([, , ex], i) => {
+    const el = $(`case-step-${i}`);
+    if (el) { el.value = ex || ''; window.saveCaseDraft(`${fw}_${idx}`, i, ex || ''); }
+  });
+};
+
+window.clearCaseWorksheet = function () {
+  const fw = $('case-fw-sel')?.value || 'circles', idx = +($('case-pr-sel')?.value || 0);
+  const item = (PM_CASE_PROMPTS[fw] || [])[idx];
+  if (!item) return;
+  item.steps.forEach((_, i) => {
+    const el = $(`case-step-${i}`);
+    if (el) { el.value = ''; window.saveCaseDraft(`${fw}_${idx}`, i, ''); }
+  });
+};
+
+window.copyCaseWorksheet = function () {
+  const fw = $('case-fw-sel')?.value || 'circles', idx = +($('case-pr-sel')?.value || 0);
+  const item = (PM_CASE_PROMPTS[fw] || [])[idx];
+  if (!item) return;
+  const text = `${item.label}\nPrompt: ${item.prompt}\n\n` + item.steps.map(([lbl], i) => `${lbl}:\n${($(`case-step-${i}`)?.value || '').trim()}`).join('\n\n');
+  navigator.clipboard?.writeText(text);
+  const btn = $('case-copy-btn');
+  if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy Answer'; }, 1500); }
+};
+
+let pmScIdx = 0, pmScAnswered = {};
+function renderPmScenario() {
+  const body = $('pm-sc-body'), scoreEl = $('pm-sc-score');
+  if (!body) return;
+  const correctCount = Object.entries(pmScAnswered).filter(([i, a]) => PM_SCENARIOS[i]?.ans === a).length;
+  if (scoreEl) scoreEl.textContent = `Score: ${correctCount} / ${PM_SCENARIOS.length}`;
+  const sc = PM_SCENARIOS[pmScIdx];
+  const picked = pmScAnswered[pmScIdx];
+  body.innerHTML = `
+    <div class="row" style="justify-content:space-between;margin-bottom:8px">
+      <span class="tag">${esc(sc.cat)}</span>
+      <span class="m" style="font-size:12px">Scenario ${pmScIdx + 1} of ${PM_SCENARIOS.length}</span>
+    </div>
+    <p style="font-weight:600;margin:6px 0 10px">${esc(sc.q)}</p>
+    ${sc.opts.map((o, i) => {
+      let st = '';
+      if (picked !== undefined) {
+        if (i === sc.ans) st = 'border-color:#059669;background:rgba(5,150,105,0.1)';
+        else if (i === picked) st = 'border-color:#dc2626;background:rgba(220,38,38,0.1)';
+      }
+      return `<button class="btn" style="display:block;width:100%;text-align:left;margin-bottom:6px;background:var(--bg);color:var(--t);border:1px solid var(--b);${st}" onclick="pickPmScenario(${i})">${esc(o)}</button>`;
+    }).join('')}
+    ${picked !== undefined ? `<div class="note" style="margin-top:8px"><strong>${picked === sc.ans ? 'Correct!' : 'Not quite.'}</strong> ${esc(sc.why)}</div>` : ''}
+    <div class="row" style="margin-top:10px;gap:8px">
+      <button class="btn" style="${pmScIdx === 0 ? INACTIVE_BTN : ''}" onclick="navPmScenario(-1)">← Prev</button>
+      <button class="btn primary" onclick="navPmScenario(1)">Next →</button>
+    </div>`;
+}
+window.pickPmScenario = function (optIdx) { pmScAnswered[pmScIdx] = optIdx; recordActivity(1); renderPmScenario(); };
+window.navPmScenario = function (d) { pmScIdx = (pmScIdx + d + PM_SCENARIOS.length) % PM_SCENARIOS.length; renderPmScenario(); };
+
+/* ============ Frameworks Practice Lab ============ */
+const FW_PROMPTS = {
+  circles: {
+    title: 'CIRCLES — Product Design & Problem Solving',
+    prompt: 'Design a feature to help remote project teams avoid meeting fatigue and missed action items.',
+    steps: [
+      ['C — Comprehend', 'Clarify goal, constraints, platform, and success criteria.', 'Goal: Reduce meeting fatigue & missed action items for distributed teams on Slack/Teams within 3 months. Success: -25% meeting hours, +30% on-time action item completion.'],
+      ['I — Identify Customer', 'Who is the primary user? (e.g., Remote PMs, distributed engineers)', 'Primary: Remote Project/Product Managers running 5+ cross-functional syncs/week. Secondary: Distributed engineers across time zones.'],
+      ['R — Report Needs', 'What pain points or jobs-to-be-done do they have?', '1) Too many status meetings just to share updates. 2) Action items get buried in chat or lost after calls. 3) Async teammates lack context.'],
+      ['C — Cut Through Prioritization', 'Which single user need will you focus on first and why?', 'Focus on #2 (lost action items & decisions) because it directly causes follow-up meetings and rework.'],
+      ['L — List Solutions', 'Brainstorm 3 distinct solutions (low, medium, high effort).', '1) Auto-capture Slack/Meet decisions into a daily digest (Low). 2) Interactive async check-in bot replacing standups (Med). 3) Full AI meeting copilot with Jira/Asana sync (High).'],
+      ['E — Evaluate Trade-offs', 'Compare solutions on impact, cost, risk, and dependencies.', 'Option 2 gives high impact with medium effort and no heavy video-API dependencies; Option 1 is a fast MVP.'],
+      ['S — Summarize', 'State your final recommendation and how you will measure success.', 'Launch Option 1 as a 2-week MVP, then layer Option 2. Track % of meetings replaced by async digests and action-item completion rate.']
+    ]
+  },
+  starl: {
+    title: 'STARL — Behavioral & Leadership Storytelling',
+    prompt: 'Tell me about a time a key stakeholder changed scope late in a project and how you handled it.',
+    steps: [
+      ['S — Situation', 'Set the context: project, team size, timeline, and stakes.', '2 weeks before a Q3 enterprise portal launch (team of 8), the VP of Sales requested a custom SSO integration for a key prospect.'],
+      ['T — Task', 'What was your specific responsibility or challenge?', 'Protect the committed launch date and quality while finding a way to support the high-value sales deal.'],
+      ['A — Action', 'What concrete steps did YOU take? (e.g., impact analysis, trade-off options)', 'Ran a 1-hour impact assessment with tech leads, quantified a 3-week delay if bundled, and proposed a phased release: launch core portal on time + fast-follow SSO in Sprint +1.'],
+      ['R — Result', 'Quantify the outcome (schedule saved, budget protected, adoption %).', 'Core portal launched on schedule with 0 Sev-1 bugs; SSO shipped 10 days later, closing the $250K deal.'],
+      ['L — Learning', 'What did you learn and how did you improve your process afterward?', 'Added a formal Change Control checkpoint 3 weeks pre-launch and aligned Sales/Product on a fast-follow intake lane.']
+    ]
+  },
+  jtbd: {
+    title: 'JTBD — Jobs-to-be-Done Statement',
+    prompt: 'Define the core job for a PM using an AI-assisted status reporting tool.',
+    steps: [
+      ['When (Situation)', 'e.g., When preparing for a weekly executive steering committee...', 'When preparing for a weekly executive steering committee across 3 parallel workstreams...'],
+      ['I want to (Motivation)', 'e.g., I want to synthesize risks, blockers, and EVM trends in 5 minutes...', 'I want to automatically synthesize risks, blockers, and schedule/budget variance into a 1-page brief in 5 minutes...'],
+      ['So I can (Expected Outcome)', 'e.g., So I can spend the meeting aligning on decisions rather than reading slides.', 'So I can spend the meeting aligning executives on trade-off decisions rather than manually chasing status updates.']
+    ]
+  }
+};
+
+V.frameworks = () => `
+  <h2>Frameworks Practice Lab</h2>
+  <p class="m" style="font-size:13px;margin-top:0">Practise prioritization scoring (RICE &amp; WSJF) and structured problem-solving (CIRCLES, STARL, JTBD) interactively.</p>
+  <div class="card">
+    <h3>1. Prioritization Scorer (RICE &amp; WSJF)</h3>
+    <div class="row" style="margin-bottom:10px">
+      <button class="btn primary" id="pm-rice-btn" onclick="setPrioMode('rice')">RICE (Reach × Impact × Conf ÷ Effort)</button>
+      <button class="btn" id="pm-wsjf-btn" style="opacity:0.55;background:var(--bg);color:var(--t);border:1px solid var(--b)" onclick="setPrioMode('wsjf')">WSJF (Cost of Delay ÷ Job Size)</button>
+    </div>
+    <div id="prio-inputs" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px">
+      <div><label>Feature / Initiative</label><input id="pr-name" placeholder="e.g., SSO Login" value="AI Status Digest"></div>
+      <div><label id="pr-l1">Reach (users/qtr)</label><input id="pr-v1" type="number" value="1000" min="1"></div>
+      <div><label id="pr-l2">Impact (0.25–3)</label><input id="pr-v2" type="number" value="2" step="0.25" min="0.25"></div>
+      <div><label id="pr-l3">Confidence (%)</label><input id="pr-v3" type="number" value="80" min="1" max="100"></div>
+      <div><label id="pr-l4">Effort (person-mo)</label><input id="pr-v4" type="number" value="2" step="0.5" min="0.25"></div>
+    </div>
+    <button class="btn primary" onclick="addPrioItem()">Add &amp; Rank Item</button>
+    <button class="btn" onclick="loadPrioExample()" style="margin-left:6px">Load Example</button>
+    <button class="btn" onclick="clearPrioItems()" style="margin-left:6px">Clear</button>
+    <button class="btn" onclick="resetPrioLab()" style="margin-left:6px">Reset</button>
+    <div id="prio-table" class="table-wrap" style="margin-top:12px"></div>
+  </div>
+  <div class="card">
+    <h3>2. Guided Framework Worksheet (CIRCLES · STARL · JTBD)</h3>
+    <div class="row" style="margin-bottom:10px;gap:6px;flex-wrap:wrap">
+      <select id="fw-ws-sel" onchange="renderFwWorksheet()">
+        <option value="circles">CIRCLES (Product Design)</option>
+        <option value="starl">STARL (Behavioral / Leadership)</option>
+        <option value="jtbd">JTBD (Jobs-to-be-Done)</option>
+      </select>
+      <button class="btn" onclick="loadFwExample()">Load Example</button>
+      <button class="btn" onclick="clearFwWorksheet()">Clear</button>
+      <button class="btn primary" id="fw-copy-btn" onclick="copyFwWorksheet()">Copy Structured Answer</button>
+    </div>
+    <div id="fw-ws-body"></div>
+  </div>
+`;
+
+let prioMode = 'rice';
+let prioItems = store.prioItems || [
+  { mode: 'rice', name: 'AI Status Digest', v1: 1000, v2: 2, v3: 80, v4: 2, score: 800 },
+  { mode: 'rice', name: 'Dark Mode', v1: 2000, v2: 0.5, v3: 100, v4: 1, score: 1000 }
+];
+
+window.setPrioMode = function (m) {
+  prioMode = m;
+  const rBtn = $('pm-rice-btn'), wBtn = $('pm-wsjf-btn');
+  if (rBtn && wBtn) {
+    rBtn.classList.toggle('primary', m === 'rice');
+    wBtn.classList.toggle('primary', m === 'wsjf');
+    const inactive = 'opacity:0.55;background:var(--bg);color:var(--t);border:1px solid var(--b)';
+    rBtn.style.cssText = m === 'rice' ? '' : inactive;
+    wBtn.style.cssText = m === 'wsjf' ? '' : inactive;
+  }
+  if (m === 'rice') {
+    $('pr-l1').textContent = 'Reach (users/qtr)'; $('pr-v1').value = 1000;
+    $('pr-l2').textContent = 'Impact (0.25–3)'; $('pr-v2').value = 2;
+    $('pr-l3').textContent = 'Confidence (%)'; $('pr-v3').value = 80;
+    $('pr-l4').textContent = 'Effort (person-mo)'; $('pr-v4').value = 2;
+  } else {
+    $('pr-l1').textContent = 'Business Value (1–10)'; $('pr-v1').value = 8;
+    $('pr-l2').textContent = 'Time Criticality (1–10)'; $('pr-v2').value = 7;
+    $('pr-l3').textContent = 'Risk/Opp Enablement (1–10)'; $('pr-v3').value = 5;
+    $('pr-l4').textContent = 'Job Size (1–10)'; $('pr-v4').value = 3;
+  }
+  renderPrioTable();
+};
+
+window.addPrioItem = function () {
+  const name = ($('pr-name').value || '').trim() || 'Untitled Item';
+  const v1 = +$('pr-v1').value || 0, v2 = +$('pr-v2').value || 0, v3 = +$('pr-v3').value || 0, v4 = Math.max(0.1, +$('pr-v4').value || 1);
+  const score = prioMode === 'rice' ? Math.round((v1 * v2 * (v3 / 100)) / v4) : +((v1 + v2 + v3) / v4).toFixed(2);
+  prioItems.push({ mode: prioMode, name, v1, v2, v3, v4, score });
+  store.prioItems = prioItems; save();
+  $('pr-name').value = '';
+  renderPrioTable();
+};
+
+window.clearPrioItems = function () { prioItems = []; store.prioItems = prioItems; save(); renderPrioTable(); };
+
+window.loadPrioExample = function () {
+  if (prioMode === 'rice') {
+    prioItems = [
+      { mode: 'rice', name: 'AI Status Digest', v1: 1000, v2: 2, v3: 80, v4: 2, score: 800 },
+      { mode: 'rice', name: 'Dark Mode', v1: 2000, v2: 0.5, v3: 100, v4: 1, score: 1000 },
+      { mode: 'rice', name: 'SSO Enterprise Login', v1: 400, v2: 3, v3: 90, v4: 3, score: 360 }
+    ];
+  } else {
+    prioItems = [
+      { mode: 'wsjf', name: 'Checkout Bug Fix', v1: 9, v2: 10, v3: 8, v4: 2, score: 13.5 },
+      { mode: 'wsjf', name: 'API Rate Limiter', v1: 7, v2: 6, v3: 9, v4: 3, score: 7.33 },
+      { mode: 'wsjf', name: 'Admin CSV Export', v1: 5, v2: 3, v3: 2, v4: 2, score: 5 }
+    ];
+  }
+  store.prioItems = prioItems; save();
+  renderPrioTable();
+};
+
+window.resetPrioLab = function () {
+  window.setPrioMode('rice');
+  window.loadPrioExample();
+};
+
+function renderPrioTable() {
+  const el = $('prio-table');
+  if (!el) return;
+  const rows = prioItems.filter(x => x.mode === prioMode).sort((a, b) => b.score - a.score);
+  if (!rows.length) { el.innerHTML = '<p class="m" style="font-size:13px">No items yet. Add an initiative above to rank it.</p>'; return; }
+  el.innerHTML = `<table><tr><th>Rank</th><th>Initiative</th><th>Score (${prioMode.toUpperCase()})</th></tr>${rows.map((r, i) => `<tr><td><strong>#${i + 1}</strong></td><td>${esc(r.name)}</td><td><strong>${r.score}</strong></td></tr>`).join('')}</table>`;
+}
+
+window.renderFwWorksheet = function () {
+  const sel = $('fw-ws-sel');
+  const body = $('fw-ws-body');
+  if (!sel || !body) return;
+  const fw = FW_PROMPTS[sel.value];
+  body.innerHTML = `<div class="note" style="margin-bottom:10px"><strong>Practice Prompt:</strong> ${esc(fw.prompt)}</div>` +
+    fw.steps.map(([lbl, hint], i) => `<div style="margin-bottom:8px"><label><strong>${esc(lbl)}</strong> <span class="m" style="font-weight:400">(${esc(hint)})</span></label><textarea id="fw-step-${i}" rows="2" placeholder="Write your response..."></textarea></div>`).join('');
+};
+
+window.loadFwExample = function () {
+  const sel = $('fw-ws-sel');
+  if (!sel) return;
+  const fw = FW_PROMPTS[sel.value];
+  fw.steps.forEach(([, , ex], i) => {
+    const el = $(`fw-step-${i}`);
+    if (el) el.value = ex || '';
+  });
+};
+
+window.clearFwWorksheet = function () {
+  const sel = $('fw-ws-sel');
+  if (!sel) return;
+  FW_PROMPTS[sel.value].steps.forEach((_, i) => {
+    const el = $(`fw-step-${i}`);
+    if (el) el.value = '';
+  });
+};
+
+window.copyFwWorksheet = function () {
+  const sel = $('fw-ws-sel');
+  if (!sel) return;
+  const fw = FW_PROMPTS[sel.value];
+  const text = `${fw.title}\nPrompt: ${fw.prompt}\n\n` + fw.steps.map(([lbl], i) => `${lbl}:\n${($(`fw-step-${i}`)?.value || '').trim()}`).join('\n\n');
+  navigator.clipboard?.writeText(text);
+  const btn = $('fw-copy-btn');
+  if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy Structured Answer'; }, 1500); }
+};
+
 /* ============ Glossary & Flashcards ============ */
 V.glossary = () => `
   <h2>Glossary of Terms (${GLOSSARY.length})</h2>
   <div class="card"><input id="gq" placeholder="Filter terms or definitions..." oninput="filterGloss(this.value)"></div>
   <div id="gl">${glossHTML(GLOSSARY)}</div>`;
-const glossHTML = list => list.map(([t, d]) => {
+const glossHTML = list => list.length ? list.map(([t, d]) => {
   const idx = GLOSSARY.findIndex(x => x[0] === t);
   return `<div class="card" style="margin:8px 0;display:flex;justify-content:space-between;align-items:flex-start">
     <div><strong>${esc(t)}</strong><div class="m" style="margin-top:4px">${esc(d)}</div></div>
-    <button class="btn2" style="padding:4px 8px;font-size:12px;margin-left:8px" onclick="speakGloss(${idx})">🔊</button>
+    <button class="btn2" style="padding:4px 8px;font-size:12px;margin-left:8px" onclick="speakGloss(${idx})" aria-label="Listen to ${esc(t)}">🔊</button>
   </div>`;
-}).join('');
+}).join('') : '<div class="card m">No matching glossary terms found.</div>';
 function filterGloss(v) { const q = v.toLowerCase(); $('gl').innerHTML = glossHTML(GLOSSARY.filter(([t, d]) => (t + d).toLowerCase().includes(q))); }
 
 V.flash = () => {
@@ -1331,7 +2004,7 @@ V.flash = () => {
   const deckBar = `
     <div class="row" style="justify-content:space-between;margin-bottom:10px">
       <div class="seg">
-        ${[['glossary', 'Glossary'], ['formulas', 'Formulas'], ['agile', 'Agile'], ['custom', `Custom (${store.customCards.length})`]].map(([k, lbl]) =>
+        ${[['glossary', 'Glossary'], ['formulas', 'Formulas'], ['agile', 'Agile'], ['frameworks', 'Frameworks'], ['custom', `Custom (${store.customCards.length})`]].map(([k, lbl]) =>
           `<button class="${store.fcDeck === k ? 'active' : ''}" onclick="store.fcDeck='${k}';store.fcIdx=0;FC.flip=false;save();render()">${lbl}</button>`
         ).join('')}
       </div>
@@ -1850,6 +2523,27 @@ V.ref = () => `
   <h2>Reference &amp; ITTO Hub</h2>
   <div class="card"><input id="ioq" placeholder="Filter processes..." oninput="ioFilter(this.value)"><div id="iot" class="table-wrap" style="margin-top:10px">${ioTable(IO)}</div></div>
   <h3>Tailoring Guidelines</h3><div class="card"><div class="table-wrap"><table>${TAILOR.map(([t, d]) => `<tr><th style="width:28%">${esc(t)}</th><td>${esc(d)}</td></tr>`).join('')}</table></div></div>
+  <h3>PM &amp; Product Mastery Frameworks</h3>
+  <p class="m" style="font-size:13px;margin-top:0">Essential prioritization, problem-solving, interview, and strategy frameworks to master project &amp; product management beyond the exam.</p>
+  <div class="row" style="margin-bottom:12px" id="fw-cats">
+    ${['All', 'Prioritization', 'Problem-Solving & Interviews', 'Strategy & Discovery'].map((c, i) =>
+      `<button class="btn ${i === 0 ? 'primary' : ''}" style="${i === 0 ? '' : 'opacity:0.55;background:var(--bg);color:var(--t);border:1px solid var(--b)'}" onclick="filterFrameworks('${esc(c)}', this)">${esc(c)}</button>`
+    ).join('')}
+  </div>
+  <div id="fw-grid" class="grid" style="margin-bottom:16px">
+    ${PM_FRAMEWORKS.map(f => `
+      <div class="card fw-card" data-cat="${esc(f.cat)}" style="margin:0">
+        <div class="row" style="justify-content:space-between;align-items:flex-start;gap:8px">
+          <strong style="font-size:15px">${esc(f.name)}</strong>
+          <span class="tag">${esc(f.cat)}</span>
+        </div>
+        <div class="m" style="font-size:12px;color:var(--a);margin-top:4px;font-weight:600">${esc(f.acronym)}</div>
+        <p style="font-size:13px;margin:8px 0 6px">${esc(f.desc)}</p>
+        <div class="m" style="font-size:12px"><strong>When:</strong> ${esc(f.when)}</div>
+        <div class="m" style="font-size:12px;margin-top:4px"><strong>How:</strong> ${esc(f.steps)}</div>
+      </div>
+    `).join('')}
+  </div>
   <h3>Models, Methods, and Artifacts</h3><div class="card"><div class="table-wrap"><table>${MMA.map(([t, d]) => `<tr><th style="width:22%">${esc(t)}</th><td>${esc(d)}</td></tr>`).join('')}</table></div></div>
   <h3>📚 Official PMP® &amp; PMBOK® Study Resources</h3>
   <div class="grid">
@@ -1894,6 +2588,15 @@ V.ai = () => `
     </div>
     <div id="ai-resp" class="card" style="display:none;margin-top:12px;background:var(--bg)"></div>
   </div>`;
+
+window.filterFrameworks = function (cat, btn) {
+  const inactive = 'opacity:0.55;background:var(--bg);color:var(--t);border:1px solid var(--b)';
+  document.querySelectorAll('#fw-cats .btn').forEach(b => { b.classList.remove('primary'); b.style.cssText = inactive; });
+  if (btn) { btn.classList.add('primary'); btn.style.cssText = ''; }
+  document.querySelectorAll('#fw-grid .fw-card').forEach(el => {
+    el.style.display = (cat === 'All' || el.dataset.cat === cat) ? '' : 'none';
+  });
+};
 
 function buildAIPrompt() {
   if (!$('ai-out')) return;
@@ -2055,6 +2758,10 @@ function render() {
   if (key === 'method') { recMethod(); calcBurndown(); }
   if (key === 'cpm') runCPM();
   if (key === 'ai') buildAIPrompt();
+  if (key === 'frameworks') { renderPrioTable(); renderFwWorksheet(); }
+  if (key === 'pm-prio') { renderPrioTable(); renderMatrix2x2(); renderMoscow(); }
+  if (key === 'pm-metrics') { calcAARRR(); calcPMF(); renderHeartTable(); }
+  if (key === 'pm-cases') { renderCaseWorksheet(); renderPmScenario(); }
   if (key !== 'search' && $('q')) $('q').value = '';
   updateSoundBtn();
 }
@@ -2077,8 +2784,15 @@ document.addEventListener('keydown', e => {
     if (store.fcMode !== 'browse' && FC.flip && ['1', '2', '3', '4'].includes(e.key)) rate([1, 3, 4, 5][+e.key - 1]);
   }
   if (v === 'quiz' && QZ.mode) {
-    if (QZ.ans === null && ['1', '2', '3', '4'].includes(e.key)) answerQ(+e.key - 1);
-    if (QZ.ans !== null && e.key === 'Enter') nextQ();
+    const q = QUIZ[QZ.pool[QZ.i]];
+    if (QZ.ans === null && ['1', '2', '3', '4'].includes(e.key)) {
+      if (!q?.type || q.type === 'single') answerQ(+e.key - 1);
+      else if (q.type === 'multi') toggleMultiOpt(+e.key - 1);
+    } else if (QZ.ans === null && e.key === 'Enter' && q?.type === 'multi') {
+      submitMultiQ();
+    } else if (QZ.ans !== null && e.key === 'Enter') {
+      nextQ();
+    }
   }
 });
 

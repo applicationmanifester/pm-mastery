@@ -95,7 +95,13 @@ export const GLOSSARY = [
   ["Psychological safety", "Shared belief that team members can raise risks, questions, or mistakes without fear of punishment."],
   ["Salience model", "Stakeholder classification grid based on Power, Urgency, and Legitimacy."],
   ["Velocity", "Average story points a Scrum team completes per sprint, used for forecasting rather than comparing teams."],
-  ["Value delivery system", "End-to-end set of portfolios, programs, projects, and operations that create business value."]
+  ["Value delivery system", "End-to-end set of portfolios, programs, projects, and operations that create business value."],
+  ["Burnup chart", "Visualizes cumulative work completed versus total scope, making scope creep immediately visible."],
+  ["RACI matrix", "Responsibility assignment chart mapping tasks to Responsible, Accountable, Consulted, and Informed roles."],
+  ["Technical debt", "Implied future rework caused by choosing an expedient solution now instead of a cleaner design."],
+  ["Value stream mapping", "Lean technique that maps all steps from request to delivery to expose waste and handoff delays."],
+  ["Sprint retrospective", "Timeboxed Scrum ceremony where the team inspects its process and commits to concrete improvements."],
+  ["Kanban WIP limit", "Maximum number of work items allowed in a workflow column to prevent bottlenecks and reduce cycle time."]
 ];
 
 export const FORMULAS = [
@@ -774,4 +780,226 @@ export const STUDY_RESOURCES = [
   { title: 'Agile Practice Guide', org: 'PMI® & Agile Alliance', url: 'https://www.pmi.org/pmbok-guide-standards/practice-guides/agile', desc: 'Essential reference for Agile, Hybrid, Scrum, Kanban, and servant leadership on the PMP® exam.' },
   { title: 'The Scrum Guide (Official)', org: 'Scrum.org', url: 'https://scrumguides.org/scrum-guide.html', desc: 'Concise 13-page official definition of Scrum roles, events, artifacts, and commitments.' },
   { title: 'PMI® Code of Ethics and Professional Conduct', org: 'PMI®', url: 'https://www.pmi.org/about/ethics/code', desc: 'Responsibility, Respect, Fairness, and Honesty—frequently tested in situational questions.' }
+];
+
+export const PM_FRAMEWORKS = [
+  // Prioritization Frameworks
+  {
+    cat: 'Prioritization',
+    name: 'RICE Scoring',
+    acronym: 'Reach × Impact × Confidence ÷ Effort',
+    desc: 'Quantitative prioritization model for comparing features or initiatives objectively.',
+    when: 'Comparing a large backlog of product features or roadmap items with varying reach and effort.',
+    steps: 'Reach (users/quarter) × Impact (0.25–3x) × Confidence (%) ÷ Effort (person-months).'
+  },
+  {
+    cat: 'Prioritization',
+    name: 'ICE Scoring',
+    acronym: 'Impact × Confidence × Ease',
+    desc: 'Lightweight prioritization score (1–10 each) for fast-moving growth experiments and MVPs.',
+    when: 'Early-stage discovery, growth experiments, or when you lack hard Reach data for RICE.',
+    steps: 'Score Impact (1–10), Confidence (1–10), and Ease (1–10); multiply or average to rank.'
+  },
+  {
+    cat: 'Prioritization',
+    name: 'MoSCoW Method',
+    acronym: 'Must · Should · Could · Won’t have',
+    desc: 'Categorical prioritization technique used to align stakeholders on release scope.',
+    when: 'Timeboxed releases, stakeholder alignment workshops, and MVP scope negotiation.',
+    steps: 'Classify each requirement into Must-have (non-negotiable), Should-have, Could-have, or Won’t-have (this release).'
+  },
+  {
+    cat: 'Prioritization',
+    name: 'Kano Model',
+    acronym: 'Basic · Performance · Delighters',
+    desc: 'Classifies features by how they affect customer satisfaction vs. implementation investment.',
+    when: 'Balancing table-stakes reliability, competitive features, and high-impact differentiators.',
+    steps: 'Map features into Must-be (expected), One-dimensional (more = better), Attractive (delighters), Indifferent, or Reverse.'
+  },
+  {
+    cat: 'Prioritization',
+    name: 'WSJF (Weighted Shortest Job First)',
+    acronym: 'Cost of Delay ÷ Job Duration',
+    desc: 'SAFe® economic prioritization model that maximizes value delivered per unit of time.',
+    when: 'Agile Release Trains, competing enterprise initiatives, and bottlenecked engineering teams.',
+    steps: 'Cost of Delay = (User/Business Value + Time Criticality + Risk Reduction/Opportunity Enablement) ÷ Job Size.'
+  },
+  {
+    cat: 'Prioritization',
+    name: 'Value vs. Effort Matrix (2×2)',
+    acronym: 'Quick Wins · Big Bets · Fill-Ins · Time Sinks',
+    desc: 'Visual 2×2 quadrant plotting expected business value against implementation effort.',
+    when: 'Rapidly triaging ideas with cross-functional teams or executives in a 30-minute session.',
+    steps: 'Do Quick Wins (High Value, Low Effort) first; schedule Big Bets; defer Fill-Ins; cut Time Sinks.'
+  },
+  // Problem-Solving & Interview Frameworks
+  {
+    cat: 'Problem-Solving & Interviews',
+    name: 'CIRCLES Method',
+    acronym: 'Comprehend · Identify · Report · Cut · List · Evaluate · Summarize',
+    desc: 'Structured product design and problem-solving framework (Lewis C. Lin) for ambiguous challenges.',
+    when: 'Product design interviews, 0-to-1 feature discovery, and structuring ambiguous stakeholder requests.',
+    steps: 'Comprehend situation → Identify customer → Report needs → Cut through prioritization → List solutions → Evaluate trade-offs → Summarize.'
+  },
+  {
+    cat: 'Problem-Solving & Interviews',
+    name: 'STARL Method',
+    acronym: 'Situation · Task · Action · Result · Learning',
+    desc: 'Behavioral storytelling framework that extends STAR with explicit reflection and growth.',
+    when: 'Leadership interviews, post-mortems, executive reviews, and demonstrating PM maturity.',
+    steps: 'Set Situation & Task → Detail your specific Action → Quantify the Result → Share the key Learning & what you’d do differently.'
+  },
+  {
+    cat: 'Problem-Solving & Interviews',
+    name: 'HEART Framework',
+    acronym: 'Happiness · Engagement · Adoption · Retention · Task Success',
+    desc: 'Google’s user-centered UX metrics framework linking product goals to measurable signals.',
+    when: 'Defining UX/product success metrics beyond vanity traffic numbers.',
+    steps: 'For each dimension (H-E-A-R-T), define Goal → Signal → Metric.'
+  },
+  {
+    cat: 'Problem-Solving & Interviews',
+    name: 'AARRR (Pirate Metrics)',
+    acronym: 'Acquisition · Activation · Retention · Referral · Revenue',
+    desc: 'Full-funnel growth and lifecycle framework for diagnosing where users drop off.',
+    when: 'SaaS/consumer funnel optimization, growth diagnostics, and product-led growth (PLG).',
+    steps: 'Measure conversion and drop-off at each stage; fix Retention/Activation before scaling Acquisition.'
+  },
+  {
+    cat: 'Problem-Solving & Interviews',
+    name: 'AARM Method',
+    acronym: 'Acquisition · Activation · Retention · Monetization',
+    desc: 'PM metric-definition framework for structuring product KPIs in interviews and reviews.',
+    when: 'Answering "How would you measure success for X?" or setting product health dashboards.',
+    steps: 'Define 1–2 leading/lagging metrics per stage plus guardrail metrics (e.g., latency, churn, support tickets).'
+  },
+  {
+    cat: 'Problem-Solving & Interviews',
+    name: '5 Whys & Fishbone (Ishikawa)',
+    acronym: 'Root Cause Analysis (RCA)',
+    desc: 'Iterative questioning and cause-categorization techniques to uncover systemic root causes.',
+    when: 'Incident post-mortems, defect spikes, missed milestones, or recurring team blockers.',
+    steps: 'Ask "Why?" 5 times until you reach a process/systemic cause; group causes (People, Process, Tech, Environment) on a Fishbone.'
+  },
+  // Strategy, Discovery & Alignment
+  {
+    cat: 'Strategy & Discovery',
+    name: 'Jobs-to-be-Done (JTBD)',
+    acronym: 'Functional · Emotional · Social Jobs',
+    desc: 'Focuses on the underlying progress a customer is trying to make rather than product features.',
+    when: 'Customer discovery interviews, value proposition design, and avoiding feature-factory traps.',
+    steps: 'Frame as: "When [situation], I want to [motivation], so I can [expected outcome]."'
+  },
+  {
+    cat: 'Strategy & Discovery',
+    name: 'North Star Metric (NSM)',
+    acronym: 'Value Delivered to Customers',
+    desc: 'Single leading metric that best captures the core value your product delivers to customers.',
+    when: 'Aligning autonomous product, engineering, and marketing teams around one shared outcome.',
+    steps: 'Pick a metric that reflects customer value + predicts long-term revenue (e.g., Weekly Active Teams completing a workflow).'
+  },
+  {
+    cat: 'Strategy & Discovery',
+    name: 'Opportunity Solution Tree (OST)',
+    acronym: 'Outcome → Opportunities → Solutions → Experiments',
+    desc: 'Teresa Torres’s visual discovery map connecting business outcomes to customer needs and tests.',
+    when: 'Continuous discovery, preventing premature solutioning, and linking experiments to OKRs.',
+    steps: 'Start with desired Outcome → map customer Opportunities (pain points) → brainstorm Solutions → run Assumption Tests.'
+  },
+  {
+    cat: 'Strategy & Discovery',
+    name: 'OKRs (Objectives & Key Results)',
+    acronym: 'Qualitative Objective + 2–4 Quantitative Key Results',
+    desc: 'Goal-setting framework that aligns company, team, and project outcomes without micromanaging.',
+    when: 'Quarterly/annual planning, outcome-based roadmaps, and shifting teams from output to impact.',
+    steps: 'Objective = inspiring direction; Key Results = measurable, time-bound outcomes (not a to-do list of tasks).'
+  },
+  {
+    cat: 'Strategy & Discovery',
+    name: 'SWOT & PESTEL',
+    acronym: 'Internal (S/W) · External (O/T) · Macro (PESTEL)',
+    desc: 'Strategic environmental scanning tools for assessing competitive position and macro risks.',
+    when: 'Business case creation, market entry, project chartering, and enterprise risk identification.',
+    steps: 'SWOT: Strengths, Weaknesses, Opportunities, Threats. PESTEL: Political, Economic, Social, Technological, Environmental, Legal.'
+  },
+  {
+    cat: 'Strategy & Discovery',
+    name: 'RACI Matrix',
+    acronym: 'Responsible · Accountable · Consulted · Informed',
+    desc: 'Clarifies decision-making and execution roles across cross-functional stakeholders.',
+    when: 'Complex cross-team launches, governance setup, and resolving "who owns this?" ambiguity.',
+    steps: 'Ensure every deliverable has exactly ONE Accountable (A) owner and at least one Responsible (R) doer.'
+  },
+  {
+    cat: 'Strategy & Discovery',
+    name: 'DACI & RAPID Decision Frameworks',
+    acronym: 'Driver · Approver · Contributor · Informed',
+    desc: 'Structured decision-making models that prevent consensus bottlenecks on high-stakes choices.',
+    when: 'Cross-functional architecture, pricing, or scope decisions with multiple senior stakeholders.',
+    steps: 'Assign 1 Driver (runs the process), 1 Approver (final call), Contributors (input), and Informed (notified).'
+  },
+  {
+    cat: 'Prioritization',
+    name: 'Eisenhower Matrix',
+    acronym: 'Urgent vs. Important (4 Quadrants)',
+    desc: 'Time-management and triage matrix separating true strategic importance from noisy urgency.',
+    when: 'Daily PM triage, managing stakeholder escalations, and protecting deep-work roadmap time.',
+    steps: 'Q1 (Do Now: Urgent+Important) · Q2 (Schedule: Important, Not Urgent) · Q3 (Delegate: Urgent, Not Important) · Q4 (Eliminate).'
+  },
+  {
+    cat: 'Prioritization',
+    name: 'T-Shirt Sizing & Planning Poker',
+    acronym: 'XS/S/M/L/XL · Fibonacci (1, 2, 3, 5, 8, 13)',
+    desc: 'Relative estimation techniques that align teams on complexity and uncertainty without false precision.',
+    when: 'Roadmap capacity planning (T-Shirt) and Sprint backlog refinement (Planning Poker).',
+    steps: 'Estimate relative effort/complexity collaboratively; discuss outliers (highest vs. lowest) to surface hidden assumptions.'
+  },
+  {
+    cat: 'Prioritization',
+    name: 'Affinity Estimation',
+    acronym: 'Silent Grouping by Relative Size',
+    desc: 'Fast, collaborative technique to size dozens of backlog items in minutes.',
+    when: 'New project kickoffs, quarterly release planning, or sizing a large unestimated backlog.',
+    steps: 'Team silently groups items into size buckets (e.g., S/M/L) on a board, then discusses only disputed items.'
+  },
+  {
+    cat: 'Strategy & Discovery',
+    name: 'Lean Canvas',
+    acronym: '1-Page Business Model (Problem → Solution → Metrics → Unfair Advantage)',
+    desc: 'Ash Maurya’s 9-block adaptation of Business Model Canvas focused on startups and new product bets.',
+    when: '0-to-1 product pitches, validating a new business line, or aligning on riskiest assumptions.',
+    steps: 'Fill Problem, Customer Segments, Unique Value Prop, Solution, Channels, Revenue, Cost, Key Metrics, and Unfair Advantage.'
+  },
+  {
+    cat: 'Strategy & Discovery',
+    name: 'Value Proposition Canvas',
+    acronym: 'Customer Profile (Jobs/Pains/Gains) ↔ Value Map',
+    desc: 'Ensures product features directly relieve customer pains and create desired gains.',
+    when: 'Positioning a new feature, refining messaging, or diagnosing low feature adoption.',
+    steps: 'Map Customer Jobs, Pains, and Gains first; then design Pain Relievers and Gain Creators that fit.'
+  },
+  {
+    cat: 'Strategy & Discovery',
+    name: 'Hook Model',
+    acronym: 'Trigger → Action → Variable Reward → Investment',
+    desc: 'Nir Eyal’s habit-forming product loop for building organic, recurring user engagement.',
+    when: 'Designing retention loops, onboarding flows, and daily/weekly active product habits.',
+    steps: 'Pair an External/Internal Trigger with a simple Action, a Variable Reward, and a small user Investment.'
+  },
+  {
+    cat: 'Problem-Solving & Interviews',
+    name: 'Sean Ellis PMF Survey',
+    acronym: '40% "Very Disappointed" Benchmark',
+    desc: 'Quantitative Product-Market Fit test measuring how indispensable your product is to users.',
+    when: 'Before scaling acquisition spend, or validating whether a pivot/MVP achieved Product-Market Fit.',
+    steps: 'Ask "How would you feel if you could no longer use [product]?" ≥ 40% "Very disappointed" signals PMF.'
+  },
+  {
+    cat: 'Problem-Solving & Interviews',
+    name: 'DORA Metrics',
+    acronym: 'Deployment Freq · Lead Time · MTTR · Change Failure Rate',
+    desc: 'Industry-standard DevOps & engineering delivery metrics balancing speed with stability.',
+    when: 'Improving release velocity, diagnosing CI/CD bottlenecks, and partnering with engineering leadership.',
+    steps: 'Track Throughput (Deployment Frequency, Lead Time for Changes) alongside Stability (MTTR, Change Failure Rate).'
+  }
 ];
