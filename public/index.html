@@ -4528,14 +4528,15 @@ function activePillarFor(viewId) {
 
 /* ============ Toast & Inspector Modal ============ */
 let toastTimer = null;
-function showToast(msg) {
+function showToast(msg, ms = 2600) {
   const el = $('toast');
   if (!el) return;
-  el.textContent = msg;
+  el.innerHTML = msg;
   el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+  toastTimer = setTimeout(() => el.classList.remove('show'), ms);
 }
+const toast = showToast;
 
 function showInspector(title, htmlBody) {
   const m = $('inspector-modal');

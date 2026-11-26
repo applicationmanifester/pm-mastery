@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pm-mastery-v2-mwxi0kdg';
+const CACHE_NAME = 'pm-mastery-v2-mwxi8owz';
 const ASSETS = [
   './',
   './index.html',
@@ -22,6 +22,19 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+  const isNav = event.request.mode === 'navigate' || event.request.url.endsWith('.html');
+  if (isNav) {
+    event.respondWith(
+      fetch(event.request).then(res => {
+        if (res && res.status === 200 && res.type === 'basic') {
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        }
+        return res;
+      }).catch(() => caches.match(event.request))
+    );
+    return;
+  }
   event.respondWith(
     caches.match(event.request).then(cached => {
       const networkFetch = fetch(event.request).then(res => {
