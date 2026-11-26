@@ -107,6 +107,7 @@ function showInspector(title, htmlBody) {
   $('insp-body').innerHTML = htmlBody;
   m.classList.add('open');
 }
+window.showInspector = showInspector;
 function closeInspector() {
   const m = $('inspector-modal');
   if (m) m.classList.remove('open');
