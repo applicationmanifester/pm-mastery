@@ -5446,12 +5446,15 @@ V.risk = () => {
     <div><div class="m">P95 Worst-Case</div><div class="stat">$${money(mc.p95)}</div></div>
   </div></div>
   <div class="card">
-    <div class="row" style="justify-content:space-between;margin-bottom:12px">
-      <h3>Risk Analysis Engine</h3>
-      <div class="seg">
-        <button class="${tab === 'mc' ? 'active' : ''}" onclick="store.riskTab='mc';save();render()">Monte Carlo</button>
-        <button class="${tab === 'heatmap' ? 'active' : ''}" onclick="store.riskTab='heatmap';save();render()">5×5 Heatmap</button>
-        <button class="${tab === 'table' ? 'active' : ''}" onclick="store.riskTab='table';save();render()">Risk Register</button>
+    <div class="row" style="justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+      <h3 style="margin:0">Risk Analysis Engine</h3>
+      <div class="row" style="gap:8px;flex-wrap:wrap">
+        <div class="seg">
+          <button class="${tab === 'mc' ? 'active' : ''}" onclick="store.riskTab='mc';save();render()">Monte Carlo</button>
+          <button class="${tab === 'heatmap' ? 'active' : ''}" onclick="store.riskTab='heatmap';save();render()">5×5 Heatmap</button>
+          <button class="${tab === 'table' ? 'active' : ''}" onclick="store.riskTab='table';save();render()">Risk Register</button>
+        </div>
+        <button type="button" class="btn2" onclick="resetRisks()" title="Reset to default risks">↺ Reset</button>
       </div>
     </div>
     ${tab === 'mc' ? `<div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
@@ -5484,6 +5487,7 @@ function addRisk() {
   playSound('click'); render();
 }
 function delRisk(i) { persistRisks(risks().filter((_, k) => k !== i)); playSound('click'); render(); }
+function resetRisks() { store.risks = null; save(); playSound('click'); toast('Risks reset to defaults'); render(); }
 
 /* ============ Stakeholders ============ */
 V.stake = () => `
