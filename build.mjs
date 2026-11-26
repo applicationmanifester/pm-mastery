@@ -3,6 +3,7 @@ import path from 'node:path';
 
 const ORDER = [
   'src/data/knowledge.js',
+  'src/data/product.js',
   'src/data/quiz_extended.js',
   'src/data/quiz.js',
   'src/engines/pm.js',

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pm-mastery-v2-mwxi8owz';
+const CACHE_NAME = 'pm-mastery-v2-mwxigvn5';
 const ASSETS = [
   './',
   './index.html',
