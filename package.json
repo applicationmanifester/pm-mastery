@@ -1,0 +1,11 @@
+{
+  "name": "pm-mastery",
+  "version": "2.0.0",
+  "description": "Offline-first PMP, CAPM & Agile interactive study hub with ECO Exam Simulator, CPM, EVM, Monte Carlo, Kanban, and SM-2 Flashcards.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.cjs",
+    "build": "node build.mjs",
+    "test": "node build.mjs && node --test tests/run.mjs"
+  }
+}

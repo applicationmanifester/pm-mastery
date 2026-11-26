@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = process.env.PORT || 8080;
-const HTML_FILE = 'PM Mastery_ Learn, Revise, Practise.html';
+const PUBLIC_DIR = path.join(__dirname, 'public');
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -21,13 +21,13 @@ const MIME_TYPES = {
 const server = http.createServer((req, res) => {
   let decodedPath = decodeURIComponent(req.url.split('?')[0]);
   if (decodedPath === '/' || decodedPath === '/index.html') {
-    decodedPath = '/' + HTML_FILE;
+    decodedPath = '/index.html';
   }
 
-  const filePath = path.join(__dirname, decodedPath);
+  const filePath = path.join(PUBLIC_DIR, decodedPath);
   
   // Security check: prevent directory traversal
-  if (!filePath.startsWith(__dirname)) {
+  if (!filePath.startsWith(PUBLIC_DIR)) {
     res.writeHead(403, { 'Content-Type': 'text/plain' });
     res.end('403 Forbidden');
     return;

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<meta name="description" content="PM Mastery: Interactive PMP, CAPM & Agile study hub with ECO Exam Simulator, CPM, EVM, Monte Carlo, Kanban, and SM-2 Flashcards.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PM Mastery">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg?v=3">
+<link rel="apple-touch-icon" href="icon.svg?v=3">
+<title>PM Mastery: Learn, Revise, Practise</title>
+<style>/*__STYLES__*/</style>
+</head>
+<body>
+<header>
+  <div class="top-bar">
+    <div class="row" style="gap:8px;align-items:center">
+      <a class="brand" href="#dash">
+        <img src="icon.svg?v=3" alt="PM" width="26" height="26" style="border-radius:6px;flex-shrink:0">
+        <h1>PM Mastery</h1>
+      </a>
+      <button type="button" id="cert-badge" class="cert-pill" onclick="openOnboarding()" title="Change Target Certification" aria-label="Change Target Certification">PMP®</button>
+    </div>
+    <div class="top-actions">
+      <input id="q" placeholder="Search (/)" oninput="doSearch(this.value)" aria-label="Search">
+      <button type="button" class="btn2" id="installBtn" onclick="installPWA()" title="Install App" aria-label="Install App">📲</button>
+      <button type="button" class="btn2" id="snd" onclick="toggleSound()" title="Toggle Sound" aria-label="Toggle Sound">🔊</button>
+      <button type="button" class="btn2" id="theme" onclick="toggleTheme()" title="Switch Theme" aria-label="Switch Theme">Auto</button>
+      <button type="button" class="btn2" onclick="openAbout()" title="About &amp; How to Use" aria-label="About and How to Use">?</button>
+    </div>
+  </div>
+  <nav class="pillar-nav" aria-label="Primary Navigation">
+    <a href="#dash" data-pillar="today">🏠 Today</a>
+    <a href="#learn" data-pillar="learn">📖 Learn</a>
+    <a href="#cpm" data-pillar="labs">🧪 Labs</a>
+    <a href="#flash" data-pillar="practise">🎯 Practise</a>
+    <a href="#process" data-pillar="ref">📚 Reference</a>
+  </nav>
+</header>
+<div class="subnav-bar">
+  <div id="subnav" class="subnav-inner"></div>
+</div>
+
+<main id="app"></main>
+
+<footer class="site-footer">
+  <div>© 2026 <strong>Bhargav G K</strong> · PM Mastery · <a href="#legal">Terms, Privacy &amp; Trademarks</a></div>
+  <div class="m" style="margin-top:4px">Independent study tool; not affiliated with or endorsed by the Project Management Institute, Inc. PMI®, PMP®, CAPM®, PMI-ACP®, and PMBOK® are registered marks of PMI, Inc.</div>
+</footer>
+
+<nav id="bottom-nav" aria-label="Mobile Navigation">
+  <a href="#dash" data-pillar="today"><span class="ico">🏠</span><span>Today</span></a>
+  <a href="#learn" data-pillar="learn"><span class="ico">📖</span><span>Learn</span></a>
+  <a href="#cpm" data-pillar="labs"><span class="ico">🧪</span><span>Labs</span></a>
+  <a href="#flash" data-pillar="practise"><span class="ico">🎯</span><span>Practise</span></a>
+  <a href="#process" data-pillar="ref"><span class="ico">📚</span><span>Ref</span></a>
+</nav>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<div id="inspector-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="insp-title" onclick="if(event.target===this)closeInspector()">
+  <div class="modal-card">
+    <div class="row" style="justify-content:space-between;margin-bottom:10px">
+      <strong id="insp-title" style="font-size:16px">Details</strong>
+      <button class="btn2" onclick="closeInspector()" aria-label="Close details modal">✕</button>
+    </div>
+    <div id="insp-body" class="m" style="line-height:1.6"></div>
+  </div>
+</div>
+
+<div id="onboard-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="onboard-title" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-card">
+    <h2 id="onboard-title" style="margin-top:0">Welcome to PM Mastery 👋</h2>
+    <p class="m">Personalize your adaptive study plan and exam readiness benchmarks.</p>
+    <div style="margin:12px 0">
+      <label for="ob-cert">Target Certification</label>
+      <select id="ob-cert">
+        <option value="PMP">PMP® (Project Management Professional)</option>
+        <option value="CAPM">CAPM® (Certified Associate in PM)</option>
+        <option value="PMI-ACP">PMI-ACP® (Agile Certified Practitioner)</option>
+      </select>
+    </div>
+    <div style="margin:12px 0">
+      <label for="ob-date">Target Exam Date (Optional)</label>
+      <input id="ob-date" type="date">
+    </div>
+    <div style="margin:12px 0">
+      <label for="ob-goal">Daily Study Goal (actions/day)</label>
+      <input id="ob-goal" type="number" min="3" max="100" value="10">
+    </div>
+    <div class="row" style="justify-content:space-between;margin-top:16px">
+      <button class="btn2" onclick="skipOnboarding()">Skip for now</button>
+      <button class="btn" onclick="saveOnboarding()">Save Study Goal →</button>
+    </div>
+  </div>
+</div>
+
+<div id="legal-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="legal-title" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-card">
+    <div class="row" style="justify-content:space-between;margin-bottom:10px">
+      <strong id="legal-title" style="font-size:16px">Terms, Privacy &amp; Trademark Notice</strong>
+      <button class="btn2" onclick="document.getElementById('legal-modal').classList.remove('open')" aria-label="Close legal notice">✕</button>
+    </div>
+    <div class="m" style="font-size:13px;line-height:1.6;display:flex;flex-direction:column;gap:10px">
+      <p style="margin:0"><strong style="color:var(--t)">Copyright:</strong> © 2026 Bhargav G K. All rights reserved. Original source code, interactive calculators, visualizations, and study summaries are the intellectual property of Bhargav G K.</p>
+      <p style="margin:0"><strong style="color:var(--t)">Trademark &amp; Non-Affiliation:</strong> PM Mastery is an independent educational resource and is not affiliated with, endorsed by, or sponsored by the Project Management Institute, Inc. (PMI). PMI®, PMP®, CAPM®, PMI-ACP®, and PMBOK® are registered trademarks of PMI, Inc.</p>
+      <p style="margin:0"><strong style="color:var(--t)">Terms of Use:</strong> This application is provided "as is" for personal educational study only, without warranties of any kind or guarantee of exam results. Always verify official exam requirements on <a href="https://www.pmi.org" target="_blank" rel="noopener noreferrer">pmi.org</a>.</p>
+      <p style="margin:0"><strong style="color:var(--t)">Privacy &amp; Data:</strong> Your study progress, flashcards, and settings are stored locally in your browser (<code>localStorage</code>). No tracking cookies or server-side accounts are used. If you choose to use the optional AI Coach, your entered prompt is sent directly from your browser to Google's Gemini API using your own API key.</p>
+    </div>
+  </div>
+</div>
+
+<script>/*__SCRIPT__*/</script>
+</body>
+</html>
