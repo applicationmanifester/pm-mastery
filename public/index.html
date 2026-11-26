@@ -4764,7 +4764,7 @@ function recordActivity(points = 1) {
 const PILLARS = [
   { id: 'today', label: 'Today', views: [{ id: 'dash', label: 'Dashboard' }, { id: 'revise', label: 'Checklist & Backup' }, { id: 'legal', label: 'Legal & Privacy' }] },
   { id: 'learn', label: 'Learn', views: [{ id: 'learn', label: 'Principles & Domains' }, { id: 'guide', label: 'Chapter Map' }, { id: 'lessons', label: 'Lessons' }] },
-  { id: 'labs', label: 'Labs', views: [{ id: 'cpm', label: 'CPM Network' }, { id: 'evm', label: 'EVM & Advisor' }, { id: 'risk', label: 'Monte Carlo & Risk' }, { id: 'method', label: 'Agile & Kanban' }, { id: 'formulas', label: 'Formulas' }, { id: 'stake', label: 'Stakeholders' }, { id: 'frameworks', label: 'Frameworks Lab' }] },
+  { id: 'labs', label: 'Labs', views: [{ id: 'cpm', label: 'CPM Network' }, { id: 'evm', label: 'EVM & Advisor' }, { id: 'risk', label: 'Monte Carlo & Risk' }, { id: 'method', label: 'Agile & Kanban' }, { id: 'formulas', label: 'Formulas' }, { id: 'stake', label: 'Stakeholders' }] },
   { id: 'practise', label: 'Practise', views: [{ id: 'flash', label: 'Flashcards' }, { id: 'quiz', label: 'Quiz Drills' }, { id: 'exam', label: 'Exam Simulator' }] },
   { id: 'product', label: 'Product Mastery', views: [{ id: 'pm-hub', label: 'Frameworks & Deep Dives' }, { id: 'pm-prio', label: 'Prioritization Studio' }, { id: 'pm-metrics', label: 'Metrics & Growth Lab' }, { id: 'pm-cases', label: 'Cases & Drills' }] },
   { id: 'ref', label: 'Reference', views: [{ id: 'process', label: '49-Process Grid' }, { id: 'ref', label: 'ITTOs, Frameworks & Resources' }, { id: 'glossary', label: 'Glossary' }, { id: 'ai', label: 'AI Coach & Prompts' }] }
@@ -6520,43 +6520,7 @@ const FW_PROMPTS = {
   }
 };
 
-V.frameworks = () => `
-  <h2>Frameworks Practice Lab</h2>
-  <p class="m" style="font-size:13px;margin-top:0">Practise prioritization scoring (RICE &amp; WSJF) and structured problem-solving (CIRCLES, STARL, JTBD) interactively.</p>
-  <div class="card">
-    <h3>1. Prioritization Scorer (RICE &amp; WSJF)</h3>
-    <div class="row" style="margin-bottom:10px">
-      <button class="btn primary" id="pm-rice-btn" onclick="setPrioMode('rice')">RICE (Reach × Impact × Conf ÷ Effort)</button>
-      <button class="btn" id="pm-wsjf-btn" style="opacity:0.55;background:var(--bg);color:var(--t);border:1px solid var(--b)" onclick="setPrioMode('wsjf')">WSJF (Cost of Delay ÷ Job Size)</button>
-    </div>
-    <div id="prio-inputs" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px">
-      <div><label>Feature / Initiative</label><input id="pr-name" placeholder="e.g., SSO Login" value="AI Status Digest"></div>
-      <div><label id="pr-l1">Reach (users/qtr)</label><input id="pr-v1" type="number" value="1000" min="1"></div>
-      <div><label id="pr-l2">Impact (0.25–3)</label><input id="pr-v2" type="number" value="2" step="0.25" min="0.25"></div>
-      <div><label id="pr-l3">Confidence (%)</label><input id="pr-v3" type="number" value="80" min="1" max="100"></div>
-      <div><label id="pr-l4">Effort (person-mo)</label><input id="pr-v4" type="number" value="2" step="0.5" min="0.25"></div>
-    </div>
-    <button class="btn primary" onclick="addPrioItem()">Add &amp; Rank Item</button>
-    <button class="btn" onclick="loadPrioExample()" style="margin-left:6px">Load Example</button>
-    <button class="btn" onclick="clearPrioItems()" style="margin-left:6px">Clear</button>
-    <button class="btn" onclick="resetPrioLab()" style="margin-left:6px">Reset</button>
-    <div id="prio-table" class="table-wrap" style="margin-top:12px"></div>
-  </div>
-  <div class="card">
-    <h3>2. Guided Framework Worksheet (CIRCLES · STARL · JTBD)</h3>
-    <div class="row" style="margin-bottom:10px;gap:6px;flex-wrap:wrap">
-      <select id="fw-ws-sel" onchange="renderFwWorksheet()">
-        <option value="circles">CIRCLES (Product Design)</option>
-        <option value="starl">STARL (Behavioral / Leadership)</option>
-        <option value="jtbd">JTBD (Jobs-to-be-Done)</option>
-      </select>
-      <button class="btn" onclick="loadFwExample()">Load Example</button>
-      <button class="btn" onclick="clearFwWorksheet()">Clear</button>
-      <button class="btn primary" id="fw-copy-btn" onclick="copyFwWorksheet()">Copy Structured Answer</button>
-    </div>
-    <div id="fw-ws-body"></div>
-  </div>
-`;
+V.frameworks = () => { setTimeout(() => go('pm-prio'), 0); return '<p class="m">Redirecting to Product Mastery...</p>'; };
 
 let prioMode = 'rice';
 let prioItems = store.prioItems || [
