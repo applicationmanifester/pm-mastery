@@ -1,0 +1,2963 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PM Mastery: Learn, Revise, Practise</title>
+<style>
+:root {
+  --bg: #f8fafc;
+  --s: #ffffff;
+  --t: #0f172a;
+  --m: #64748b;
+  --a: #3b82f6;
+  --a-hover: #2563eb;
+  --ok: #10b981;
+  --bad: #ef4444;
+  --warn: #f59e0b;
+  --b: #e2e8f0;
+  --hi: rgba(59, 130, 246, 0.08);
+  --hi-crit: rgba(239, 68, 68, 0.12);
+  --crit: #ef4444;
+  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f172a;
+    --s: #1e293b;
+    --t: #f1f5f9;
+    --m: #94a3b8;
+    --a: #60a5fa;
+    --a-hover: #93c5fd;
+    --ok: #34d399;
+    --bad: #f87171;
+    --warn: #fbbf24;
+    --b: #334155;
+    --hi: rgba(96, 165, 250, 0.14);
+    --hi-crit: rgba(248, 113, 113, 0.18);
+    --crit: #f87171;
+    --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f172a;
+  --s: #1e293b;
+  --t: #f1f5f9;
+  --m: #94a3b8;
+  --a: #60a5fa;
+  --a-hover: #93c5fd;
+  --ok: #34d399;
+  --bad: #f87171;
+  --warn: #fbbf24;
+  --b: #334155;
+  --hi: rgba(96, 165, 250, 0.14);
+  --hi-crit: rgba(248, 113, 113, 0.18);
+  --crit: #f87171;
+  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--t);
+  font: 15px/1.6 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  background: var(--s);
+  border-bottom: 1px solid var(--b);
+  z-index: 10;
+  padding: 8px 14px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+h1 { font-size: 16px; margin: 0 8px 0 0; white-space: nowrap; font-weight: 700; color: var(--a); }
+nav { display: flex; gap: 3px; flex-wrap: wrap; flex: 1; }
+nav a {
+  color: var(--m);
+  text-decoration: none;
+  padding: 5px 9px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+nav a:hover { color: var(--t); background: var(--hi); }
+nav a.on { color: var(--a); border-color: var(--b); background: var(--bg); font-weight: 600; }
+#q { width: 170px; padding: 6px 10px; font-size: 13px; }
+main { max-width: 980px; margin: 0 auto; padding: 20px 16px 80px; }
+.card {
+  background: var(--s);
+  border: 1px solid var(--b);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 12px 0;
+  box-shadow: var(--card-shadow);
+}
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
+.stat { font-size: 26px; font-weight: 700; }
+h2 { font-size: 20px; margin: 6px 0 12px; }
+h3 { font-size: 15px; margin: 10px 0 6px; }
+.m { color: var(--m); }
+a { color: var(--a); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.btn {
+  background: var(--a);
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.btn:hover { background: var(--a-hover); }
+.btn2 {
+  background: none;
+  border: 1px solid var(--b);
+  color: var(--t);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+.btn2:hover { background: var(--hi); border-color: var(--a); }
+.btn:disabled, .btn2:disabled { opacity: .4; cursor: default; }
+input, select, textarea {
+  font: inherit;
+  padding: 8px;
+  border: 1px solid var(--b);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--t);
+  width: 100%;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--a);
+  box-shadow: 0 0 0 2px var(--hi);
+}
+textarea { font-family: ui-monospace, Menlo, monospace; font-size: 13px; min-height: 120px; }
+.opt {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 6px 0;
+  padding: 10px 12px;
+  border: 1px solid var(--b);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--t);
+  cursor: pointer;
+  font: inherit;
+  transition: all 0.15s ease;
+}
+.opt:hover:not(:disabled) { border-color: var(--a); background: var(--hi); }
+.opt.ok { border-color: var(--ok); color: var(--ok); background: rgba(16, 185, 129, 0.08); font-weight: 600; }
+.opt.bad { border-color: var(--bad); color: var(--bad); background: rgba(239, 68, 68, 0.08); }
+.opt.sel { border-color: var(--a); color: var(--a); background: var(--hi); font-weight: 600; }
+.bar { height: 8px; background: var(--b); border-radius: 6px; overflow: hidden; }
+.bar span { display: block; height: 100%; background: var(--a); transition: width .3s; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+td, th { border-bottom: 1px solid var(--b); padding: 7px; text-align: left; vertical-align: top; }
+tr.crit td { background: var(--hi-crit); }
+code { background: var(--bg); padding: 1px 6px; border-radius: 4px; font-size: 13px; font-family: ui-monospace, Menlo, monospace; }
+.chk { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; cursor: pointer; }
+.chk input { width: auto; margin-top: 4px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.pill { display: inline-block; font-size: 12px; border: 1px solid var(--b); border-radius: 20px; padding: 2px 9px; color: var(--m); background: var(--s); }
+.tag { font-size: 11px; padding: 2px 8px; border-radius: 6px; background: var(--hi); color: var(--a); font-weight: 600; display: inline-block; }
+.tag.crit { background: var(--hi-crit); color: var(--crit); }
+.g2 { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+@media (max-width: 640px) { .g2 { grid-template-columns: 1fr; } #q { width: 110px; } }
+.kbd { font-size: 11px; border: 1px solid var(--b); border-radius: 4px; padding: 1px 5px; color: var(--m); background: var(--bg); }
+label { display: block; font-size: 13px; color: var(--m); margin-bottom: 4px; }
+.neg { color: var(--bad); }
+.pos { color: var(--ok); }
+.seg { display: inline-flex; background: var(--bg); border: 1px solid var(--b); border-radius: 8px; padding: 2px; gap: 2px; }
+.seg button { background: none; border: 0; padding: 6px 12px; border-radius: 6px; color: var(--m); font: inherit; cursor: pointer; font-size: 13px; font-weight: 500; }
+.seg button.active { background: var(--s); color: var(--a); box-shadow: 0 1px 2px rgba(0,0,0,0.06); font-weight: 600; }
+
+/* 3D Flashcard Flip */
+.flip-container { perspective: 1000px; margin: 12px 0; }
+.flip-card {
+  min-height: 200px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease;
+  cursor: pointer;
+  border-radius: 12px;
+}
+.flip-card.flipped { transform: rotateY(180deg); }
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  border: 1px dashed var(--b);
+  border-radius: 12px;
+  background: var(--s);
+  text-align: center;
+}
+.flip-back { transform: rotateY(180deg); background: var(--bg); }
+
+/* SVG Diagrams & Maps */
+.svg-scroll-container {
+  overflow-x: auto;
+  border: 1px solid var(--b);
+  border-radius: 10px;
+  background: var(--bg);
+  padding: 12px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.03);
+}
+
+@media print {
+  header, nav, #q, #theme, #snd, .btn, .btn2, input, select, textarea, .seg, .kbd { display: none !important; }
+  main { max-width: 100% !important; padding: 0 !important; }
+  .card { border: 1px solid #ccc !important; box-shadow: none !important; page-break-inside: avoid; margin: 8px 0 !important; }
+  body { background: #fff !important; color: #000 !important; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>PM Mastery</h1>
+  <nav id="nav">
+    <a href="#dash">Dashboard</a>
+    <a href="#learn">Principles</a>
+    <a href="#guide">Chapter Map</a>
+    <a href="#process">Processes</a>
+    <a href="#lessons">Lessons</a>
+    <a href="#ref">Reference</a>
+    <a href="#method">Methods</a>
+    <a href="#cpm">CPM Lab</a>
+    <a href="#evm">EVM</a>
+    <a href="#formulas">Formulas Lab</a>
+    <a href="#risk">Risk Lab</a>
+    <a href="#stake">Stakeholders</a>
+    <a href="#glossary">Glossary</a>
+    <a href="#flash">Flashcards</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#exam">Exam</a>
+    <a href="#ai">AI in PM</a>
+    <a href="#revise">Revise</a>
+  </nav>
+  <input id="q" placeholder="Search all (/ or Esc)" oninput="doSearch(this.value)">
+  <button class="btn2" id="snd" onclick="toggleSound()">🔊 Sound</button>
+  <button class="btn2" id="theme" onclick="toggleTheme()">Theme</button>
+</header>
+<main id="app"></main>
+
+<script>
+
+/* ============ persistence (guarded; per-viewer) ============ */
+const DAY = 86400000;
+let store = {};
+try { store = JSON.parse(localStorage.getItem('pmm') || '{}'); } catch (e) { store = {}; }
+const save = () => { try { localStorage.setItem('pmm', JSON.stringify(store)); } catch (e) {} };
+store.checks ??= {}; store.quizBest ??= 0; store.srs ??= {}; store.domStats ??= {}; store.missed ??= [];
+store.risks ??= null; store.exam ??= ''; store.theme ??= 'auto'; store.sound ??= true; store.cpmTab ??= 'graph';
+store.fcMode ??= 'srs'; store.fcIdx ??= 0; store.evmTab ??= 'scurve'; store.riskTab ??= 'mc';
+store.procFilter ??= 'all'; store.procView ??= 'matrix'; store.learnTab ??= 'cards'; store.cpmPreset ??= 'software';
+store.evmPreset ??= 'custom';
+store.kanban ??= {
+  backlog: ['User Auth & SSO', 'Payment Gateway Integration', 'Push Notification Service', 'Analytics Dashboard', 'Audit Logging'],
+  inProgress: ['Database Indexing', 'API Rate Limiting'],
+  testing: ['Password Reset Flow'],
+  done: ['Landing Page']
+};
+
+/* ============ Web Audio Synthesizer ============ */
+function playSound(type) {
+  if (!store.sound) return;
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.connect(g); g.connect(ctx.destination);
+    const now = ctx.currentTime;
+    if (type === 'ok') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, now);
+      osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.15);
+      g.gain.setValueAtTime(0.12, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      osc.start(now); osc.stop(now + 0.2);
+    } else if (type === 'bad') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(329.63, now);
+      osc.frequency.setValueAtTime(261.63, now + 0.12);
+      g.gain.setValueAtTime(0.12, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      osc.start(now); osc.stop(now + 0.25);
+    } else if (type === 'click') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(750, now);
+      g.gain.setValueAtTime(0.04, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      osc.start(now); osc.stop(now + 0.05);
+    }
+  } catch (e) {}
+}
+function updateSoundBtn() {
+  const el = $('snd');
+  if (el) el.textContent = store.sound ? '🔊 Sound' : '🔇 Muted';
+}
+function toggleSound() {
+  store.sound = !store.sound;
+  save();
+  updateSoundBtn();
+  if (store.sound) playSound('click');
+}
+
+function speakText(text) {
+  if (!('speechSynthesis' in window)) { alert('Text-to-speech not supported in this browser.'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 1.0;
+  window.speechSynthesis.speak(u);
+}
+
+/* ============ content ============ */
+const PRINCIPLES = [
+  ["Stewardship", "Be a diligent, respectful, caring steward of resources: people, money, environment."],
+  ["Team", "Build a collaborative, high-performing team with clear roles and psychological safety."],
+  ["Stakeholders", "Engage stakeholders proactively; their influence shapes outcomes."],
+  ["Value", "Focus on measurable benefits and value, not just outputs."],
+  ["Systems thinking", "Treat the project as part of a larger system and respond to interactions."],
+  ["Leadership", "Show context-fitting leadership behaviours: vision, ethics, decisions, adaptation."],
+  ["Tailoring", "Tailor the delivery approach (predictive, agile, hybrid) to the context."],
+  ["Quality", "Build quality into processes and deliverables; ensure fitness for purpose."],
+  ["Complexity", "Navigate complexity from human behaviour, system interactions, and ambiguity."],
+  ["Risk", "Optimise risk responses, treating both threats and opportunities."],
+  ["Adaptability & resilience", "Absorb shocks and adjust as you learn."],
+  ["Change", "Enable change to move from current to desired future state."]
+];
+
+const DOMAINS = [
+  ["Stakeholders", "Engage stakeholders, manage expectations, communicate, resolve conflict, build support."],
+  ["Team", "Build team charter, develop competence, lead, manage conflict, empower self-organisation."],
+  ["Development approach & life cycle", "Select predictive, agile, or hybrid; define deliverables, cadence, and phases."],
+  ["Planning", "Scope, schedule, budget, quality, resources, communication, risk, procurement plans."],
+  ["Project work", "Manage resources, procurement, knowledge, and work performance in execution."],
+  ["Delivery", "Deliver scope and quality, enable benefits, handle change, close the project."],
+  ["Measurement", "Track performance with KPIs, variance, earned value, and corrective action."],
+  ["Uncertainty", "Identify and respond to risks, assumptions, issues, and ambiguity."]
+];
+
+
+const PROCESS_GROUPS = [
+  ["Initiating", "Authorise the project and identify stakeholders.", ["Develop project charter", "Identify stakeholders"]],
+  ["Planning", "Define scope, schedule, cost, quality, risk, and how work will be done.", ["Develop project management plan", "Plan scope management", "Create WBS", "Define activities", "Estimate activity durations", "Develop schedule", "Estimate costs", "Determine budget", "Plan quality management", "Plan risk management", "Identify risks", "Perform quantitative risk analysis", "Plan risk responses", "Plan procurement management", "Plan stakeholder engagement"]],
+  ["Executing", "Carry out the plan, lead the team, manage communications and procurement.", ["Direct and manage project work", "Manage project knowledge", "Manage quality", "Acquire resources", "Develop team", "Manage team", "Manage communications", "Conduct procurements", "Manage stakeholder engagement", "Implement risk responses"]],
+  ["Monitoring & Controlling", "Track, review, and regulate performance; approve changes.", ["Monitor and control project work", "Perform integrated change control", "Validate scope", "Control scope", "Control schedule", "Control costs", "Control quality", "Monitor risks", "Monitor stakeholder engagement"]],
+  ["Closing", "Formalise completion and transfer deliverables.", ["Close project or phase"]]
+];
+
+const METHODS = [
+  ["Predictive (waterfall)", "Scope and plan defined upfront; sequential phases; change via formal control. Best when requirements are stable."],
+  ["Iterative", "Refines the product through repeated cycles; each iteration improves the design."],
+  ["Incremental", "Delivers working pieces that add functionality over time."],
+  ["Agile", "Short iterations, customer collaboration, continuous feedback, adaptation to change."],
+  ["Hybrid", "Predictive governance combined with agile delivery for parts of the work."]
+];
+
+const AGILE = [
+  ["Scrum roles", "Product Owner (value, backlog), Scrum Master (process, removes impediments), Developers (build the increment)."],
+  ["Scrum events", "Sprint, Sprint Planning, Daily Scrum (15 min), Sprint Review, Sprint Retrospective."],
+  ["Scrum artifacts", "Product Backlog, Sprint Backlog, Increment; commitments: Product Goal, Sprint Goal, Definition of Done."],
+  ["Kanban", "Visualise flow, limit work in progress (WIP), make policies explicit, improve collaboratively."],
+  ["Velocity", "Work a team completes per sprint; used for forecasting, never for comparing teams."],
+  ["Burndown / burnup", "Burndown shows remaining work; burnup shows completed work against total scope."],
+  ["Retrospective", "Team reflects on process and agrees on improvements for the next iteration."]
+];
+
+const GLOSSARY = [
+  ["Project charter", "Document issued by the sponsor that formally authorises the project and gives the PM authority."],
+  ["Business case", "Justification for investment, reviewed during the project to confirm continued value."],
+  ["Stakeholder register", "Log of stakeholders with interests, influence, and engagement strategy."],
+  ["WBS", "Work Breakdown Structure: hierarchical decomposition of total scope into work packages."],
+  ["RBS", "Resource Breakdown Structure: hierarchy of resources by category and type."],
+  ["Critical path", "Longest sequence of dependent activities; sets the shortest possible project duration."],
+  ["Float (slack)", "Amount an activity can slip without delaying the project finish date."],
+  ["Fast-tracking", "Running activities in parallel that were planned in sequence; adds risk and rework."],
+  ["Crashing", "Adding resources to shorten the schedule, usually at extra cost."],
+  ["Resource leveling", "Adjusting the schedule to smooth resource demand; may extend the critical path."],
+  ["Lead and lag", "Lead lets a successor start early; lag inserts a delay between activities."],
+  ["Milestone", "Significant point or event with zero duration, often used for approvals and reviews."],
+  ["RACI", "Responsibility matrix: Responsible, Accountable, Consulted, Informed."],
+  ["Lessons learned", "Captured knowledge about what worked and did not, for future use."],
+  ["Expert power", "Influence derived from specialised knowledge or skill."],
+  ["Risk register", "Log of risks with probability, impact, owner, and response."],
+  ["Expected Monetary Value (EMV)", "Probability multiplied by impact; used to compare risk options."],
+  ["Monte Carlo simulation", "Repeated random sampling of uncertain inputs to estimate a range of outcomes."],
+  ["Change request", "Formal proposal to change a baseline or any project element."],
+  ["Baseline", "Approved plan used as the reference for measuring performance."],
+  ["Earned Value (EV)", "Value of work actually completed, measured against its budget."],
+  ["Planned Value (PV)", "Authorised budget for scheduled work up to a given date."],
+  ["Actual Cost (AC)", "Realised cost of work performed to date."],
+  ["Governance", "Framework of rules, roles, and processes that direct and control the project."],
+  ["Sponsor", "Person or group providing resources and support; accountable for the business case."],
+  ["Escalation", "Passing an issue up the chain because it exceeds the PM's authority or tolerance."],
+  ["Contingency reserve", "Budget or schedule held for known-unknown risks, controlled by the PM."],
+  ["Management reserve", "Budget held for unknown-unknown risks, controlled by senior management."],
+  ["Organisational process assets", "Internal plans, policies, templates, and lessons learned the project can use."],
+  ["Enterprise environmental factors", "External and internal conditions outside the project's control, such as regulations and culture."],
+  ["Procurement", "Acquiring goods or services from outside the performing organisation."],
+  ["Definition of Done", "Agreed criteria a work item must meet to be considered complete."],
+  ["Impediment", "Anything that blocks or slows a team's progress."],
+  ["Psychological safety", "Shared belief that one can speak up, take risks, and admit mistakes without punishment."],
+  ["Servant leadership", "Leading by removing obstacles and enabling the team to deliver."],
+  ["Benefits realisation", "Process of ensuring intended business outcomes are achieved and sustained."],
+  ["Tailoring", "Adapting the development approach, processes, and artifacts to the project's needs."],
+  ["Point of Total Assumption (PTA)", "Cost threshold in an FPIF contract above which the seller bears 100% of additional cost overruns."],
+  ["Definition of Done (DoD)", "Formal checklist of quality criteria an increment must meet to be considered potentially releasable."],
+  ["Definition of Ready (DoR)", "Shared agreement on what must be clear and sized before a backlog item enters a sprint."],
+  ["Minimum Viable Product (MVP)", "Smallest product increment that delivers value and validates key customer hypotheses."],
+  ["Spike", "Short, timeboxed research or prototyping task used in Agile to reduce technical or requirement uncertainty."],
+  ["Servant leadership", "Leadership style focused on removing impediments, empowering the team, and supporting growth."],
+  ["Psychological safety", "Shared belief that team members can raise risks, questions, or mistakes without fear of punishment."],
+  ["Salience model", "Stakeholder classification grid based on Power, Urgency, and Legitimacy."],
+  ["Velocity", "Average story points a Scrum team completes per sprint, used for forecasting rather than comparing teams."],
+  ["Value delivery system", "End-to-end set of portfolios, programs, projects, and operations that create business value."]
+];
+
+const FORMULAS = [
+  ["CV (Cost Variance)", "EV − AC", "Negative = over budget"],
+  ["SV (Schedule Variance)", "EV − PV", "Negative = behind schedule"],
+  ["CPI", "EV ÷ AC", "< 1 = cost inefficient"],
+  ["SPI", "EV ÷ PV", "< 1 = schedule inefficient"],
+  ["EAC (typical)", "BAC ÷ CPI", "Assumes current CPI continues"],
+  ["EAC (atypical)", "AC + (BAC − EV)", "Use when variances are one-off"],
+  ["EAC (CPI & SPI)", "AC + (BAC − EV) ÷ (CPI × SPI)", "Both cost and schedule drive remaining cost"],
+  ["ETC", "EAC − AC", "Estimate to complete"],
+  ["VAC", "BAC − EAC", "Variance at completion"],
+  ["TCPI (to BAC)", "(BAC − EV) ÷ (BAC − AC)", "Efficiency needed to finish within BAC"],
+  ["TCPI (to EAC)", "(BAC − EV) ÷ (EAC − AC)", "Efficiency needed to hit revised EAC"],
+  ["EMV", "Probability × Impact", "Compare risk options on a common basis"],
+  ["PERT estimate (Beta)", "(O + 4M + P) ÷ 6", "Optimistic, most likely, pessimistic"],
+  ["Triangular estimate", "(O + M + P) ÷ 3", "Equal weight three-point average"],
+  ["PERT Standard Deviation", "(P − O) ÷ 6", "1σ spread; Variance = σ²"],
+  ["Float", "LS − ES  (or LF − EF)", "0 on the critical path"],
+  ["Communication channels", "n(n − 1) ÷ 2", "n = number of people"],
+  ["Point of Total Assumption", "((Ceiling − Target Price) ÷ Buyer Share) + Target Cost", "FPIF contract cost ceiling threshold"]
+];
+
+const QUIZ = [
+  { d:"P", q:"A project has EV = 800 and AC = 1000. What is the CPI?", o:["1.25","0.80","0.20","1.00"], a:1, e:"CPI = EV ÷ AC = 0.80. Below 1 means over budget." },
+  { d:"P", q:"Which negative risk response shifts financial impact to a third party?", o:["Avoid","Transfer","Mitigate","Escalate"], a:1, e:"Transfer moves impact or ownership to a third party, e.g., insurance or outsourcing." },
+  { d:"P", q:"Which process group contains 'Develop project charter'?", o:["Planning","Initiating","Executing","Closing"], a:1, e:"The charter authorises the project, so it sits in Initiating." },
+  { d:"P", q:"The longest path through a network diagram determines:", o:["Float","Critical path and earliest finish","Budget","Team size"], a:1, e:"The critical path sets the earliest possible project finish." },
+  { d:"P", q:"SPI = 0.9. The project is:", o:["Ahead of schedule","Behind schedule","On schedule","Under budget"], a:1, e:"SPI < 1 means less work completed than planned." },
+  { d:"P", q:"PERT with optimistic 2, most likely 5, pessimistic 14 days gives:", o:["5.0","6.0","7.0","8.0"], a:1, e:"(2 + 4×5 + 14) ÷ 6 = 6." },
+  { d:"P", q:"Which performance domain covers ambiguity, assumptions, and risk?", o:["Planning","Measurement","Uncertainty","Delivery"], a:2, e:"Uncertainty covers risks, assumptions, issues, and ambiguity." },
+  { d:"P", q:"A change request arrives mid-execution. What happens first?", o:["Implement it immediately","Submit it for impact analysis through integrated change control","Ask the sponsor to sign off the charter","Update the risk register only"], a:1, e:"All change requests go through integrated change control for impact analysis." },
+  { d:"P", q:"Which response makes a positive risk more likely to occur?", o:["Exploit","Accept","Transfer","Avoid"], a:0, e:"Exploit ensures the opportunity happens. Share, Enhance, and Accept are other positive responses." },
+  { d:"P", q:"Which reserve is controlled by senior management?", o:["Contingency","Management","Schedule","Procurement"], a:1, e:"Management reserve covers unknown-unknowns." },
+  { d:"P", q:"A Sprint Review primarily serves to:", o:["Plan the next sprint's tasks","Inspect the increment with stakeholders and adapt the backlog","Resolve team conflict","Estimate project costs"], a:1, e:"The review inspects the Increment and feeds the Product Backlog." },
+  { d:"P", q:"Kanban WIP limits primarily aim to:", o:["Increase multitasking","Improve flow and expose bottlenecks","Eliminate planning","Replace retrospectives"], a:1, e:"Limiting WIP reduces context switching and makes bottlenecks visible." },
+  { d:"P", q:"Typical EAC with BAC = 100 and CPI = 0.8:", o:["80","108","125","140"], a:2, e:"EAC = BAC ÷ CPI = 100 ÷ 0.8 = 125." },
+  { d:"P", q:"Crashing a schedule means:", o:["Adding resources to shorten critical activities, usually at extra cost","Running activities in parallel with added risk","Removing scope","Ignoring float"], a:0, e:"Crashing trades cost for time. Fast-tracking trades risk for time." },
+  { d:"E", q:"In the five-stage team development model, which stage typically involves conflict over roles and approach?", o:["Forming","Storming","Norming","Adjourning"], a:1, e:"Storming is where conflict over roles and methods surfaces before norms form." },
+  { d:"E", q:"A stakeholder with high power and low interest should be handled by:", o:["Manage closely","Keep satisfied","Keep informed","Monitor"], a:1, e:"Power/interest grid: high power, low interest = Keep satisfied." },
+  { d:"E", q:"Ten people on a team create how many communication channels?", o:["45","90","100","10"], a:0, e:"n(n − 1) ÷ 2 = 10 × 9 ÷ 2 = 45." },
+  { d:"E", q:"Two senior engineers disagree on architecture and escalate to you. Best first step?", o:["Pick the option you prefer","Facilitate a structured discussion against agreed criteria","Ignore it until the next sprint","Let the sponsor decide immediately"], a:1, e:"Facilitate, agree decision criteria, then decide or escalate with a clear recommendation." },
+  { d:"E", q:"Which action best reflects servant leadership?", o:["Assigning all tasks personally","Removing blockers so the team can deliver","Reporting only to the sponsor","Setting deadlines without input"], a:1, e:"Servant leaders remove obstacles and enable the team." },
+  { d:"E", q:"A developer repeatedly misses handoffs due to unclear ownership. Most effective first response:", o:["Issue a performance warning","Clarify ownership with a RACI and team agreement","Reassign the developer","Add more status meetings"], a:1, e:"Systemic ambiguity is fixed by clarifying roles, not by blaming individuals." },
+  { d:"E", q:"Psychological safety is best described as:", o:["Freedom from all conflict","Belief that one can speak up without fear of punishment","Strict hierarchy","Anonymous reporting only"], a:1, e:"It enables candour, which surfaces risks early." },
+  { d:"B", q:"Which document justifies the investment and is revisited during the project?", o:["Business case","Charter","WBS","Backlog"], a:0, e:"The business case is checked against benefits throughout the project." },
+  { d:"B", q:"A lessons-learned repository is classified as:", o:["Enterprise environmental factor","Organisational process asset","Stakeholder","Constraint"], a:1, e:"It is an internal asset the organisation owns and updates." },
+  { d:"B", q:"New government regulations affecting the project are classified as:", o:["Organisational process assets","Enterprise environmental factors","Risk responses","Deliverables"], a:1, e:"External conditions outside team control are enterprise environmental factors." },
+  { d:"B", q:"Pasting confidential client data into an unapproved public AI tool most directly conflicts with:", o:["The sprint goal","Data governance and the organisation's AI usage policy","The earned value method","The critical path"], a:1, e:"Data privacy and approved-tool policies apply to AI use like any other system." },
+  { d:"B", q:"Benefits realisation is most closely tied to:", o:["Output delivery only","Measurable outcomes the business gains","Team velocity","Float"], a:1, e:"Benefits are outcomes; outputs are only means to them." },
+  { d:"P", q:"A project has BAC $600,000, EV $150,000, and AC $125,000. Using EAC = AC + (BAC − EV), what is EAC?", o:["$475,000","$575,000","$600,000","$450,000"], a:1, e:"Worked example: EAC = $125,000 + $450,000 = $575,000." },
+  { d:"P", q:"Same project (BAC $600,000, EV $150,000, AC $125,000). What TCPI is needed to finish at BAC?", o:["1.33","0.95","0.75","1.25"], a:1, e:"TCPI = (BAC − EV) ÷ (BAC − AC) = $450,000 ÷ $475,000 ≈ 0.95." },
+  { d:"E", q:"How many progressive stages does the common team development model describe?", o:["Three","Four","Five","Six"], a:2, e:"Forming, storming, norming, performing, adjourning. Five stages are commonly described.", c:10 },
+  { d:"P", c:1, q:"Which two characteristics define a project?", o:["Temporary and unique","Budgeted and staffed","Ongoing and repeatable","Sponsored and managed"], a:0, e:"A project has a defined start and finish and produces a unique product, service, or result." },
+  { d:"P", c:1, q:"How many project management knowledge areas does the standard framework use?", o:["Eight","Ten","Twelve","Five"], a:1, e:"Ten knowledge areas, including integration, scope, schedule, cost, quality, resources, communications, risk, procurement, and stakeholders." },
+  { d:"B", c:2, q:"In which organisation structure does the project manager usually have the greatest authority?", o:["Functional","Weak matrix","Project-oriented","Balanced matrix"], a:2, e:"In a project-oriented structure the PM has high to near-full authority over resources." },
+  { d:"B", c:2, q:"In a functional organisation, the project manager's authority is typically:", o:["Very high","Shared equally","None to low","Full"], a:2, e:"Functional managers control resources, so PM authority is minimal." },
+  { d:"B", c:3, q:"Who typically issues the project charter?", o:["The project manager","A team lead","Management of the performing organisation or the sponsor","The procurement team"], a:2, e:"The charter is issued by management or the sponsor and authorises the PM to apply resources." },
+  { d:"B", c:3, q:"A regulator's fixed completion date for a project is best classified as:", o:["An assumption","A constraint","A risk","A milestone only"], a:1, e:"Hard deadlines imposed from outside are constraints that limit options." },
+  { d:"P", c:3, q:"An unverified condition the team treats as true for planning is a(n):", o:["Constraint","Assumption","Deliverable","Issue"], a:1, e:"Assumptions carry risk if they prove false, so they should be logged and tested." },
+  { d:"P", c:4, q:"Which outputs come from the Create WBS process?", o:["Project scope statement only","WBS and WBS dictionary","Stakeholder register","Requirements traceability matrix"], a:1, e:"Create WBS produces the WBS and its dictionary; the scope statement is separate." },
+  { d:"P", c:4, q:"Which technique gathers requirements by observing users doing their work?", o:["Brainstorming","Job shadowing","Delphi","Nominal group technique"], a:1, e:"Job shadowing is the observation technique for collecting requirements." },
+  { d:"P", c:5, q:"Which network diagramming method is most commonly used in scheduling?", o:["Arrow diagramming","Precedence diagramming method","Decision tree","Gantt chart alone"], a:1, e:"The precedence diagramming method (activity-on-node) is the most widely used." },
+  { d:"P", c:5, q:"Float (slack) is best defined as:", o:["A buffer added to the budget","The difference between allowed late start and early start","Total project duration","Unused resource hours"], a:1, e:"Float is how far an activity can slip without moving the project finish." },
+  { d:"P", c:5, q:"Overlapping activities that were planned in sequence to shorten the schedule is called:", o:["Crashing","Fast tracking","Resource leveling","Leading"], a:1, e:"Fast tracking shortens time by adding risk; crashing shortens time by adding cost." },
+  { d:"P", c:5, q:"Analogous estimating relies on:", o:["Detailed bottom-up sums","Historical data from similar past projects","Monte Carlo runs","Three-point averages"], a:1, e:"Analogous estimates are top-down and use comparable past projects." },
+  { d:"P", c:6, q:"Where does the cost baseline come from?", o:["Estimate Costs","Determine Budget","Plan Procurements","Control Costs"], a:1, e:"Determine Budget aggregates cost estimates into the cost baseline." },
+  { d:"B", c:6, q:"Under a firm fixed-price contract, who absorbs cost overruns?", o:["The buyer","The seller","Shared 50/50","The sponsor"], a:1, e:"In a firm fixed-price contract the seller bears overruns." },
+  { d:"B", c:6, q:"Under cost-plus-fixed-fee, who pays for cost overruns?", o:["The seller","The buyer","Shared","Nobody"], a:1, e:"The fee is fixed, so the buyer pays the actual costs, including overruns." },
+  { d:"P", c:6, q:"The statement of work is an output of which process?", o:["Plan Procurement Management","Conduct Procurements","Control Procurements","Plan Quality Management"], a:0, e:"The SOW is produced while planning procurements." },
+  { d:"P", c:6, q:"A contingency reserve can be applied to:", o:["Only durations","Only cost","Both duration and cost","Neither"], a:2, e:"Contingency reserves cover time and cost uncertainty." },
+  { d:"P", c:7, q:"A risk can have:", o:["Only negative effects","Only positive effects","Positive or negative effects","No effect"], a:2, e:"Risks are uncertain events that can help or hurt the project." },
+  { d:"P", c:7, q:"Building redundancy into a system is an example of which response?", o:["Avoid","Mitigate","Transfer","Accept"], a:1, e:"Mitigation reduces probability or impact; redundancy reduces impact." },
+  { d:"P", c:7, q:"Shifting a risk's financial impact to a third party such as an insurer is:", o:["Avoid","Transfer","Escalate","Share"], a:1, e:"Transfer moves impact or ownership to a third party." },
+  { d:"P", c:7, q:"Quantitative risk analysis is best described as:", o:["Ranking risks by rough judgement","Numerical analysis of the effect of identified risks","Listing risk triggers","Assigning risk owners"], a:1, e:"Quantitative analysis puts numbers on risk effects, for example through EMV or simulation." },
+  { d:"P", c:7, q:"Risks that arise because of a risk response are called:", o:["Residual risks","Secondary risks","Trigger risks","Latent risks"], a:1, e:"Secondary risks are caused by responses; residual risks remain after responses." },
+  { d:"P", c:7, q:"Which is NOT a standard risk response?", o:["Avoid","Transfer","Risk rejection","Mitigate"], a:2, e:"There is no standard response called risk rejection." },
+  { d:"P", c:10, q:"Under an authoritarian management style, managers assume employees:", o:["Seek responsibility","Dislike work and need close control","Are self-motivated","Prefer no feedback"], a:1, e:"An authoritarian style assumes employees avoid work and must be directed." },
+  { d:"P", c:10, q:"Under a trusting, participative management style, managers assume employees:", o:["Need close control","Are trusted and can be self-directed","Dislike their work","Avoid responsibility"], a:1, e:"A participative style trusts employees to be self-directed." },
+  { d:"E", c:10, q:"Which set of needs does the three-needs motivation theory focus on?", o:["Safety, belonging, and esteem","Achievement, affiliation, and power","Pay and conditions only","Hygiene factors"], a:1, e:"The three-needs theory centres on achievement, affiliation, and power." },
+  { d:"E", c:10, q:"Which conflict approach produces a win-win resolution?", o:["Withdraw","Collaborate","Force","Smooth"], a:1, e:"Collaboration seeks solutions that satisfy both sides." },
+  { d:"P", c:12, q:"Which tool plots results over time to show whether a process is stable?", o:["Control chart","Pareto chart","Fishbone diagram","Flowchart"], a:0, e:"Control charts show variation over time and flag out-of-control points." },
+  { d:"P", c:12, q:"Quality control measurements are an output of which process?", o:["Plan Quality Management","Control Quality","Manage Quality","Validate Scope"], a:1, e:"Control Quality produces measurements that show how results compare with standards." },
+  { d:"P", c:12, q:"Which process formalises customer acceptance of deliverables?", o:["Control Quality","Validate Scope","Close Project or Phase","Direct and Manage Project Work"], a:1, e:"Validate Scope gets formal acceptance; Control Quality verifies correctness first." },
+  { d:"P", c:13, q:"Earned value (EV) is calculated as:", o:["BAC × percent work complete","PV − AC","AC ÷ BAC","BAC − EV"], a:0, e:"EV = BAC × (work completed ÷ total work)." },
+  { d:"P", c:13, q:"Planned value (PV) is calculated as:", o:["BAC × percent time elapsed","EV × CPI","AC + SV","BAC − CV"], a:0, e:"PV = BAC × (time passed ÷ total time)." },
+  { d:"P", c:13, q:"A CPI greater than 1 indicates:", o:["Over budget","Under budget","Behind schedule","A critical path problem"], a:1, e:"CPI > 1 means you earn more value than you spend." },
+  { d:"P", c:13, q:"Schedule variance is calculated as:", o:["EV − PV","PV − EV","EV − AC","AC − PV"], a:0, e:"SV = EV − PV; negative means behind schedule." },
+  { d:"P", c:13, q:"Total float on the critical path is:", o:["Positive","Zero","Negative only","Unlimited"], a:1, e:"Critical activities have zero float." },
+  { d:"B", c:15, q:"Who signs the final closure documents?", o:["The project manager","The sponsor","A team lead","The procurement lead"], a:1, e:"The sponsor formally accepts closure and signs the final documents." },
+  { d:"P", c:15, q:"Should a cancelled project go through closing?", o:["Yes, every project needs closing, including cancelled ones","No","Only large projects","Only completed projects"], a:0, e:"Closing captures lessons learned and releases resources, even if the project was cancelled." },
+  { d:"P", c:15, q:"Verified deliverables are an output of which process?", o:["Control Quality","Plan Quality Management","Manage Quality","Close Project or Phase"], a:0, e:"Control Quality verifies deliverables, and the verified results feed closing." },
+  { d:"E", c:8, q:"Which document holds the management strategies for engaging each stakeholder?", o:["Stakeholder register","Stakeholder engagement plan","Issue log","Charter"], a:1, e:"The register records who stakeholders are; the engagement plan records how to engage them." },
+  { d:"E", c:8, q:"The stakeholder register is produced by which process?", o:["Plan Stakeholder Engagement","Identify Stakeholders","Manage Stakeholder Engagement","Monitor Communications"], a:1, e:"Identify Stakeholders creates the register; planning builds on it." },
+  { d:"E", c:8, q:"A team member struggles to decode unfamiliar jargon in your message. In the communication model, the jargon acts as:", o:["Feedback","Noise","A medium","A response"], a:1, e:"Anything that interferes with encoding or decoding the message is noise." },
+  { d:"E", c:8, q:"What does the plural 'communications' refer to, versus singular 'communication'?", o:["Nothing different","The artifacts, such as reports and minutes, versus the act of communicating","Verbal versus written","Internal versus external"], a:1, e:"Communication is the act (for example, sending an email); communications are the artifacts it produces." },
+  { d:"E", c:8, q:"Which feature do interactive communication models have that the basic sender/receiver model lacks?", o:["A message is sent","Ensuring the message is understood","A channel exists","A sender exists"], a:1, e:"Interactive models add feedback to confirm understanding." },
+  { d:"P", c:9, q:"Which two processes produce the lessons learned register as an output?", o:["Manage Project Knowledge and Close Project or Phase","Control Quality and Validate Scope","Plan Scope and Create WBS","Develop Team and Manage Team"], a:0, e:"Both Manage Project Knowledge and Close Project or Phase generate lessons learned." },
+  { d:"P", c:9, q:"Deliverables produced by Direct and Manage Project Work are best described as:", o:["Accepted deliverables","Deliverables that still must be verified and accepted through other processes","Verified deliverables","Closed deliverables"], a:1, e:"They come out of execution; Control Quality verifies and Validate Scope gets acceptance." },
+  { d:"P", c:9, q:"Which process applies the organisation's quality policy and procedures through quality audits?", o:["Plan Quality Management","Manage Quality","Control Quality","Validate Scope"], a:1, e:"Quality audits are a Manage Quality technique; Control Quality verifies deliverables." },
+  { d:"P", c:9, q:"Work performance data is an input to which process, rather than to Manage Quality?", o:["Control Quality","Plan Quality Management","Develop Team","Create WBS"], a:0, e:"Control Quality takes work performance data as an input." },
+  { d:"B", c:9, q:"Sellers submit proposals in response to buyers during which process?", o:["Plan Procurement Management","Conduct Procurements","Control Procurements","Close Project"], a:1, e:"Conduct Procurements is where sellers respond and contracts are awarded." },
+  { d:"P", c:9, q:"Where are procurements formally closed in this framework?", o:["A Close Procurements process","Control Procurements","Conduct Procurements","Plan Procurement Management"], a:1, e:"There is no separate Close Procurements process; Control Procurements closes them." },
+  { d:"P", c:11, q:"Which is an output of Manage Communications rather than an input?", o:["Stakeholder engagement plan","Project communications","Communications management plan","Issue log"], a:1, e:"Project communications (reports, presentations, notifications) are what the process produces." },
+  { d:"P", c:11, q:"Work performance data is an output of which process?", o:["Direct and Manage Project Work","Monitor and Control Project Work","Plan Scope Management","Close Project or Phase"], a:0, e:"Execution generates raw work performance data; monitoring turns it into information." },
+  { d:"E", c:11, q:"Which is an output of Manage Stakeholder Engagement?", o:["Change requests","Stakeholder register","Work performance information","Communications management plan"], a:0, e:"Change requests can arise while engaging stakeholders; performance information comes from monitoring processes." },
+  { d:"P", c:11, q:"Which document is used in Manage Communication and Monitor Communication but is NOT an input to Plan Communications Management?", o:["Issue log","Stakeholder register","Communications management plan","Stakeholder engagement plan"], a:0, e:"The issue log is used when communicating about and monitoring issues, not when planning how to communicate." },
+  { d:"P", c:14, q:"Which is an output of Monitor Stakeholder Engagement?", o:["Work performance information","Stakeholder register creation","Charter","Procurement documents"], a:0, e:"Monitoring processes output work performance information, not performance reports." },
+  { d:"P", c:14, q:"Monitoring processes (outside integration management) generate which of these?", o:["Work performance data","Work performance information","Deliverables","Approved changes"], a:1, e:"Data is raised in execution; monitoring and controlling processes turn it into information." },
+  { d:"P", c:14, q:"Monitor Communications is carried out according to:", o:["The communication plan alone","The stakeholder engagement plan alone","Both the communication and stakeholder engagement plans","The risk plan"], a:2, e:"It follows both plans; there is no standalone stakeholder management plan." },
+  { d:"P", c:1, q:"Which statement correctly distinguishes a project from operations?", o:["Projects are temporary with a defined end; operations are ongoing","Projects have no budget; operations do","Operations are always unique","Projects never need a plan"], a:0, e:"Operations are ongoing and have no planned closure; projects are temporary and produce something unique." },
+  { d:"B", c:1, q:"A group of interrelated projects managed together is best described as a:", o:["Program","Portfolio","Operation","Work package"], a:0, e:"Programs coordinate related projects; portfolios can hold both projects and programs." },
+  { d:"B", c:1, q:"A portfolio may contain:", o:["Projects and programs","Only a single project","Only operations","Only deliverables"], a:0, e:"Portfolios group projects and programs to meet strategic objectives." },
+  { d:"P", c:1, q:"In the process framework, every output is either a terminal output or:", o:["An input to another process","A change request","A baseline","A constraint"], a:0, e:"Outputs either end the chain or feed another process as an input." },
+  { d:"P", c:1, q:"Which statement about processes in a project is true?", o:["Every process must be performed in every project","Processes are selected and tailored to the project's needs","Only planning processes are optional","Processes apply only to predictive projects"], a:1, e:"No process has to be performed in every project; the team tailors the set it uses." },
+  { d:"E", c:2, q:"Which three skill sets are commonly used to group project manager skills?", o:["Technical project management, leadership, and strategic and business management","Cost, schedule, and scope","People, process, and business environment","Hard, soft, and legal"], a:0, e:"Technical PM skills, leadership skills, and strategic and business management skills." },
+  { d:"B", c:2, q:"Which two documents are the project business documents?", o:["Business case and benefits management plan","Charter and WBS","Risk register and issue log","Schedule and budget"], a:0, e:"The two business documents are the project business case and the project benefits management plan." },
+  { d:"B", c:2, q:"Who authorises the project?", o:["The project manager","The project sponsor","A PMO analyst","A team lead"], a:1, e:"The sponsor authorises the project, usually through the charter." },
+  { s:1, d:"P", q:"Mid-sprint, a stakeholder asks for a new feature. What is the best response?", o:["Add it to the current sprint immediately","Have the Product Owner evaluate and prioritise it in the backlog","Reject it outright","Escalate to the sponsor first"], a:1, e:"New requests go to the Product Owner, who orders the backlog; the sprint goal is protected unless it is at risk." },
+  { s:1, d:"P", q:"A risk occurs that had no planned response. What should you do first?", o:["Wait for the next risk review","Treat it as an issue: assess impact, decide a response, and update the logs","Ask the sponsor to cancel the project","Add more contingency reserve and move on"], a:1, e:"An occurred risk is now an issue: assess it, respond, and record it so the plans stay current." },
+  { s:1, d:"P", q:"CPI = 1.1 and SPI = 0.8. What is the best first action?", o:["Fast track immediately without analysis","Analyse the cause of the delay and evaluate compression options through change control","Quietly cut scope","Draw on management reserve"], a:1, e:"The project is under budget but behind schedule. Find the cause, then compare crashing and fast tracking, and route changes through change control." },
+  { s:1, d:"B", q:"The sponsor asks you to skip testing to meet a date. What do you do?", o:["Comply and note it in the log","Explain the quality and risk impact and present options through change control","Refuse and stop work","Tell the team to test after release without telling anyone"], a:1, e:"Show the consequences, offer alternatives, and let the decision go through the agreed change process." },
+  { s:1, d:"P", q:"A team member suggests a worthwhile improvement outside the agreed scope. Best action?", o:["Implement it quietly","Assess impact and submit a change request","Ignore it","Add it to the next status report only"], a:1, e:"Valid ideas still go through impact analysis and integrated change control." },
+  { s:1, d:"E", q:"A powerful stakeholder is discovered late in execution. What should you do?", o:["Hope they stay uninvolved","Update the stakeholder register, assess them, and update the engagement plan","Wait for them to contact you","Tell the sponsor to handle them"], a:1, e:"Identify, assess, and plan engagement as soon as a new stakeholder appears." },
+  { s:1, d:"B", q:"A vendor on a fixed-price contract is delivering late. What is the best first step?", o:["Cancel the contract","Review the contract terms, discuss with the vendor, and assess the schedule impact","Absorb the delay silently","Hire a second vendor immediately"], a:1, e:"Start from the contract and facts, then manage the impact and escalate through the procurement process if needed." },
+  { s:1, d:"E", q:"A remote team is disengaged and rarely speaks up. What is the best first step?", o:["Add more status meetings","Facilitate a discussion to agree working norms and build psychological safety","Replace the quietest members","Switch to email only"], a:1, e:"Team agreements and safe speaking-up address the cause rather than adding oversight." },
+  { s:1, d:"P", q:"A regulatory deliverable is fixed, but the user interface is still uncertain. Which approach fits best?", o:["Pure predictive","Pure agile","Hybrid: predictive for the regulated part, iterative for the interface","Wait until everything is defined"], a:2, e:"Tailor the approach: control what is fixed and discover what is uncertain." },
+  { s:1, d:"B", q:"New regulations affect a project mid-way. Best action?", o:["Continue as planned","Assess the impact, update plans through change control, and inform stakeholders","Stop all work","Ask the team to decide alone"], a:1, e:"External factors change the context; assess, adjust through change control, and communicate." },
+  { s:1, d:"B", q:"The project delivered on time, but the business benefits are not appearing. What matters most now?", o:["Close the project; delivery is complete","Review the benefits management plan with the sponsor and business owner","Increase the budget","Blame the team"], a:1, e:"Value, not output, is the goal. Revisit the benefits plan and engage the people who own the outcomes." },
+  { s:1, d:"P", q:"The team gives very optimistic estimates. What helps most?", o:["Accept them","Use three-point estimating with historical data and expert review","Double every estimate","Remove the buffer"], a:1, e:"Three-point (PERT) estimates plus historical data reduce optimism bias." },
+  { s:1, d:"B", q:"A team uses an AI tool to draft the risk register. What is the best practice?", o:["Publish it as is","Validate it with domain experts and assign a human owner to each risk","Delete the existing register","Use it only for the executive summary"], a:1, e:"AI output is a draft; accountable people check it and own the risks." },
+  { s:1, d:"B", q:"You want to paste a confidential client contract into a public AI tool. What should you do first?", o:["Paste it; speed matters","Check the organisation's AI and data policy and use an approved tool or remove sensitive content","Ask a colleague to paste it","Paste only the signatures"], a:1, e:"Data governance and approved-tool rules apply before any confidential content is shared." },
+  { d:"B", c:2, q:"The performing organisation's code of conduct is classified as:", o:["An internal enterprise environmental factor","An external enterprise environmental factor","A deliverable","A project assumption"], a:0, e:"It is an internal factor; regulations and market conditions are external." },
+  { d:"P", c:6, q:"In an FPIF contract: Target Cost = $100k, Target Fee = $10k, Ceiling Price = $120k, Share Ratio = 80/20 (Buyer/Seller). What is the Point of Total Assumption (PTA)?", o:["$110,000","$112,500","$120,000","$125,000"], a:1, e:"Target Price = $110k. PTA = ((120k − 110k) ÷ 0.80) + 100k = $12,500 + $100k = $112,500." },
+  { d:"P", c:5, q:"A task has Optimistic = 4d, Most Likely = 7d, Pessimistic = 16d. What is the PERT standard deviation (1σ)?", o:["2 days","3 days","4 days","8 days"], a:0, e:"SD = (P − O) ÷ 6 = (16 − 4) ÷ 6 = 2 days." },
+  { d:"E", c:8, q:"A team of 8 people adds 2 new stakeholders. How many NEW communication channels are created?", o:["17","28","45","19"], a:0, e:"Original = 8×7÷2 = 28. New = 10×9÷2 = 45. Increase = 45 − 28 = 17 new channels." },
+  { d:"P", q:"Which Agile artifact commitment ensures shared understanding of quality for a potentially shippable increment?", o:["Sprint Goal","Definition of Done","Product Goal","Team Charter"], a:1, e:"The Definition of Done (DoD) defines the quality standards required for an Increment." },
+  { d:"P", q:"During a sprint, the team encounters high technical uncertainty around an API. What should they schedule?", o:["A Spike","A Sprint Review","Scope creep","A Change Control Board meeting"], a:0, e:"A Spike is a short, timeboxed exploration/prototyping task to reduce uncertainty." },
+  { d:"E", q:"A team has just resolved major role conflicts and is beginning to collaborate smoothly with shared norms. Which Tuckman stage is this?", o:["Forming","Storming","Norming","Performing"], a:2, e:"Norming follows Storming as team members align on working agreements and trust." },
+  { d:"E", q:"Which conflict resolution technique generally produces the most durable, win-win outcome?", o:["Smooth / Accommodate","Force / Direct","Collaborate / Problem-solve","Withdraw / Avoid"], a:2, e:"Collaborating addresses underlying concerns from multiple viewpoints for a lasting consensus." },
+  { d:"P", c:7, q:"A risk has a 30% probability of causing a $50,000 delay, and a 20% probability of saving $10,000 if mitigated early. What is the threat's EMV?", o:["−$15,000","+$15,000","−$13,000","−$50,000"], a:0, e:"Threat EMV = 0.30 × (−$50,000) = −$15,000." },
+  { d:"P", c:7, q:"A project team identifies a risk that exceeds the project manager's authority and could impact the entire program. Which response applies?", o:["Transfer","Mitigate","Escalate","Accept"], a:2, e:"Escalate moves ownership of risks outside project authority to the program or portfolio level." },
+  { d:"P", c:12, q:"Which quality process confirms that a deliverable meets technical specifications BEFORE the customer validates it?", o:["Validate Scope","Control Quality","Manage Quality","Close Project"], a:1, e:"Control Quality verifies deliverables internally; Validate Scope obtains formal customer acceptance." },
+  { d:"E", c:3, q:"Which stakeholder classification model evaluates stakeholders by Power, Urgency, and Legitimacy?", o:["Power/Interest Grid","Salience Model","RACI Matrix","Stakeholder Cube"], a:1, e:"The Salience Model categorises stakeholders by Power, Urgency, and Legitimacy." },
+  { d:"B", q:"An executive asks you to compare Velocity between Team A (40 pts) and Team B (25 pts) to rank productivity. How should you respond?", o:["Report Team A as higher performing","Explain that velocity is team-specific and used for forecasting, not cross-team comparison","Normalize both teams to 30 points","Switch both teams to Kanban immediately"], a:1, e:"Story points and velocity are relative to each team's sizing and cannot be compared across teams." },
+  { d:"P", c:13, q:"If BAC = $200k, EV = $100k, AC = $120k, and CPI is expected to continue, what is EAC?", o:["$220,000","$240,000","$200,000","$180,000"], a:1, e:"CPI = 100/120 = 0.8333. Typical EAC = BAC ÷ CPI = 200,000 ÷ (100/120) = $240,000." },
+  { d:"B", c:15, q:"A project is cancelled mid-execution due to shifting market strategy. What must the PM still do?", o:["Stop immediately without documentation","Execute formal closure: archive records, capture lessons learned, and release resources","Delete the project charter","Transfer all funds to operations"], a:1, e:"Every project—even a cancelled one—must go through formal closure to capture lessons and release resources." }
+];
+
+/* shuffle options per page load so the correct answer is not predictable */
+QUIZ.forEach(q => {
+  const right = q.o[q.a];
+  for (let i = q.o.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [q.o[i], q.o[j]] = [q.o[j], q.o[i]]; }
+  q.a = q.o.indexOf(right);
+});
+
+const AI_TOPICS = [
+  ["AI for planning", "Draft WBS outlines, first-pass schedules, and risk lists. Validate against scope and historical data. AI output is a draft, not a baseline."],
+  ["AI for risk", "Pattern detection across logs and status reports can surface emerging risks early. Every risk entry still needs a human owner."],
+  ["AI for reporting", "Summarise meetings, status updates, and stakeholder feedback. Verify facts, figures, names, and dates before sharing."],
+  ["Predictive analytics", "Forecast slippage and overrun from performance trends. Treat as a signal to investigate, not a verdict."],
+  ["AI for stakeholder analysis", "Map stakeholder sentiment from communications and draft engagement plans. Check for bias and misreading of tone."],
+  ["Prompt patterns for PMs", "Give role, context, constraints, and output format. Example: 'Act as a PMO analyst. From this scope statement, list 10 risks with probability, impact, and mitigation, as a table.'"],
+  ["Responsible AI", "Accountability, transparency, fairness, privacy, safety. Record where AI influenced a decision."],
+  ["Data governance", "Do not paste confidential, personal, or client data into tools without approved data terms. Follow the organisation's AI policy."],
+  ["Human-in-the-loop", "AI recommends; accountable humans decide. Keep sign-off on baselines, budgets, and external communications."],
+  ["Team adoption", "Pilot in small groups, set usage norms, measure time saved and quality, and train on failure modes."],
+  ["Agentic workflows", "Agents can run multi-step tasks such as ticket triage or status compilation. Define permissions, audit logs, and a kill switch first."],
+  ["Limits", "Models hallucinate, reflect bias, and can lag current data. Check citations, numbers, and dates."]
+];
+
+const REVISE = [
+  "Recite the 12 project management principles",
+  "Name the 8 performance domains and their focus",
+  "Know the balance of people, process, and business-environment topics",
+  "List the 5 process groups and key processes in each",
+  "Recall EV, PV, AC formulas and CPI/SPI meaning",
+  "Derive typical and atypical EAC and TCPI",
+  "Compute a critical path and float by hand",
+  "Distinguish positive and negative risk responses",
+  "Describe Scrum roles, events, and artifacts",
+  "Choose predictive vs agile vs hybrid with reasons",
+  "Explain servant leadership and conflict-resolution modes",
+  "Apply the power/interest grid to stakeholders",
+  "Name 3 AI use cases and 3 AI risks in PM",
+  "Score 80%+ on a full quiz run"
+];
+
+const DOM_DEEP = [
+  ['Stakeholders', 'Outcomes: productive working relationships, stakeholder agreement with objectives, supporters benefit while critics do not derail. Ideas: identify, understand, analyse, prioritise, engage, monitor; engagement is continuous, so communicate and negotiate throughout.'],
+  ['Team', 'Outcomes: shared ownership, a high-performing team, leadership suited to context. Ideas: servant leadership, team culture and charter, skills development, emotional intelligence, tailoring leadership style.'],
+  ['Development approach & life cycle', 'Outcomes: approach fits the deliverables, cadence supports value, phases link delivery to value. Ideas: delivery cadence (single, multiple, periodic, continuous), predictive vs adaptive vs hybrid, align cadence with approach.'],
+  ['Planning', 'Outcomes: organised and deliberate progress, holistic delivery approach, enough information to engage stakeholders, adaptive planning. Ideas: estimating, scheduling, budgeting, procurement, planning for change.'],
+  ['Project work', 'Outcomes: efficient performance, processes fit the approach, effective communication, resources and procurement managed, continuous learning. Ideas: focus the work, manage physical resources, handle change, learn as you go.'],
+  ['Delivery', 'Outcomes: contribution to business objectives, intended outcomes realised, stakeholders accept deliverables. Ideas: value delivery, scope and requirements, quality, dealing with suboptimal outcomes.'],
+  ['Measurement', 'Outcomes: reliable status, actionable data, timely action, forecast-based decisions. Ideas: leading and lagging indicators, effective metrics, presenting information, pitfalls such as vanity metrics, observation effect, and confirmation bias.'],
+  ['Uncertainty', 'Outcomes: awareness of the environment, risks managed, opportunities realised, reserves sized to need. Ideas: general uncertainty, ambiguity, complexity, volatility, and risk.']
+];
+const CH_LESSONS = [
+  [1, 'Project Management Framework', 'Project = temporary and unique; operations are ongoing. Program groups related projects; portfolio holds projects and programs. Five process groups, ten knowledge areas, life cycles, progressive elaboration, PMO types. Processes are tailored, none mandatory.'],
+  [2, 'Project Environment', 'Structures: functional (PM authority none to low), weak/balanced/strong matrix, project-oriented (high to almost full). Enterprise environmental factors (internal and external) vs organisational process assets. PM skills: technical, leadership, strategic and business. Business documents: business case and benefits management plan.'],
+  [3, 'Initiating', 'Develop the charter (sponsor issues it; names the PM and gives authority). Identify stakeholders into the register. Tools: power/interest grid, salience model, stakeholder cube. Assumptions carry risk; constraints limit options.'],
+  [4, 'Scope', 'Plan scope, collect requirements (interviews, focus groups, observation or job shadowing), define scope, create WBS. Scope baseline = scope statement + WBS + WBS dictionary. Work packages are the lowest WBS level.'],
+  [5, 'Schedule', 'Define activities, sequence (precedence diagramming; FS, SS, FF, SF; leads and lags), estimate durations (analogous, parametric, three-point), develop schedule (critical path, float). Compression: crashing adds cost, fast tracking adds risk.'],
+  [6, 'Resources, Cost, Procurement', 'Resource plan, RAM, team charter. Estimate costs, determine budget into the cost baseline; contingency vs management reserve. Contracts: FFP (seller bears overruns), CPFF (buyer pays costs), T&M. Make-or-buy analysis; SOW output of procurement planning.'],
+  [7, 'Quality and Risk', 'Quality planning: cost of quality, benchmarking, flowcharts; PDCA. Risk: plan, identify, qualitative, quantitative (EMV), responses (avoid, transfer, mitigate, accept; exploit, share, enhance), secondary and residual risks, risk register.'],
+  [8, 'Communication and Stakeholder Planning', 'Channels = n(n-1)/2. Models: sender/receiver, interactive (confirms understanding); noise disrupts decoding. Push, pull, interactive methods. Engagement levels: unaware, resistant, neutral, supportive, leading. Engagement plan holds the strategies.'],
+  [9, 'Executing', 'Direct and manage work yields deliverables, work performance data, issue log, change requests. Manage knowledge and close phase produce lessons learned. Manage Quality uses audits. Conduct Procurements: sellers respond with proposals.'],
+  [10, 'Managing Resources', 'Acquire, develop, manage team. Team development stages: forming, storming, norming, performing, adjourning. Conflict modes (collaborate gives win-win; force, withdraw, smooth, compromise). Authoritarian vs participative styles, the three-needs theory, virtual teams, power types.'],
+  [11, 'Communication and Engagement', 'Manage Communications outputs project communications. Manage Stakeholder Engagement can raise change requests. The issue log supports communicating and monitoring issues.'],
+  [12, 'Monitoring the Work', 'Monitor and control work; integrated change control with a change control board. Quality tools: control chart, Pareto, histogram, scatter, cause-and-effect. Control Quality verifies; Validate Scope gets acceptance.'],
+  [13, 'Controlling Scope, Schedule, Resources', 'EV = BAC x % complete; PV = BAC x % time; CV = EV - AC; SV = EV - PV; CPI, SPI; EAC, ETC, VAC, TCPI. Scope creep is controlled through change control; critical path has zero float.'],
+  [14, 'Monitoring Engagement and Communication', 'Monitor Communications follows both the communication and engagement plans. Monitoring processes generate work performance information from data.'],
+  [15, 'Closing', 'Close project or phase: sponsor signs closure, capture lessons learned, archive records, release resources. Every project closes, including cancelled ones. Procurements close in Control Procurements.']
+];
+
+const IO = [
+  ['Develop Project Charter', 'Business documents, agreements, EEFs, OPAs', 'Project charter, assumption log'],
+  ['Identify Stakeholders', 'Charter, business documents, agreements', 'Stakeholder register'],
+  ['Create WBS', 'Scope management plan, project scope statement, requirements documentation', 'Scope baseline (scope statement + WBS + dictionary)'],
+  ['Develop Schedule', 'Activity list, durations, resource requirements, project calendars', 'Schedule baseline, project schedule'],
+  ['Determine Budget', 'Cost estimates, basis of estimates, scope baseline, schedule', 'Cost baseline, funding requirements'],
+  ['Identify Risks', 'Plans, assumption log, requirements, stakeholder register', 'Risk register, risk report'],
+  ['Direct and Manage Project Work', 'Project management plan, approved changes, project documents', 'Deliverables, work performance data, issue log, change requests'],
+  ['Manage Project Knowledge', 'Project management plan, deliverables, lessons learned register', 'Lessons learned register, updated plans'],
+  ['Manage Quality', 'Quality management plan, quality metrics, risk report', 'Test and evaluation documents, quality reports, change requests'],
+  ['Conduct Procurements', 'Procurement documents, seller proposals, selection criteria', 'Selected sellers, agreements'],
+  ['Manage Communications', 'Communications and engagement plans, work performance reports', 'Project communications'],
+  ['Manage Stakeholder Engagement', 'Engagement plan, communications plan, issue log, change log', 'Change requests, updated plans'],
+  ['Control Quality', 'Quality metrics, test documents, approved changes, deliverables', 'Quality control measurements, verified deliverables'],
+  ['Validate Scope', 'Verified deliverables, requirements documentation, scope baseline', 'Accepted deliverables, change requests'],
+  ['Monitor and Control Project Work', 'Project management plan, work performance information', 'Work performance reports, change requests'],
+  ['Perform Integrated Change Control', 'Change requests, work performance reports, plans', 'Approved change requests, change log'],
+  ['Close Project or Phase', 'Charter, plans, accepted deliverables, agreements', 'Final report, lessons learned, updated OPAs']
+];
+const TAILOR = [
+  ['Why tailor', 'No single approach fits every project. Adjust the approach, governance, processes, and artifacts to the product, team, organisation, and uncertainty.'],
+  ['Step 1: select initial approach', 'Choose predictive, adaptive, or hybrid based on the product, project, and organisation.'],
+  ['Step 2: tailor for the organisation', 'Adapt to governance, culture, policies, and the tools the organisation already uses.'],
+  ['Step 3: tailor for the project', 'Adapt to team size, location, risk, and stakeholder needs. Inspect results and keep adapting.'],
+  ['Areas to tailor', 'Life cycle and phases, delivery cadence, processes, engagement approach, tools, methods, and artifacts.']
+];
+const MMA = [
+  ['Models', 'Leadership and team models (situational leadership, staged team development, team performance models), change models (urgency-led, individual-readiness, and transition models), complexity models (simple, complicated, complex, and chaotic domains), conflict and negotiation models, planning and prioritisation models.'],
+  ['Methods', 'Data gathering and analysis (surveys, interviews, root cause), estimating (analogous, parametric, three-point), meetings and events (planning, standups, retrospectives, reviews).'],
+  ['Artifacts', 'Strategy documents, logs and registers, plans, hierarchy charts such as the WBS, baselines, visual data (dashboards, burn charts), reports, and agreements and contracts.']
+];
+
+/* ============ 49 Processes Matrix Data ============ */
+const KNOWLEDGE_AREAS = [
+  'Integration', 'Scope', 'Schedule', 'Cost', 'Quality',
+  'Resource', 'Communications', 'Risk', 'Procurement', 'Stakeholders'
+];
+
+const PROCESS_MATRIX = [
+  ['Integration', ['Develop Project Charter'], ['Develop Project Management Plan'], ['Direct & Manage Project Work', 'Manage Project Knowledge'], ['Monitor & Control Project Work', 'Perform Integrated Change Control'], ['Close Project or Phase']],
+  ['Scope', [], ['Plan Scope Management', 'Collect Requirements', 'Define Scope', 'Create WBS'], [], ['Validate Scope', 'Control Scope'], []],
+  ['Schedule', [], ['Plan Schedule Management', 'Define Activities', 'Sequence Activities', 'Estimate Activity Durations', 'Develop Schedule'], [], ['Control Schedule'], []],
+  ['Cost', [], ['Plan Cost Management', 'Estimate Costs', 'Determine Budget'], [], ['Control Costs'], []],
+  ['Quality', [], ['Plan Quality Management'], ['Manage Quality'], ['Control Quality'], []],
+  ['Resource', [], ['Plan Resource Management', 'Estimate Activity Resources'], ['Acquire Resources', 'Develop Team', 'Manage Team'], ['Control Resources'], []],
+  ['Communications', [], ['Plan Communications Management'], ['Manage Communications'], ['Monitor Communications'], []],
+  ['Risk', [], ['Plan Risk Management', 'Identify Risks', 'Perform Qualitative Risk Analysis', 'Perform Quantitative Risk Analysis', 'Plan Risk Responses'], ['Implement Risk Responses'], ['Monitor Risks'], []],
+  ['Procurement', [], ['Plan Procurement Management'], ['Conduct Procurements'], ['Control Procurements'], []],
+  ['Stakeholders', ['Identify Stakeholders'], ['Plan Stakeholder Engagement'], ['Manage Stakeholder Engagement'], ['Monitor Stakeholder Engagement'], []]
+];
+
+/* ============ helpers ============ */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = x => (isFinite(x) ? x : 0).toLocaleString(undefined, { maximumFractionDigits: 0 });
+const cur = () => location.hash.slice(1) || 'dash';
+const go = v => { if (cur() === v) render(); else location.hash = v; };
+const SEARCH = { q: '', prev: 'dash' };
+
+/* ============ Visual Icons & Visual Generators ============ */
+const ICONS = {
+  steward: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>',
+  team: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  stake: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
+  value: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="6 2 18 2 22 8 12 22 2 8 6 2"/><line x1="2" y1="8" x2="22" y2="8"/><line x1="12" y1="22" x2="18" y2="8"/><line x1="12" y1="22" x2="6" y2="8"/></svg>',
+  systems: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+  lead: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>',
+  tailor: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>',
+  quality: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>',
+  complex: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+  risk: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  adapt: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>',
+  change: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M2 12H22"/></svg>'
+};
+
+const PRINCIPLE_ICONS = [
+  ICONS.steward, ICONS.team, ICONS.stake, ICONS.value,
+  ICONS.systems, ICONS.lead, ICONS.tailor, ICONS.quality,
+  ICONS.complex, ICONS.risk, ICONS.adapt, ICONS.change
+];
+
+function generateDomainSynergyMapSVG() {
+  const w = 580, h = 330;
+  const cx = w / 2, cy = h / 2, r = 115;
+  let nodesSvg = '';
+  let linesSvg = '';
+
+  DOMAINS.forEach(([name, desc], i) => {
+    const angle = (i * 2 * Math.PI) / DOMAINS.length - Math.PI / 2;
+    const nx = cx + r * Math.cos(angle);
+    const ny = cy + r * Math.sin(angle);
+
+    linesSvg += `<line x1="${cx}" y1="${cy}" x2="${nx}" y2="${ny}" stroke="var(--b)" stroke-width="1.5" stroke-dasharray="3,3" />`;
+    nodesSvg += `
+      <g style="cursor:pointer" onclick="alert('${esc(name)}: \n\n${esc(desc)}')">
+        <circle cx="${nx}" cy="${ny}" r="20" fill="var(--s)" stroke="var(--a)" stroke-width="2" />
+        <text x="${nx}" y="${ny + 4}" font-size="10" font-weight="700" fill="var(--a)" text-anchor="middle">${i + 1}</text>
+        <text x="${nx}" y="${ny > cy ? ny + 26 : ny - 22}" font-size="10" font-weight="600" fill="var(--t)" text-anchor="middle">${esc(name.split(' ')[0])}</text>
+      </g>
+    `;
+  });
+
+  return `
+    <div style="text-align:center;margin:12px 0">
+      <svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" style="max-width:580px;background:var(--bg);border-radius:12px;border:1px solid var(--b)">
+        <defs>
+          <radialGradient id="hubGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="var(--a)" stop-opacity="0.2"/>
+            <stop offset="100%" stop-color="var(--a)" stop-opacity="0.02"/>
+          </radialGradient>
+        </defs>
+        <circle cx="${cx}" cy="${cy}" r="${r + 15}" fill="none" stroke="var(--b)" stroke-width="1" stroke-dasharray="4,4" />
+        <circle cx="${cx}" cy="${cy}" r="42" fill="url(#hubGrad)" stroke="var(--a)" stroke-width="2.5" />
+        <text x="${cx}" y="${cy - 5}" font-size="12" font-weight="800" fill="var(--a)" text-anchor="middle">VALUE</text>
+        <text x="${cx}" y="${cy + 12}" font-size="11" font-weight="600" fill="var(--t)" text-anchor="middle">DELIVERY</text>
+        ${linesSvg}
+        ${nodesSvg}
+      </svg>
+    </div>
+  `;
+}
+
+function generateProcessPipelineSVG(activeGroup) {
+  const w = 780, h = 95;
+  const groups = PROCESS_GROUPS.map((g, i) => ({ name: g[0], count: g[2].length, i }));
+  const boxW = 135, boxH = 50, gap = 20, startX = 15, y = 18;
+  let svg = '';
+
+  groups.forEach((g, idx) => {
+    const x = startX + idx * (boxW + gap);
+    const isSel = (activeGroup === 'all' || activeGroup === g.name);
+    const fill = isSel ? 'var(--a)' : 'var(--s)';
+    const textCol = isSel ? '#ffffff' : 'var(--t)';
+    const stroke = isSel ? 'var(--a)' : 'var(--b)';
+
+    svg += `
+      <g style="cursor:pointer" onclick="setProcessGroup('${esc(g.name)}')">
+        <rect x="${x}" y="${y}" width="${boxW}" height="${boxH}" rx="8" fill="${fill}" stroke="${stroke}" stroke-width="2" />
+        <text x="${x + boxW/2}" y="${y + 22}" font-size="12" font-weight="700" fill="${textCol}" text-anchor="middle">${esc(g.name.split(' ')[0])}</text>
+        <text x="${x + boxW/2}" y="${y + 38}" font-size="10" fill="${textCol}" opacity="0.85" text-anchor="middle">${g.count} processes</text>
+      </g>
+    `;
+
+    if (idx < groups.length - 1) {
+      const arrX = x + boxW + 4;
+      svg += `
+        <path d="M ${arrX} ${y + boxH/2} L ${arrX + 10} ${y + boxH/2}" stroke="var(--m)" stroke-width="2" marker-end="url(#arr-m)" />
+      `;
+    }
+  });
+
+  const planX = startX + 1 * (boxW + gap) + boxW/2;
+  const monX = startX + 3 * (boxW + gap) + boxW/2;
+  svg += `
+    <path d="M ${monX} ${y + boxH} C ${monX} ${y + boxH + 20}, ${planX} ${y + boxH + 20}, ${planX} ${y + boxH + 4}" fill="none" stroke="var(--a)" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arr-a)" />
+    <text x="${(planX + monX) / 2}" y="${y + boxH + 19}" font-size="9" font-weight="600" fill="var(--a)" text-anchor="middle">Iterative Feedback Loop</text>
+  `;
+
+  return `
+    <div class="svg-scroll-container">
+      <svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+        <defs>
+          <marker id="arr-m" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L6,3 z" fill="var(--m)"/>
+          </marker>
+          <marker id="arr-a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L6,3 z" fill="var(--a)"/>
+          </marker>
+        </defs>
+        ${svg}
+      </svg>
+    </div>
+  `;
+}
+
+function setProcessGroup(g) {
+  store.procFilter = (store.procFilter === g) ? 'all' : g;
+  save(); playSound('click'); render();
+}
+
+function generateStaceyMatrixSVG(rec) {
+  const w = 480, h = 250;
+  const padL = 60, padR = 30, padT = 25, padB = 40;
+  const plotW = w - padL - padR;
+  const plotH = h - padT - padB;
+
+  let pinX = padL + 60, pinY = padT + plotH - 40;
+  if (rec.includes('Predictive')) { pinX = padL + 50; pinY = padT + plotH - 35; }
+  else if (rec.includes('Agile')) { pinX = padL + plotW - 70; pinY = padT + 50; }
+  else if (rec.includes('Iterative')) { pinX = padL + plotW/2; pinY = padT + plotH/2; }
+  else { pinX = padL + plotW/2 - 10; pinY = padT + plotH/2 + 20; }
+
+  return `
+    <div style="text-align:center;margin:12px 0">
+      <svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" style="max-width:500px;background:var(--s);border-radius:12px;border:1px solid var(--b)">
+        <rect x="${padL}" y="${padT + plotH/2}" width="${plotW/2}" height="${plotH/2}" fill="rgba(16, 185, 129, 0.12)" />
+        <rect x="${padL + plotW/2}" y="${padT + plotH/2}" width="${plotW/2}" height="${plotH/2}" fill="rgba(245, 158, 11, 0.1)" />
+        <rect x="${padL}" y="${padT}" width="${plotW/2}" height="${plotH/2}" fill="rgba(245, 158, 11, 0.1)" />
+        <rect x="${padL + plotW/2}" y="${padT}" width="${plotW/2}" height="${plotH/2}" fill="rgba(59, 130, 246, 0.15)" />
+
+        <text x="${padL + 15}" y="${padT + plotH - 15}" font-size="11" font-weight="700" fill="var(--ok)">SIMPLE (Waterfall)</text>
+        <text x="${padL + plotW/2 + 15}" y="${padT + plotH - 15}" font-size="11" font-weight="700" fill="var(--warn)">COMPLICATED</text>
+        <text x="${padL + 15}" y="${padT + 30}" font-size="11" font-weight="700" fill="var(--warn)">COMPLICATED</text>
+        <text x="${padL + plotW/2 + 15}" y="${padT + 30}" font-size="11" font-weight="700" fill="var(--a)">COMPLEX (Agile / Scrum)</text>
+
+        <line x1="${padL}" y1="${padT + plotH}" x2="${padL + plotW}" y2="${padT + plotH}" stroke="var(--m)" stroke-width="1.5" />
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + plotH}" stroke="var(--m)" stroke-width="1.5" />
+        <text x="${padL + plotW/2}" y="${h - 10}" font-size="11" font-weight="600" fill="var(--m)" text-anchor="middle">How (Technical Uncertainty →)</text>
+        <text transform="rotate(-90)" x="${-(padT + plotH/2)}" y="20" font-size="11" font-weight="600" fill="var(--m)" text-anchor="middle">What (Requirements Uncertainty →)</text>
+
+        <g style="transition:all 0.4s ease">
+          <circle cx="${pinX}" cy="${pinY}" r="8" fill="var(--crit)" stroke="#fff" stroke-width="2"/>
+          <text x="${pinX}" y="${pinY - 12}" font-size="11" font-weight="800" fill="var(--crit)" text-anchor="middle">Target Position</text>
+        </g>
+      </svg>
+    </div>
+  `;
+}
+
+function generateScrumFlowSVG() {
+  const w = 740, h = 180;
+  return `
+    <div class="svg-scroll-container" style="margin:12px 0">
+      <svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+        <defs>
+          <marker id="scrum-arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L6,3 z" fill="var(--a)" />
+          </marker>
+        </defs>
+
+        <rect x="10" y="45" width="105" height="70" rx="8" fill="var(--s)" stroke="var(--b)" stroke-width="1.5"/>
+        <text x="62" y="75" font-size="11" font-weight="700" fill="var(--t)" text-anchor="middle">Product Backlog</text>
+        <text x="62" y="95" font-size="9" fill="var(--m)" text-anchor="middle">Prioritized by PO</text>
+
+        <path d="M115 80 L145 80" stroke="var(--a)" stroke-width="2" marker-end="url(#scrum-arr)"/>
+
+        <rect x="150" y="45" width="105" height="70" rx="8" fill="var(--s)" stroke="var(--b)" stroke-width="1.5"/>
+        <text x="202" y="75" font-size="11" font-weight="700" fill="var(--t)" text-anchor="middle">Sprint Planning</text>
+        <text x="202" y="95" font-size="9" fill="var(--m)" text-anchor="middle">Team estimates</text>
+
+        <path d="M255 80 L285 80" stroke="var(--a)" stroke-width="2" marker-end="url(#scrum-arr)"/>
+
+        <rect x="290" y="45" width="105" height="70" rx="8" fill="var(--s)" stroke="var(--b)" stroke-width="1.5"/>
+        <text x="342" y="75" font-size="11" font-weight="700" fill="var(--t)" text-anchor="middle">Sprint Backlog</text>
+        <text x="342" y="95" font-size="9" fill="var(--m)" text-anchor="middle">Committed tasks</text>
+
+        <path d="M395 80 L425 80" stroke="var(--a)" stroke-width="2" marker-end="url(#scrum-arr)"/>
+
+        <circle cx="485" cy="80" r="45" fill="var(--hi)" stroke="var(--a)" stroke-width="2"/>
+        <text x="485" y="75" font-size="11" font-weight="700" fill="var(--a)" text-anchor="middle">1–4 Week Sprint</text>
+        <text x="485" y="92" font-size="9" font-weight="600" fill="var(--t)" text-anchor="middle">Daily Scrum (15m)</text>
+
+        <path d="M530 80 L560 80" stroke="var(--a)" stroke-width="2" marker-end="url(#scrum-arr)"/>
+
+        <rect x="565" y="45" width="110" height="70" rx="8" fill="var(--hi-crit)" stroke="var(--ok)" stroke-width="1.5"/>
+        <text x="620" y="75" font-size="11" font-weight="700" fill="var(--ok)" text-anchor="middle">Increment (DoD)</text>
+        <text x="620" y="95" font-size="9" fill="var(--m)" text-anchor="middle">Review & Retro</text>
+
+        <path d="M 620 45 C 620 15, 62 15, 62 40" fill="none" stroke="var(--m)" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#scrum-arr)"/>
+        <text x="340" y="20" font-size="9" font-weight="600" fill="var(--m)" text-anchor="middle">Continuous Inspection & Adaptation</text>
+      </svg>
+    </div>
+  `;
+}
+
+/* ============ Interactive Kanban Simulator ============ */
+function renderKanbanSimulator() {
+  const kb = store.kanban;
+  const inProgFull = kb.inProgress.length >= 2;
+  const testingFull = kb.testing.length >= 2;
+
+  return `
+    <div class="card" style="margin-top:14px;background:var(--bg)">
+      <div class="row" style="justify-content:space-between;margin-bottom:10px">
+        <div>
+          <h3 style="margin:0">Interactive Kanban Board (WIP Limits Simulator)</h3>
+          <p class="m" style="margin:4px 0 0;font-size:12px">Observe Little's Law in practice. WIP limits prevent multitasking and expose process bottlenecks.</p>
+        </div>
+        <button class="btn2" onclick="resetKanban()">Reset Board</button>
+      </div>
+
+      <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:10px">
+        <!-- Backlog -->
+        <div class="card" style="margin:0;padding:10px;background:var(--s)">
+          <div class="row" style="justify-content:space-between">
+            <strong>Backlog</strong>
+            <span class="tag">${kb.backlog.length}</span>
+          </div>
+          <div style="min-height:90px;margin:8px 0">
+            ${kb.backlog.map(item => `<div class="card" style="margin:4px 0;padding:6px;font-size:12px;background:var(--bg)">${esc(item)}</div>`).join('')}
+          </div>
+          <button class="btn" style="width:100%;font-size:12px;padding:5px" onclick="pullToInProgress()" ${kb.backlog.length === 0 || inProgFull ? 'disabled' : ''}>
+            ${inProgFull ? 'WIP Full (Max 2)' : '+ Pull into In Progress'}
+          </button>
+        </div>
+
+        <!-- In Progress (WIP 2) -->
+        <div class="card" style="margin:0;padding:10px;background:var(--s);border-color:${inProgFull ? 'var(--warn)' : 'var(--b)'}">
+          <div class="row" style="justify-content:space-between">
+            <strong>In Progress</strong>
+            <span class="tag ${inProgFull ? 'crit' : ''}">WIP: ${kb.inProgress.length} / 2</span>
+          </div>
+          <div style="min-height:90px;margin:8px 0">
+            ${kb.inProgress.map((item, idx) => `
+              <div class="card" style="margin:4px 0;padding:6px;font-size:12px;background:var(--bg);display:flex;justify-content:space-between;align-items:center">
+                <span>${esc(item)}</span>
+                <button class="btn2" style="padding:2px 6px;font-size:10px" onclick="moveToTesting(${idx})" ${testingFull ? 'disabled' : ''} title="Move to Testing">→</button>
+              </div>
+            `).join('')}
+          </div>
+          <p class="m" style="font-size:11px;margin:0">${inProgFull ? '⚠️ Capacity reached. Move items right before pulling more.' : 'Capacity available.'}</p>
+        </div>
+
+        <!-- Testing (WIP 2) -->
+        <div class="card" style="margin:0;padding:10px;background:var(--s);border-color:${testingFull ? 'var(--warn)' : 'var(--b)'}">
+          <div class="row" style="justify-content:space-between">
+            <strong>Testing / QA</strong>
+            <span class="tag ${testingFull ? 'crit' : ''}">WIP: ${kb.testing.length} / 2</span>
+          </div>
+          <div style="min-height:90px;margin:8px 0">
+            ${kb.testing.map((item, idx) => `
+              <div class="card" style="margin:4px 0;padding:6px;font-size:12px;background:var(--bg);display:flex;justify-content:space-between;align-items:center">
+                <span>${esc(item)}</span>
+                <button class="btn2" style="padding:2px 6px;font-size:10px" onclick="moveToDone(${idx})" title="Mark Done">✔</button>
+              </div>
+            `).join('')}
+          </div>
+          <p class="m" style="font-size:11px;margin:0">${testingFull ? '⚠️ QA bottleneck! Complete testing.' : 'QA capacity available.'}</p>
+        </div>
+
+        <!-- Done -->
+        <div class="card" style="margin:0;padding:10px;background:var(--s)">
+          <div class="row" style="justify-content:space-between">
+            <strong>Done (Accepted)</strong>
+            <span class="tag" style="background:rgba(16,185,129,0.15);color:var(--ok)">${kb.done.length}</span>
+          </div>
+          <div style="min-height:90px;margin:8px 0">
+            ${kb.done.map(item => `<div class="card" style="margin:4px 0;padding:6px;font-size:12px;background:rgba(16,185,129,0.08);color:var(--ok)">✔ ${esc(item)}</div>`).join('')}
+          </div>
+          <p class="m" style="font-size:11px;margin:0">Meets Definition of Done (DoD).</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function pullToInProgress() {
+  if (store.kanban.inProgress.length >= 2 || store.kanban.backlog.length === 0) return;
+  const item = store.kanban.backlog.shift();
+  store.kanban.inProgress.push(item);
+  save(); playSound('click'); render();
+}
+function moveToTesting(idx) {
+  if (store.kanban.testing.length >= 2) return;
+  const item = store.kanban.inProgress.splice(idx, 1)[0];
+  store.kanban.testing.push(item);
+  save(); playSound('click'); render();
+}
+function moveToDone(idx) {
+  const item = store.kanban.testing.splice(idx, 1)[0];
+  store.kanban.done.push(item);
+  save(); playSound('ok'); render();
+}
+function resetKanban() {
+  store.kanban = {
+    backlog: ['User Auth & SSO', 'Payment Gateway Integration', 'Push Notification Service', 'Analytics Dashboard', 'Audit Logging'],
+    inProgress: ['Database Indexing', 'API Rate Limiting'],
+    testing: ['Password Reset Flow'],
+    done: ['Landing Page']
+  };
+  save(); playSound('click'); render();
+}
+
+function generateSCurveSVG(BAC, PV, EV, AC, EACt) {
+  const w = 540, h = 260;
+  const padL = 65, padR = 40, padT = 30, padB = 40;
+  const plotW = w - padL - padR;
+  const plotH = h - padT - padB;
+
+  const maxVal = Math.max(BAC, PV, EV, AC, EACt, 1) * 1.15;
+  const mapY = val => padT + plotH - (val / maxVal) * plotH;
+  const mapX = pct => padL + (pct / 100) * plotW;
+
+  const curX = mapX(50);
+  const pvY = mapY(PV);
+  const evY = mapY(EV);
+  const acY = mapY(AC);
+  const bacY = mapY(BAC);
+  const eacY = mapY(EACt);
+
+  const pvPath = `M ${padL} ${mapY(0)} C ${mapX(25)} ${mapY(PV*0.35)}, ${mapX(35)} ${mapY(PV*0.75)}, ${curX} ${pvY} S ${mapX(80)} ${mapY(BAC*0.9)}, ${mapX(100)} ${bacY}`;
+  const evPath = `M ${padL} ${mapY(0)} C ${mapX(25)} ${mapY(EV*0.4)}, ${mapX(40)} ${mapY(EV*0.8)}, ${curX} ${evY}`;
+  const acPath = `M ${padL} ${mapY(0)} C ${mapX(25)} ${mapY(AC*0.45)}, ${mapX(40)} ${mapY(AC*0.85)}, ${curX} ${acY}`;
+
+  return `
+    <div style="text-align:center;margin:12px 0">
+      <svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" style="max-width:540px;background:var(--s);border-radius:12px;border:1px solid var(--b)">
+        <line x1="${padL}" y1="${padT + plotH}" x2="${padL + plotW}" y2="${padT + plotH}" stroke="var(--m)" stroke-width="1.5" />
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + plotH}" stroke="var(--m)" stroke-width="1.5" />
+        <line x1="${curX}" y1="${padT}" x2="${curX}" y2="${padT + plotH}" stroke="var(--b)" stroke-width="1.5" stroke-dasharray="3,3" />
+        <text x="${curX}" y="${padT - 8}" font-size="10" font-weight="700" fill="var(--a)" text-anchor="middle">CURRENT STATUS DATE</text>
+
+        <path d="${pvPath}" fill="none" stroke="var(--m)" stroke-width="2" stroke-dasharray="4,4" />
+        <path d="${acPath}" fill="none" stroke="${AC > EV ? 'var(--bad)' : 'var(--ok)'}" stroke-width="2.5" />
+        <path d="${evPath}" fill="none" stroke="var(--a)" stroke-width="2.5" />
+
+        <line x1="${curX}" y1="${evY}" x2="${mapX(100)}" y2="${eacY}" stroke="var(--a)" stroke-width="2" stroke-dasharray="2,2" />
+
+        <circle cx="${curX}" cy="${pvY}" r="4" fill="var(--m)" />
+        <circle cx="${curX}" cy="${evY}" r="5" fill="var(--a)" />
+        <circle cx="${curX}" cy="${acY}" r="5" fill="${AC > EV ? 'var(--bad)' : 'var(--ok)'}" />
+        <circle cx="${mapX(100)}" cy="${bacY}" r="4" fill="var(--t)" />
+        <circle cx="${mapX(100)}" cy="${eacY}" r="4" fill="var(--crit)" />
+
+        <text x="${padL - 8}" y="${bacY + 4}" font-size="9" font-weight="600" fill="var(--m)" text-anchor="end">BAC</text>
+        <text x="${mapX(100) + 6}" y="${bacY + 4}" font-size="9" fill="var(--m)">BAC ${money(BAC)}</text>
+        <text x="${mapX(100) + 6}" y="${eacY + 4}" font-size="9" font-weight="700" fill="var(--crit)">EAC ${money(EACt)}</text>
+
+        <text x="${curX + 8}" y="${(evY + acY) / 2}" font-size="9" font-weight="700" fill="${EV - AC < 0 ? 'var(--bad)' : 'var(--ok)'}">CV: ${money(EV - AC)}</text>
+        <text x="${curX + 8}" y="${(evY + pvY) / 2 + 10}" font-size="9" font-weight="700" fill="${EV - PV < 0 ? 'var(--bad)' : 'var(--ok)'}">SV: ${money(EV - PV)}</text>
+
+        <text x="${padL + plotW/2}" y="${h - 10}" font-size="11" font-weight="600" fill="var(--m)" text-anchor="middle">Project Timeline (Start → Finish)</text>
+      </svg>
+      <div class="row" style="justify-content:center;font-size:11px;margin-top:4px;gap:16px">
+        <span style="color:var(--m)">-- Planned Value (PV)</span>
+        <span style="color:var(--a);font-weight:600">━ Earned Value (EV)</span>
+        <span style="color:${AC > EV ? 'var(--bad)' : 'var(--ok)'};font-weight:600">━ Actual Cost (AC)</span>
+        <span style="color:var(--crit);font-weight:600">·· Forecast (EAC)</span>
+      </div>
+    </div>
+  `;
+}
+
+function generateRadialGaugesSVG(cpi, spi) {
+  const renderGauge = (val, title, label) => {
+    const isOk = val >= 1.0;
+    const col = isOk ? 'var(--ok)' : 'var(--bad)';
+    const clamped = Math.max(0.5, Math.min(1.5, val));
+    const deg = ((clamped - 0.5) / 1.0) * 240 - 120;
+    const rad = (deg - 90) * (Math.PI / 180);
+    const cx = 80, cy = 65, r = 48;
+    const nx = cx + (r - 10) * Math.cos(rad);
+    const ny = cy + (r - 10) * Math.sin(rad);
+
+    return `
+      <g>
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--b)" stroke-width="10" stroke-dasharray="160 80" transform="rotate(-150 ${cx} ${cy})"/>
+        <line x1="${cx}" y1="${cy}" x2="${nx}" y2="${ny}" stroke="${col}" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="${cx}" cy="${cy}" r="5" fill="var(--t)"/>
+        <text x="${cx}" y="${cy + 22}" font-size="14" font-weight="800" fill="${col}" text-anchor="middle">${val.toFixed(2)}</text>
+        <text x="${cx}" y="${cy + 36}" font-size="10" font-weight="600" fill="var(--m)" text-anchor="middle">${title}</text>
+        <text x="${cx}" y="${cy + 48}" font-size="9" fill="${col}" text-anchor="middle">${label}</text>
+      </g>
+    `;
+  };
+
+  return `
+    <div style="text-align:center;margin:12px 0">
+      <svg width="340" height="135" viewBox="0 0 340 135" style="background:var(--s);border-radius:12px;border:1px solid var(--b)">
+        <g transform="translate(10, 0)">
+          ${renderGauge(cpi, 'CPI (Cost)', cpi >= 1 ? 'Under/On Budget' : 'Cost Overrun')}
+        </g>
+        <g transform="translate(180, 0)">
+          ${renderGauge(spi, 'SPI (Schedule)', spi >= 1 ? 'Ahead/On Plan' : 'Schedule Delay')}
+        </g>
+      </svg>
+    </div>
+  `;
+}
+
+/* ============ Monte Carlo Simulation Engine & SVG ============ */
+function runMonteCarlo(risksList, trials = 1000) {
+  const results = [];
+  for (let i = 0; i < trials; i++) {
+    let loss = 0;
+    risksList.forEach(r => {
+      if (Math.random() < r.p) loss += r.c;
+    });
+    results.push(loss);
+  }
+  results.sort((a, b) => a - b);
+  const p50 = results[Math.floor(trials * 0.5)];
+  const p80 = results[Math.floor(trials * 0.8)];
+  const p95 = results[Math.floor(trials * 0.95)];
+  const max = results[results.length - 1];
+  const mean = Math.round(results.reduce((s, v) => s + v, 0) / trials);
+
+  const minVal = results[0];
+  const maxVal = max;
+  const numBuckets = 10;
+  const bucketSize = Math.max(1, (maxVal - minVal) / numBuckets);
+  const buckets = Array(numBuckets).fill(0);
+  results.forEach(val => {
+    const idx = Math.min(numBuckets - 1, Math.floor((val - minVal) / bucketSize));
+    buckets[idx]++;
+  });
+
+  return { mean, p50, p80, p95, minVal, maxVal, buckets, bucketSize, trials };
+}
+
+function generateMonteCarloSVG(mc) {
+  const w = 540, h = 230;
+  const padL = 50, padR = 30, padT = 25, padB = 45;
+  const plotW = w - padL - padR;
+  const plotH = h - padT - padB;
+
+  const maxFreq = Math.max(...mc.buckets, 1);
+  const barW = plotW / mc.buckets.length;
+
+  let barsSvg = '';
+  mc.buckets.forEach((count, i) => {
+    const barH = (count / maxFreq) * plotH;
+    const x = padL + i * barW;
+    const y = padT + plotH - barH;
+    barsSvg += `<rect x="${x + 2}" y="${y}" width="${barW - 4}" height="${barH}" rx="3" fill="var(--a)" opacity="0.75" />`;
+  });
+
+  // P50 line and P80 line
+  const p50X = padL + Math.min(plotW, ((mc.p50 - mc.minVal) / (mc.maxVal - mc.minVal || 1)) * plotW);
+  const p80X = padL + Math.min(plotW, ((mc.p80 - mc.minVal) / (mc.maxVal - mc.minVal || 1)) * plotW);
+
+  return `
+    <div style="text-align:center;margin:12px 0">
+      <svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" style="max-width:540px;background:var(--s);border-radius:12px;border:1px solid var(--b)">
+        <line x1="${padL}" y1="${padT + plotH}" x2="${padL + plotW}" y2="${padT + plotH}" stroke="var(--m)" stroke-width="1.5" />
+        ${barsSvg}
+
+        <!-- P50 Median Line -->
+        <line x1="${p50X}" y1="${padT}" x2="${p50X}" y2="${padT + plotH}" stroke="var(--m)" stroke-width="2" stroke-dasharray="3,3" />
+        <text x="${p50X}" y="${padT - 8}" font-size="10" font-weight="700" fill="var(--m)" text-anchor="middle">P50: ${money(mc.p50)}</text>
+
+        <!-- P80 Contingency Line -->
+        <line x1="${p80X}" y1="${padT}" x2="${p80X}" y2="${padT + plotH}" stroke="var(--crit)" stroke-width="2.5" />
+        <text x="${p80X}" y="${padT - 8}" font-size="10" font-weight="800" fill="var(--crit)" text-anchor="middle">P80: ${money(mc.p80)}</text>
+
+        <text x="${padL + plotW/2}" y="${h - 10}" font-size="11" font-weight="600" fill="var(--m)" text-anchor="middle">Simulated Financial Loss ($) Across 1,000 Trials →</text>
+        <text x="${padL}" y="${padT + plotH + 16}" font-size="9" fill="var(--m)">${money(mc.minVal)}</text>
+        <text x="${padL + plotW}" y="${padT + plotH + 16}" font-size="9" fill="var(--m)" text-anchor="end">${money(mc.maxVal)}</text>
+      </svg>
+    </div>
+  `;
+}
+
+function generateRiskHeatmapSVG(risksList) {
+  const w = 520, h = 330;
+  const padL = 75, padR = 25, padT = 30, padB = 45;
+  const plotW = w - padL - padR;
+  const plotH = h - padT - padB;
+  const cellW = plotW / 5;
+  const cellH = plotH / 5;
+
+  const pLabels = ['Very High (0.8+)', 'High (0.6)', 'Med (0.4)', 'Low (0.2)', 'Very Low (0.1)'];
+  const iLabels = ['<15k', '15-30k', '30-50k', '50-75k', '>75k'];
+
+  const matrixColors = [
+    ['#fed7aa', '#fecaca', '#fca5a5', '#f87171', '#ef4444'],
+    ['#fef08a', '#fed7aa', '#fecaca', '#fca5a5', '#f87171'],
+    ['#fef9c3', '#fef08a', '#fed7aa', '#fecaca', '#fca5a5'],
+    ['#dcfce7', '#fef9c3', '#fef08a', '#fed7aa', '#fecaca'],
+    ['#dcfce7', '#dcfce7', '#fef9c3', '#fef08a', '#fed7aa']
+  ];
+
+  let cellsSvg = '';
+  for (let r = 0; r < 5; r++) {
+    for (let c = 0; c < 5; c++) {
+      const x = padL + c * cellW;
+      const y = padT + r * cellH;
+      cellsSvg += `<rect x="${x}" y="${y}" width="${cellW}" height="${cellH}" fill="${matrixColors[r][c]}" opacity="0.6" stroke="#ffffff" stroke-width="1.5" />`;
+    }
+  }
+
+  let labelsSvg = '';
+  pLabels.forEach((pl, r) => {
+    labelsSvg += `<text x="${padL - 8}" y="${padT + r * cellH + cellH/2 + 4}" font-size="9" font-weight="600" fill="var(--m)" text-anchor="end">${pl}</text>`;
+  });
+  iLabels.forEach((il, c) => {
+    labelsSvg += `<text x="${padL + c * cellW + cellW/2}" y="${padT + plotH + 16}" font-size="10" font-weight="600" fill="var(--m)" text-anchor="middle">${il}</text>`;
+  });
+
+  let dotsSvg = '';
+  risksList.forEach((rk, i) => {
+    let colIdx = 0;
+    if (rk.c >= 75000) colIdx = 4;
+    else if (rk.c >= 50000) colIdx = 3;
+    else if (rk.c >= 30000) colIdx = 2;
+    else if (rk.c >= 15000) colIdx = 1;
+
+    let rowIdx = 4;
+    if (rk.p >= 0.7) rowIdx = 0;
+    else if (rk.p >= 0.5) rowIdx = 1;
+    else if (rk.p >= 0.3) rowIdx = 2;
+    else if (rk.p >= 0.15) rowIdx = 3;
+
+    const cx = padL + colIdx * cellW + cellW/2 + ((i % 3) - 1) * 8;
+    const cy = padT + rowIdx * cellH + cellH/2 + ((i % 2) - 0.5) * 8;
+
+    dotsSvg += `
+      <g style="cursor:pointer" onclick="alert('${esc(rk.n)}\nProbability: ${Math.round(rk.p*100)}%\nImpact: $${money(rk.c)}\nEMV: $${money(rk.p*rk.c)}')">
+        <circle cx="${cx}" cy="${cy}" r="11" fill="var(--s)" stroke="var(--t)" stroke-width="2"/>
+        <text x="${cx}" y="${cy + 4}" font-size="10" font-weight="800" fill="var(--t)" text-anchor="middle">R${i + 1}</text>
+      </g>
+    `;
+  });
+
+  return `
+    <div style="text-align:center;margin:12px 0">
+      <svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" style="max-width:520px;background:var(--s);border-radius:12px;border:1px solid var(--b)">
+        ${cellsSvg}
+        ${labelsSvg}
+        ${dotsSvg}
+        <text x="${padL + plotW/2}" y="${h - 8}" font-size="11" font-weight="700" fill="var(--m)" text-anchor="middle">Financial Cost Impact ($) →</text>
+        <text transform="rotate(-90)" x="${-(padT + plotH/2)}" y="16" font-size="11" font-weight="700" fill="var(--m)" text-anchor="middle">Probability (0 to 1) →</text>
+      </svg>
+    </div>
+  `;
+}
+
+function generateRoadmapSVG() {
+  const w = 780, h = 130;
+  const parts = [
+    { name: "Part I", chs: [1, 2, 3], col: "var(--a)" },
+    { name: "Part II", chs: [4, 5, 6, 7, 8], col: "var(--ok)" },
+    { name: "Part III", chs: [9, 10, 11], col: "var(--warn)" },
+    { name: "Part IV", chs: [12, 13, 14], col: "#8b5cf6" },
+    { name: "Part V", chs: [15], col: "var(--crit)" }
+  ];
+
+  let svg = `<path d="M 30 65 L 750 65" stroke="var(--b)" stroke-width="8" stroke-linecap="round" />`;
+  let curX = 35;
+  parts.forEach(p => {
+    const step = 44;
+    p.chs.forEach(ch => {
+      const cx = curX;
+      curX += step;
+      svg += `
+        <g style="cursor:pointer" onclick="practiceChapter(${ch})">
+          <circle cx="${cx}" cy="65" r="14" fill="var(--s)" stroke="${p.col}" stroke-width="3" />
+          <text x="${cx}" y="69" font-size="10" font-weight="800" fill="var(--t)" text-anchor="middle">${ch}</text>
+          <text x="${cx}" y="${ch % 2 === 0 ? 40 : 96}" font-size="9" font-weight="600" fill="var(--m)" text-anchor="middle">Ch.${ch}</text>
+        </g>
+      `;
+    });
+    curX += 14;
+  });
+
+  return `
+    <div class="svg-scroll-container" style="margin:12px 0">
+      <svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+        ${svg}
+      </svg>
+    </div>
+  `;
+}
+
+/* ============ CPM Presets ============ */
+const CPM_PRESETS = {
+  software: `# id | name | duration (days) | predecessors
+A | Charter approval | 3 |
+B | Requirements | 5 | A
+C | Architecture design | 4 | B
+D | Build core | 8 | C
+E | Test planning | 3 | B
+F | System testing | 4 | D,E
+G | UAT and deploy | 1 | F
+H | Training | 2 | E`,
+  cloud: `# id | name | duration (days) | predecessors
+A | Discovery & inventory | 4 |
+B | Target architecture | 6 | A
+C | Schema migration scripts | 5 | B
+D | Pilot data load | 4 | C
+E | Security & IAM setup | 3 | B
+F | Performance tuning | 5 | D,E
+G | Cutover & validation | 2 | F`,
+  construction: `# id | name | duration (days) | predecessors
+A | Site survey & permits | 10 |
+B | Excavation & ground work | 8 | A
+C | Foundation pouring | 12 | B
+D | Structural steel framing | 15 | C
+E | Exterior cladding | 10 | D
+F | Rough plumbing & HVAC | 12 | D
+G | Interior fitout | 14 | E,F
+H | Final inspection & handover | 4 | G`,
+  launch: `# id | name | duration (days) | predecessors
+A | Market research & positioning | 5 |
+B | Creative assets design | 7 | A
+C | Landing page build | 4 | B
+D | Ad copy & audience targeting | 3 | A
+E | Tracking & analytics setup | 2 | C
+F | Soft launch & A/B testing | 5 | C,D,E
+G | Global campaign rollout | 3 | F`
+};
+
+/* ============ CPM engine ============ */
+function parseTasks(txt) {
+  return txt.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#')).map(l => {
+    const [id, name, dur, preds] = l.split('|').map(s => (s || '').trim());
+    return { id, name: name || id, dur: parseFloat(dur) || 0, preds: (preds || '').split(',').map(s => s.trim()).filter(Boolean) };
+  }).filter(t => t.id);
+}
+function cpm(tasks) {
+  if (!tasks.length) return { error: 'No tasks provided.' };
+  const by = Object.fromEntries(tasks.map(t => [t.id, t]));
+  const succ = Object.fromEntries(tasks.map(t => [t.id, []]));
+  const indeg = {};
+  tasks.forEach(t => {
+    const ps = t.preds.filter(p => by[p]);
+    indeg[t.id] = ps.length;
+    ps.forEach(p => succ[p].push(t.id));
+  });
+  const queue = tasks.filter(t => !indeg[t.id]).map(t => t.id), order = [];
+  while (queue.length) {
+    const id = queue.shift(); order.push(id);
+    succ[id].forEach(s => { if (--indeg[s] === 0) queue.push(s); });
+  }
+  if (order.length !== tasks.length) return { error: 'Cycle detected. Check predecessors.' };
+  const R = {};
+  order.forEach(id => {
+    const validPreds = by[id].preds.filter(p => by[p]);
+    const ES = validPreds.length ? Math.max(...validPreds.map(p => R[p].EF)) : 0;
+    R[id] = { ES, EF: ES + by[id].dur };
+  });
+  const finish = Math.max(...order.map(id => R[id].EF));
+  [...order].reverse().forEach(id => {
+    const LF = succ[id].length ? Math.min(...succ[id].map(s => R[s].LS)) : finish;
+    R[id].LF = LF; R[id].LS = LF - by[id].dur; R[id].TF = R[id].LS - R[id].ES;
+  });
+  return { order, R, finish, by };
+}
+
+function generateCPMGraphSVG(res) {
+  const { order, R, by } = res;
+  if (!order || !order.length) return '';
+
+  const rank = {};
+  order.forEach(id => rank[id] = 0);
+  for (let iter = 0; iter < order.length; iter++) {
+    order.forEach(id => {
+      by[id].preds.forEach(p => {
+        if (rank[p] !== undefined) rank[id] = Math.max(rank[id], rank[p] + 1);
+      });
+    });
+  }
+
+  const cols = {};
+  order.forEach(id => {
+    const c = rank[id];
+    cols[c] = cols[c] || [];
+    cols[c].push(id);
+  });
+
+  const numCols = Math.max(...Object.keys(cols).map(Number)) + 1;
+  const colWidth = 200, colGap = 70, cardWidth = 190, cardHeight = 90, rowGap = 35;
+  const maxRows = Math.max(...Object.values(cols).map(c => c.length));
+  const svgWidth = Math.max(800, numCols * (colWidth + colGap) + 40);
+  const svgHeight = Math.max(340, maxRows * (cardHeight + rowGap) + 60);
+
+  const pos = {};
+  Object.entries(cols).forEach(([colIdx, ids]) => {
+    const c = +colIdx;
+    const x = 30 + c * (colWidth + colGap);
+    const colTotalHeight = ids.length * cardHeight + (ids.length - 1) * rowGap;
+    const startY = (svgHeight - colTotalHeight) / 2;
+    ids.forEach((id, rowIdx) => {
+      pos[id] = { x, y: startY + rowIdx * (cardHeight + rowGap) };
+    });
+  });
+
+  let edgesSvg = '';
+  order.forEach(succId => {
+    const succP = pos[succId];
+    by[succId].preds.forEach(predId => {
+      if (!pos[predId]) return;
+      const predP = pos[predId];
+      const x1 = predP.x + cardWidth;
+      const y1 = predP.y + cardHeight / 2;
+      const x2 = succP.x;
+      const y2 = succP.y + cardHeight / 2;
+      const midX = (x1 + x2) / 2;
+
+      const isCrit = (R[predId].TF === 0 && R[succId].TF === 0 && R[predId].EF === R[succId].ES);
+      const stroke = isCrit ? 'var(--crit)' : 'var(--m)';
+      const strokeWidth = isCrit ? '3' : '1.5';
+      const marker = isCrit ? 'url(#arrow-crit)' : 'url(#arrow)';
+
+      edgesSvg += `<path d="M ${x1} ${y1} C ${midX} ${y1}, ${midX} ${y2}, ${x2 - 4} ${y2}" fill="none" stroke="${stroke}" stroke-width="${strokeWidth}" marker-end="${marker}" />`;
+    });
+  });
+
+  let nodesSvg = '';
+  order.forEach(id => {
+    const p = pos[id];
+    const r = R[id];
+    const t = by[id];
+    const isCrit = r.TF === 0;
+    const stroke = isCrit ? 'var(--crit)' : 'var(--b)';
+    const strokeWidth = isCrit ? '2.5' : '1';
+    const bgFill = isCrit ? 'var(--hi-crit)' : 'var(--s)';
+    const tfText = isCrit ? 'CRITICAL (TF=0)' : ('Float: ' + r.TF);
+    const tfColor = isCrit ? 'var(--crit)' : 'var(--m)';
+
+    nodesSvg += `
+      <g transform="translate(${p.x}, ${p.y})" style="cursor:pointer" onclick="alert('Task: ${esc(t.name)} (ID: ${esc(id)})\nDuration: ${t.dur} days\nEarly Start: ${r.ES} | Early Finish: ${r.EF}\nLate Start: ${r.LS} | Late Finish: ${r.LF}\nTotal Float: ${r.TF} days ${isCrit ? '(ON CRITICAL PATH)' : ''}')">
+        <rect width="${cardWidth}" height="${cardHeight}" rx="8" fill="${bgFill}" stroke="${stroke}" stroke-width="${strokeWidth}" />
+        <rect x="0" y="0" width="${cardWidth}" height="24" rx="8" fill="var(--bg)" opacity="0.8" />
+        <text x="10" y="16" font-size="11" font-weight="600" fill="var(--m)">ES: ${r.ES}</text>
+        <text x="${cardWidth - 10}" y="16" text-anchor="end" font-size="11" font-weight="600" fill="var(--m)">EF: ${r.EF}</text>
+        <line x1="0" y1="24" x2="${cardWidth}" y2="24" stroke="var(--b)" stroke-width="1" />
+        
+        <text x="10" y="44" font-size="13" font-weight="700" fill="var(--t)">${esc(id)}: ${esc(t.name.slice(0, 16))}</text>
+        <text x="10" y="60" font-size="11" fill="var(--m)">Dur: ${t.dur} d</text>
+        
+        <line x1="0" y1="68" x2="${cardWidth}" y2="68" stroke="var(--b)" stroke-width="1" />
+        <text x="10" y="82" font-size="11" fill="var(--m)">LS: ${r.LS}</text>
+        <text x="65" y="82" font-size="11" fill="var(--m)">LF: ${r.LF}</text>
+        <text x="${cardWidth - 10}" y="82" text-anchor="end" font-size="10" font-weight="700" fill="${tfColor}">${tfText}</text>
+      </g>
+    `;
+  });
+
+  return `
+    <div class="svg-scroll-container">
+      <svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="var(--m)" />
+          </marker>
+          <marker id="arrow-crit" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="var(--crit)" />
+          </marker>
+        </defs>
+        ${edgesSvg}
+        ${nodesSvg}
+      </svg>
+    </div>
+  `;
+}
+
+function generateCPMGanttSVG(res) {
+  const { order, R, by, finish } = res;
+  if (!order || !order.length || finish <= 0) return '';
+  const rowHeight = 36, labelWidth = 180, chartWidth = 580;
+  const svgWidth = labelWidth + chartWidth + 40;
+  const svgHeight = 40 + order.length * rowHeight;
+  const scale = chartWidth / finish;
+
+  let gridSvg = '';
+  const step = finish <= 15 ? 1 : finish <= 30 ? 2 : 5;
+  for (let t = 0; t <= finish; t += step) {
+    const x = labelWidth + t * scale;
+    gridSvg += `<line x1="${x}" y1="24" x2="${x}" y2="${svgHeight}" stroke="var(--b)" stroke-dasharray="2,2" />`;
+    gridSvg += `<text x="${x}" y="18" font-size="10" fill="var(--m)" text-anchor="middle">${t}d</text>`;
+  }
+
+  let barsSvg = '';
+  order.forEach((id, i) => {
+    const y = 32 + i * rowHeight;
+    const r = R[id];
+    const t = by[id];
+    const isCrit = r.TF === 0;
+    const barX = labelWidth + r.ES * scale;
+    const barW = Math.max(4, t.dur * scale);
+    const floatW = r.TF * scale;
+    const barFill = isCrit ? 'var(--crit)' : 'var(--a)';
+
+    barsSvg += `<text x="10" y="${y + 16}" font-size="12" font-weight="${isCrit ? '700' : '400'}" fill="var(--t)">${esc(id)}: ${esc(t.name.slice(0, 20))}</text>`;
+    barsSvg += `<rect x="${barX}" y="${y + 4}" width="${barW}" height="18" rx="4" fill="${barFill}" />`;
+    barsSvg += `<text x="${barX + barW / 2}" y="${y + 17}" font-size="10" font-weight="600" fill="#fff" text-anchor="middle">${t.dur}d</text>`;
+
+    if (r.TF > 0) {
+      barsSvg += `<rect x="${barX + barW}" y="${y + 9}" width="${floatW}" height="8" rx="2" fill="var(--b)" stroke="var(--m)" stroke-width="0.5" stroke-dasharray="2,2" />`;
+      barsSvg += `<text x="${barX + barW + floatW / 2}" y="${y + 16}" font-size="9" fill="var(--m)" text-anchor="middle">+${r.TF}</text>`;
+    }
+  });
+
+  return `
+    <div class="svg-scroll-container">
+      <svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}">
+        ${gridSvg}
+        ${barsSvg}
+      </svg>
+    </div>
+  `;
+}
+
+/* ============ spaced repetition state ============ */
+const FC = { flip: false };
+function dueQueue() {
+  const now = Date.now();
+  return GLOSSARY.map((_, i) => i)
+    .filter(i => !store.srs[i] || store.srs[i].due <= now)
+    .sort((a, b) => (store.srs[a]?.due ?? 0) - (store.srs[b]?.due ?? 0));
+}
+function rate(q) {
+  const queue = dueQueue(); if (!queue.length) return;
+  const i = queue[0];
+  const c = store.srs[i] || { ei: 2.5, iv: 0, r: 0, due: 0 };
+  if (q < 3) { c.r = 0; c.iv = 0; c.due = Date.now() + 10 * 60000; playSound('bad'); }
+  else { c.iv = c.r === 0 ? 1 : c.r === 1 ? 6 : Math.round(c.iv * c.ei); c.r++; c.due = Date.now() + c.iv * DAY; playSound('ok'); }
+  c.ei = Math.max(1.3, c.ei + 0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
+  store.srs[i] = c; save(); FC.flip = false; render();
+}
+
+/* ============ quiz state ============ */
+let QZ = { pool: [], i: 0, score: 0, ans: null, mode: null, log: [] };
+const DNAME = { P: 'Process', E: 'People', B: 'Business' };
+const CHN = {1:'Framework',2:'Environment',3:'Initiating',4:'Scope',5:'Schedule',6:'Resources, cost, procurement',7:'Quality and risk',8:'Comms and stakeholder planning',9:'Executing',10:'Team resources',11:'Comms and stakeholder engagement',12:'Monitoring work',13:'Scope, schedule, resource control',14:'Stakeholder monitoring',15:'Closing'};
+function recordResult(q, ok) {
+  store.domStats[q.d] ??= [0, 0];
+  store.domStats[q.d][1]++; if (ok) store.domStats[q.d][0]++;
+  if (q.c) { store.chStats ??= {}; const c = (store.chStats[q.c] ??= [0, 0]); c[1]++; if (ok) c[0]++; }
+}
+function weakChapters() {
+  return Object.entries(store.chStats || {}).filter(([, [c, t]]) => t >= 3)
+    .map(([k, [c, t]]) => ({ k: +k, c, t, pct: Math.round(c / t * 100) }))
+    .filter(x => x.pct < 80).sort((a, b) => a.pct - b.pct).slice(0, 4);
+}
+function practiceChapter(c) { startQuiz('c:' + c); go('quiz'); }
+function startQuiz(mode) {
+  let idx = QUIZ.map((_, i) => i);
+  if (mode === 'missed') idx = store.missed.filter(i => i < QUIZ.length);
+  else if (mode === 's') idx = idx.filter(i => QUIZ[i].s);
+  else if (mode.startsWith('c:')) idx = idx.filter(i => String(QUIZ[i].c) === mode.slice(2));
+  else if (mode !== 'all') idx = idx.filter(i => QUIZ[i].d === mode);
+  if (!idx.length) idx = QUIZ.map((_, i) => i);
+  idx.sort(() => Math.random() - 0.5);
+  QZ = { pool: idx, i: 0, score: 0, ans: null, mode, log: [] };
+  render();
+}
+function answerQ(k) {
+  if (QZ.ans !== null) return;
+  const qi = QZ.pool[QZ.i], q = QUIZ[qi];
+  QZ.ans = k;
+  const ok = k === q.a;
+  if (ok) { QZ.score++; playSound('ok'); } else { playSound('bad'); }
+  QZ.log.push({ qi, ok });
+  recordResult(q, ok);
+  if (!ok && !store.missed.includes(qi)) store.missed.push(qi);
+  if (ok) store.missed = store.missed.filter(x => x !== qi);
+  save(); render();
+}
+function nextQ() { QZ.i++; QZ.ans = null; playSound('click'); render(); }
+
+/* ============ risk state ============ */
+const RISK_PRESET = [
+  { n: "Vendor delivery delay", p: 0.3, c: 40000 },
+  { n: "Key staff attrition", p: 0.2, c: 60000 },
+  { n: "Scope creep", p: 0.5, c: 25000 },
+  { n: "Regulatory change", p: 0.1, c: 90000 },
+  { n: "Currency fluctuation", p: 0.25, c: 12000 }
+];
+const risks = () => store.risks || RISK_PRESET;
+const persistRisks = r => { store.risks = r; save(); };
+
+/* ============ stakeholder state & interactive map ============ */
+const STAKE_PRESET = [
+  { n: "Executive sponsor", pw: 5, in: 4 },
+  { n: "End users", pw: 2, in: 5 },
+  { n: "Regulator", pw: 4, in: 2 },
+  { n: "Vendor lead", pw: 2, in: 3 }
+];
+const stakes = () => store.stakes || STAKE_PRESET;
+function quadrant(pw, inf) {
+  if (pw >= 3 && inf >= 3) return ["Manage closely", "Partner on decisions; frequent, tailored engagement.", "var(--ok)"];
+  if (pw >= 3) return ["Keep satisfied", "Consult on key decisions; avoid surprises; light, targeted updates.", "var(--a)"];
+  if (inf >= 3) return ["Keep informed", "Regular updates; capture feedback; involve in reviews.", "var(--warn)"];
+  return ["Monitor", "Minimal effort; check periodically for change in power or interest.", "var(--m)"];
+}
+
+function generateStakeMatrixSVG() {
+  const list = stakes();
+  const width = 500, height = 340;
+  const padL = 60, padR = 40, padT = 30, padB = 50;
+  const plotW = width - padL - padR;
+  const plotH = height - padT - padB;
+  const midX = padL + plotW / 2;
+  const midY = padT + plotH / 2;
+
+  const mapX = val => padL + ((val - 1) / 4) * plotW;
+  const mapY = val => padT + ((5 - val) / 4) * plotH;
+
+  let bubblesSvg = '';
+  list.forEach((s, idx) => {
+    const cx = mapX(s.in);
+    const cy = mapY(s.pw);
+    const color = quadrant(s.pw, s.in)[2];
+    bubblesSvg += `
+      <g style="transition: all 0.3s ease;">
+        <circle cx="${cx}" cy="${cy}" r="12" fill="${color}" opacity="0.85" stroke="#fff" stroke-width="2" />
+        <text x="${cx}" y="${cy + 4}" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">${idx + 1}</text>
+        <text x="${cx}" y="${cy - 16}" font-size="11" font-weight="600" fill="var(--t)" text-anchor="middle">${esc(s.n)}</text>
+      </g>
+    `;
+  });
+
+  return `
+    <div style="text-align: center; margin: 12px 0;">
+      <svg width="100%" height="${height}" viewBox="0 0 ${width} ${height}" style="max-width: 500px; background: var(--s); border-radius: 12px; border: 1px solid var(--b);">
+        <rect x="${padL}" y="${padT}" width="${plotW/2}" height="${plotH/2}" fill="rgba(59, 130, 246, 0.05)" />
+        <rect x="${midX}" y="${padT}" width="${plotW/2}" height="${plotH/2}" fill="rgba(16, 185, 129, 0.08)" />
+        <rect x="${padL}" y="${midY}" width="${plotW/2}" height="${plotH/2}" fill="rgba(100, 116, 139, 0.05)" />
+        <rect x="${midX}" y="${midY}" width="${plotW/2}" height="${plotH/2}" fill="rgba(245, 158, 11, 0.08)" />
+
+        <text x="${padL + 10}" y="${padT + 20}" font-size="11" font-weight="700" fill="var(--a)">KEEP SATISFIED</text>
+        <text x="${midX + 10}" y="${padT + 20}" font-size="11" font-weight="700" fill="var(--ok)">MANAGE CLOSELY</text>
+        <text x="${padL + 10}" y="${midY + 20}" font-size="11" font-weight="700" fill="var(--m)">MONITOR</text>
+        <text x="${midX + 10}" y="${midY + 20}" font-size="11" font-weight="700" fill="var(--warn)">KEEP INFORMED</text>
+
+        <line x1="${midX}" y1="${padT}" x2="${midX}" y2="${padT + plotH}" stroke="var(--b)" stroke-width="2" stroke-dasharray="4,4" />
+        <line x1="${padL}" y1="${midY}" x2="${padL + plotW}" y2="${midY}" stroke="var(--b)" stroke-width="2" stroke-dasharray="4,4" />
+
+        <line x1="${padL}" y1="${padT + plotH}" x2="${padL + plotW}" y2="${padT + plotH}" stroke="var(--m)" stroke-width="1.5" />
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + plotH}" stroke="var(--m)" stroke-width="1.5" />
+
+        <text x="${padL + plotW / 2}" y="${height - 12}" font-size="12" font-weight="600" fill="var(--m)" text-anchor="middle">Interest (Low → High)</text>
+        <text transform="rotate(-90)" x="${-(padT + plotH / 2)}" y="20" font-size="12" font-weight="600" fill="var(--m)" text-anchor="middle">Power (Low → High)</text>
+
+        ${bubblesSvg}
+      </svg>
+    </div>
+  `;
+}
+
+/* ============ search index ============ */
+function buildIndex() {
+  const x = [];
+  PRINCIPLES.forEach(([t, d]) => x.push({ v: 'learn', t, d }));
+  DOMAINS.forEach(([t, d]) => x.push({ v: 'learn', t, d }));
+  PROCESS_GROUPS.forEach(([n, d, l]) => { x.push({ v: 'process', t: n, d }); l.forEach(p => x.push({ v: 'process', t: p, d: n })); });
+  METHODS.concat(AGILE).forEach(([t, d]) => x.push({ v: 'method', t, d }));
+  FORMULAS.forEach(([a, b, c]) => x.push({ v: 'formulas', t: a, d: b + ' · ' + c }));
+  GLOSSARY.forEach(([t, d]) => x.push({ v: 'glossary', t, d }));
+  AI_TOPICS.forEach(([t, d]) => x.push({ v: 'ai', t, d }));
+  return x;
+}
+function doSearch(q) {
+  if (cur() !== 'search') SEARCH.prev = cur();
+  SEARCH.q = q;
+  if (!q.trim()) { if (cur() === 'search') go(SEARCH.prev || 'dash'); return; }
+  if (cur() !== 'search') { location.hash = 'search'; return; }
+  render();
+}
+
+/* ============ views ============ */
+const V = {};
+
+V.dash = () => {
+  const done = REVISE.filter((_, i) => store.checks['r' + i]).length;
+  const pct = Math.round(done / REVISE.length * 100);
+  const mastered = Object.values(store.srs).filter(c => c.r >= 3).length;
+  const days = store.exam ? Math.ceil((new Date(store.exam) - Date.now()) / DAY) : null;
+  const dom = Object.entries(store.domStats).map(([k, [c, t]]) => `${DNAME[k]} ${Math.round(c / t * 100)}% (${t})`).join(' · ') || 'No quiz data yet';
+  return `
+  <h2>Dashboard</h2>
+  <div class="grid">
+    <div class="card"><div class="m">Revision Progress</div><div class="stat">${pct}%</div><div class="bar" style="margin-top:6px"><span style="width:${pct}%"></span></div></div>
+    <div class="card"><div class="m">Quiz Best Score</div><div class="stat">${store.quizBest}%</div><div class="m" style="font-size:12px;margin-top:4px">${dom}</div></div>
+    <div class="card"><div class="m">Cards Mastered</div><div class="stat">${mastered} / ${GLOSSARY.length}</div><div class="m" style="font-size:12px;margin-top:4px">Interval ≥ 3 reviews</div></div>
+    <div class="card"><div class="m">Exam Target Date</div><div class="stat">${days === null ? '—' : days >= 0 ? days + ' days' : 'Passed'}</div>
+      <input type="date" value="${esc(store.exam)}" onchange="store.exam=this.value;save();render()" style="margin-top:6px"></div>
+  </div>
+  <div class="card"><h3>Interactive Visual Hubs</h3>
+    <div class="grid">
+      <a href="#learn">🎯 Principles & Domain Synergy Map →</a>
+      <a href="#process">🔄 49-Process Grid & Chevron Flow →</a>
+      <a href="#method">📊 Stacey Matrix & Kanban Simulator →</a>
+      <a href="#cpm">🌐 CPM Multi-Project Network Diagram →</a>
+      <a href="#evm">📈 EVM Scenarios & Corrective Advisor →</a>
+      <a href="#formulas">🧮 PERT, PTA & Comm Channels Lab →</a>
+      <a href="#risk">🎲 Monte Carlo Simulation & Heatmap →</a>
+      <a href="#stake">🧭 Stakeholder 2×2 Dynamic Scatter Map →</a>
+      <a href="#flash">🔊 Audio 3D Flip Flashcards (SRS) →</a>
+      <a href="#quiz">📝 Knowledge Area & Scenario Drills →</a>
+      <a href="#exam">⏱️ Timed Simulation & Diagnostic Report →</a>
+      <a href="#guide">🗺️ Chapter Curriculum Subway Map →</a>
+      <a href="#ai">🤖 AI Prompts & Governance Guardrails →</a>
+    </div>
+  </div>
+  <div class="card"><h3>PMP® Exam Domain Readiness</h3>
+    <p class="m" style="margin-bottom:10px">Your accuracy vs. official PMP® exam domain weights (People 42% · Process 50% · Business Env 8%).</p>
+    ${[['E', 'People', 42], ['P', 'Process', 50], ['B', 'Business Environment', 8]].map(([k, label, wt]) => {
+      const st = store.domStats[k] || [0, 0];
+      const acc = st[1] ? Math.round(st[0] / st[1] * 100) : 0;
+      const col = !st[1] ? 'var(--m)' : acc >= 75 ? 'var(--ok)' : acc >= 55 ? 'var(--warn)' : 'var(--bad)';
+      return `<div style="margin:8px 0">
+        <div class="row" style="justify-content:space-between;font-size:13px">
+          <span><strong>${label}</strong> <span class="tag">${wt}% Exam Weight</span></span>
+          <span style="color:${col};font-weight:600">${st[1] ? `${acc}% (${st[0]}/${st[1]})` : 'No attempts yet'}</span>
+        </div>
+        <div class="bar" style="margin-top:4px"><span style="width:${acc}%;background:${col}"></span></div>
+      </div>`;
+    }).join('')}
+  </div>
+  <div class="card"><h3>Weak Areas Review</h3>${(() => { const w = weakChapters(); return w.length ? w.map(x => `<div class="row" style="justify-content:space-between;padding:4px 0"><span>Ch. ${x.k} ${esc(CHN[x.k] || '')} <span class="tag crit">${x.pct}% of ${x.t}</span></span><button class="btn2" onclick="practiceChapter(${x.k})">Practise</button></div>`).join('') : '<p class="m">Answer at least 3 questions in a chapter to see personalized weak area suggestions.</p>'; })()}</div>
+  <div class="card"><h3>Keyboard Shortcuts</h3><p class="m"><span class="kbd">/</span> search · <span class="kbd">Esc</span> close search · <span class="kbd">Space</span> flip card · <span class="kbd">1–4</span> select answer/rate · <span class="kbd">Enter</span> next question</p></div>`;
+};
+
+V.learn = () => `
+  <h2>Principles & Performance Domains</h2>
+  <p class="m">Foundational guidelines from the PMBOK® Guide 7th Edition.</p>
+  
+  <div class="card">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <h3>12 Project Management Principles</h3>
+      <div class="seg">
+        <button class="${store.learnTab === 'cards' ? 'active' : ''}" onclick="store.learnTab='cards';save();render()">Visual Cards</button>
+        <button class="${store.learnTab === 'table' ? 'active' : ''}" onclick="store.learnTab='table';save();render()">Reference Table</button>
+      </div>
+    </div>
+    ${store.learnTab === 'cards' ? `
+      <div class="grid">
+        ${PRINCIPLES.map(([t, d], idx) => `
+          <div class="card" style="margin:0;display:flex;flex-direction:column;gap:8px">
+            <div class="row" style="color:var(--a);gap:8px">
+              ${PRINCIPLE_ICONS[idx] || ''}
+              <strong>${esc(t)}</strong>
+            </div>
+            <p class="m" style="font-size:13px;margin:0;line-height:1.5">${esc(d)}</p>
+          </div>
+        `).join('')}
+      </div>
+    ` : `
+      <table>${PRINCIPLES.map(([t, d]) => `<tr><th style="width:28%">${esc(t)}</th><td>${esc(d)}</td></tr>`).join('')}</table>
+    `}
+  </div>
+
+  <div class="card">
+    <h3>8 Performance Domains Synergy Map</h3>
+    <p class="m">All 8 domains function as an integrated system focused on value delivery. Click any domain node for details.</p>
+    ${generateDomainSynergyMapSVG()}
+    <table>${DOMAINS.map(([t, d], i) => `<tr><th style="width:28%">${i + 1}. ${esc(t)}</th><td>${esc(d)}</td></tr>`).join('')}</table>
+  </div>`;
+
+V.process = () => {
+  const filter = store.procFilter || 'all';
+  const viewType = store.procView || 'matrix';
+  const displayedGroups = filter === 'all' ? PROCESS_GROUPS : PROCESS_GROUPS.filter(g => g[0] === filter);
+
+  return `
+  <h2>Process Groups & 49 Processes Matrix</h2>
+  <p class="m">Classic PMBOK framework. Toggle between the comprehensive 49-Process Matrix and the lifecycle pipeline.</p>
+  
+  <div class="card">
+    <div class="row" style="justify-content:space-between;margin-bottom:10px">
+      <div class="seg">
+        <button class="${viewType === 'matrix' ? 'active' : ''}" onclick="store.procView='matrix';save();render()">49-Process Grid Matrix</button>
+        <button class="${viewType === 'flow' ? 'active' : ''}" onclick="store.procView='flow';save();render()">Lifecycle Pipeline</button>
+      </div>
+      <span class="m">Total Processes: <strong>49</strong></span>
+    </div>
+
+    ${viewType === 'matrix' ? `
+      <div style="overflow-x:auto">
+        <table style="font-size:12px;border:1px solid var(--b)">
+          <thead>
+            <tr style="background:var(--bg)">
+              <th style="width:14%">Knowledge Area</th>
+              <th style="width:15%">Initiating (2)</th>
+              <th style="width:27%">Planning (24)</th>
+              <th style="width:20%">Executing (10)</th>
+              <th style="width:20%">Monitoring & Controlling (12)</th>
+              <th style="width:14%">Closing (1)</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${PROCESS_MATRIX.map(row => `
+              <tr>
+                <td style="font-weight:700;background:var(--bg)">${esc(row[0])}</td>
+                ${[1, 2, 3, 4, 5].map(colIdx => `
+                  <td>
+                    ${row[colIdx].map(p => `
+                      <div class="pill" style="margin:2px 0;display:block;cursor:pointer;font-size:11px" onclick="alert('Process: ${esc(p)}\nKnowledge Area: ${esc(row[0])}\nProcess Group: ${PROCESS_GROUPS[colIdx-1][0]}')">
+                        ${esc(p)}
+                      </div>
+                    `).join('')}
+                  </td>
+                `).join('')}
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    ` : `
+      ${generateProcessPipelineSVG(filter)}
+      <div class="row" style="margin-top:10px;justify-content:center">
+        <button class="btn2 ${filter === 'all' ? 'on' : ''}" onclick="setProcessGroup('all')">Show All 49 Processes</button>
+      </div>
+      ${displayedGroups.map(([n, d, l], gi) => `
+        <div class="card" style="margin:8px 0">
+          <h3>${gi + 1}. ${esc(n)} <span class="tag">${l.length} processes</span></h3>
+          <p class="m">${esc(d)}</p>
+          <div class="row">${l.map(p => `<span class="pill">${esc(p)}</span>`).join('')}</div>
+        </div>
+      `).join('')}
+    `}
+  </div>`;
+};
+
+V.method = () => {
+  const currentRec = $('mrec') ? $('mrec').textContent : 'Predictive';
+  return `
+  <h2>Methodologies & Agile Practices</h2>
+  
+  <div class="card">
+    <h3>Interactive Delivery Approach Selector</h3>
+    <div class="g2">
+      <div><label>Requirements clarity</label><select id="mc" onchange="recMethod()"><option value="stable">Stable and well understood</option><option value="evolving">Evolving or unclear</option></select></div>
+      <div><label>Expected change frequency</label><select id="mf" onchange="recMethod()"><option value="rare">Rare</option><option value="frequent">Frequent</option></select></div>
+      <div><label>Customer availability for feedback</label><select id="ma" onchange="recMethod()"><option value="yes">Yes, regularly</option><option value="no">No / limited</option></select></div>
+      <div><label>Regulatory or contract constraints</label><select id="mr" onchange="recMethod()"><option value="no">No</option><option value="yes">Yes</option></select></div>
+    </div>
+    <div id="mrec" style="margin-top:12px"></div>
+    <div id="staceyWrap" style="margin-top:12px">
+      ${generateStaceyMatrixSVG(currentRec)}
+    </div>
+  </div>
+
+  ${renderKanbanSimulator()}
+
+  <div class="card">
+    <h3>Agile Sprint Burndown &amp; Velocity Simulator</h3>
+    <p class="m">Simulate sprint pacing, mid-sprint scope additions, and inspect your burndown trajectory against the ideal guideline.</p>
+    <div class="g2" style="margin-top:8px">
+      <div><label>Sprint Length (Days): <strong id="bdDaysVal">10</strong></label><input id="bdDays" type="range" min="5" max="20" value="10" oninput="calcBurndown()"></div>
+      <div><label>Committed Story Points: <strong id="bdPtsVal">40</strong></label><input id="bdPts" type="range" min="20" max="100" step="5" value="40" oninput="calcBurndown()"></div>
+      <div><label>Team Velocity Pace: <strong id="bdPaceVal">100%</strong></label><input id="bdPace" type="range" min="60" max="130" step="5" value="100" oninput="calcBurndown()"></div>
+      <div><label>Mid-Sprint Scope Added (Pts): <strong id="bdScopeVal">0</strong></label><input id="bdScope" type="range" min="0" max="25" step="5" value="0" oninput="calcBurndown()"></div>
+    </div>
+    <div id="bdOut" style="margin-top:12px"></div>
+  </div>
+
+  <div class="card">
+    <h3>Scrum Lifecycle & Flow</h3>
+    <p class="m">Visual breakdown of Scrum events, roles, artifacts, and feedback loops.</p>
+    ${generateScrumFlowSVG()}
+    <table>${AGILE.map(([t, d]) => `<tr><th style="width:28%">${esc(t)}</th><td>${esc(d)}</td></tr>`).join('')}</table>
+  </div>
+
+  <div class="card">
+    <h3>Delivery Framework Comparisons</h3>
+    <table>${METHODS.map(([t, d]) => `<tr><th style="width:28%">${esc(t)}</th><td>${esc(d)}</td></tr>`).join('')}</table>
+  </div>`;
+};
+
+function recMethod() {
+  const c = $('mc').value, f = $('mf').value, a = $('ma').value, r = $('mr').value;
+  let pick, why;
+  if (c === 'stable' && f === 'rare' && r === 'yes') { pick = 'Predictive (Waterfall)'; why = 'Stable scope, rare change, and strict constraints strongly favour upfront baseline planning.'; }
+  else if (c === 'stable' && f === 'rare') { pick = 'Predictive'; why = 'Clear requirements and low change velocity enable sequential execution and formal change control.'; }
+  else if (f === 'frequent' && a === 'yes' && r === 'no') { pick = 'Agile (Scrum / Kanban)'; why = 'High change rate and frequent customer collaboration favor short iterative cycles and rapid increments.'; }
+  else if (a === 'yes' && r === 'no') { pick = 'Iterative / Agile'; why = 'Uncertainty is high but stakeholder feedback is available; build increments to discover and refine.'; }
+  else { pick = 'Hybrid'; why = 'Mixed project context: combine predictive milestones and governance with adaptive iterative delivery for emerging components.'; }
+  $('mrec').innerHTML = `<div class="row"><span class="tag" style="font-size:14px;padding:4px 10px">${pick}</span><span class="m">${why}</span></div>`;
+  const wrap = $('staceyWrap');
+  if (wrap) wrap.innerHTML = generateStaceyMatrixSVG(pick);
+}
+
+function calcBurndown() {
+  if (!$('bdDays')) return;
+  const days = +$('bdDays').value, pts = +$('bdPts').value, pace = +$('bdPace').value / 100, scopeAdd = +$('bdScope').value;
+  $('bdDaysVal').textContent = days;
+  $('bdPtsVal').textContent = pts;
+  $('bdPaceVal').textContent = Math.round(pace * 100) + '%';
+  $('bdScopeVal').textContent = scopeAdd;
+
+  const idealBurn = pts / days;
+  const actualBurn = idealBurn * pace;
+  const midDay = Math.floor(days / 2);
+  const actualPts = [];
+  let rem = pts;
+  for (let d = 0; d <= days; d++) {
+    if (d > 0) {
+      if (d === midDay && scopeAdd > 0) rem += scopeAdd;
+      rem = Math.max(0, rem - actualBurn);
+    }
+    actualPts.push(+rem.toFixed(1));
+  }
+  const maxY = Math.max(pts, ...actualPts, 10);
+  const w = 640, h = 230, padL = 44, padR = 20, padT = 20, padB = 34;
+  const cw = w - padL - padR, ch = h - padT - padB;
+  const xOf = d => padL + (d / days) * cw;
+  const yOf = v => padT + ch - (v / maxY) * ch;
+
+  const idealPath = `M ${xOf(0)} ${yOf(pts)} L ${xOf(days)} ${yOf(0)}`;
+  const actPath = actualPts.map((v, i) => `${i === 0 ? 'M' : 'L'} ${xOf(i).toFixed(1)} ${yOf(v).toFixed(1)}`).join(' ');
+  const endRem = actualPts[days];
+  const statusTag = endRem === 0 ? `<span class="tag" style="background:var(--ok);color:#fff">On Track / Completed</span>` : `<span class="tag crit">${endRem.toFixed(1)} pts Carryover</span>`;
+
+  $('bdOut').innerHTML = `
+    <div class="row" style="justify-content:space-between;margin-bottom:8px">
+      <span>Ideal Burn: <strong>${idealBurn.toFixed(1)} pts/day</strong> · Actual Burn: <strong>${actualBurn.toFixed(1)} pts/day</strong></span>
+      ${statusTag}
+    </div>
+    <div class="svg-scroll-container">
+      <svg viewBox="0 0 ${w} ${h}" style="width:100%;max-width:640px;height:auto;display:block;margin:0 auto">
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + ch}" stroke="var(--b)" stroke-width="1.5"/>
+        <line x1="${padL}" y1="${padT + ch}" x2="${padL + cw}" y2="${padT + ch}" stroke="var(--b)" stroke-width="1.5"/>
+        <text x="${padL - 6}" y="${padT + 4}" text-anchor="end" font-size="11" fill="var(--m)">${Math.round(maxY)}</text>
+        <text x="${padL - 6}" y="${padT + ch}" text-anchor="end" font-size="11" fill="var(--m)">0</text>
+        <text x="${padL}" y="${h - 8}" text-anchor="middle" font-size="11" fill="var(--m)">Day 0</text>
+        <text x="${padL + cw}" y="${h - 8}" text-anchor="middle" font-size="11" fill="var(--m)">Day ${days}</text>
+        <path d="${idealPath}" stroke="var(--m)" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
+        <path d="${actPath}" stroke="var(--a)" stroke-width="3" fill="none"/>
+        ${actualPts.map((v, i) => `<circle cx="${xOf(i).toFixed(1)}" cy="${yOf(v).toFixed(1)}" r="3.5" fill="var(--a)"/>`).join('')}
+        ${scopeAdd > 0 ? `<text x="${xOf(midDay)}" y="${yOf(actualPts[midDay]) - 8}" text-anchor="middle" font-size="10" fill="var(--crit)">+${scopeAdd} pts scope</text>` : ''}
+        <line x1="${padL + 10}" y1="12" x2="${padL + 30}" y2="12" stroke="var(--m)" stroke-width="2" stroke-dasharray="4 3"/>
+        <text x="${padL + 35}" y="16" font-size="11" fill="var(--m)">Ideal</text>
+        <line x1="${padL + 80}" y1="12" x2="${padL + 100}" y2="12" stroke="var(--a)" stroke-width="3"/>
+        <text x="${padL + 105}" y="16" font-size="11" fill="var(--t)">Actual Remaining</text>
+      </svg>
+    </div>`;
+}
+
+V.formulas = () => `
+  <h2>PMP® Formulas &amp; Interactive Calculators</h2>
+  <p class="m">Interactive calculators for PERT 3-point estimating, communication channels, and Fixed-Price Incentive Fee (FPIF) PTA contracts.</p>
+
+  <div class="card">
+    <h3>1. PERT 3-Point Estimating &amp; Normal Distribution (68 / 95 / 99.7%)</h3>
+    <div class="g2" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
+      <div><label>Optimistic (O)</label><input id="fO" type="number" value="4" min="0" oninput="calcFormulas()"></div>
+      <div><label>Most Likely (M)</label><input id="fM" type="number" value="8" min="0" oninput="calcFormulas()"></div>
+      <div><label>Pessimistic (P)</label><input id="fP" type="number" value="18" min="0" oninput="calcFormulas()"></div>
+    </div>
+    <div id="pertOut" style="margin-top:12px"></div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <h3>2. Communication Channels</h3>
+      <label>Team / Stakeholder Size (n): <strong id="commNVal">10</strong></label>
+      <input id="commN" type="range" min="2" max="50" value="10" oninput="calcFormulas()">
+      <div id="commOut" style="margin-top:10px"></div>
+    </div>
+
+    <div class="card">
+      <h3>3. FPIF Contract &amp; Point of Total Assumption (PTA)</h3>
+      <div class="g2">
+        <div><label>Target Cost ($)</label><input id="ptaTC" type="number" value="100000" oninput="calcFormulas()"></div>
+        <div><label>Target Fee ($)</label><input id="ptaTF" type="number" value="10000" oninput="calcFormulas()"></div>
+        <div><label>Ceiling Price ($)</label><input id="ptaCP" type="number" value="120000" oninput="calcFormulas()"></div>
+        <div><label>Buyer Share (%)</label><input id="ptaBS" type="number" value="80" min="1" max="99" oninput="calcFormulas()"></div>
+      </div>
+      <div id="ptaOut" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Complete PMP® Formula Reference (${FORMULAS.length} Formulas)</h3>
+    <table>
+      <tr><th>Metric / Formula</th><th>Equation</th><th>Interpretation</th></tr>
+      ${FORMULAS.map(([n, eq, note]) => `<tr><td><strong>${esc(n)}</strong></td><td><code>${esc(eq)}</code></td><td class="m">${esc(note)}</td></tr>`).join('')}
+    </table>
+  </div>`;
+
+function calcFormulas() {
+  if (!$('fO')) return;
+  const O = Math.max(0, +$('fO').value || 0);
+  const M = Math.max(O, +$('fM').value || 0);
+  const P = Math.max(M, +$('fP').value || 0);
+  const pert = (O + 4 * M + P) / 6;
+  const tri = (O + M + P) / 3;
+  const sd = (P - O) / 6;
+  const vr = sd * sd;
+
+  const w = 620, h = 165, padL = 30, padR = 30, baseY = 128;
+  const cw = w - padL - padR;
+  const bellPts = [];
+  for (let i = 0; i <= 60; i++) {
+    const z = -3 + (i / 60) * 6;
+    const x = padL + (i / 60) * cw;
+    const y = baseY - Math.exp(-0.5 * z * z) * 92;
+    bellPts.push(`${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`);
+  }
+  const xZ = z => (padL + ((z + 3) / 6) * cw).toFixed(1);
+
+  $('pertOut').innerHTML = `
+    <div class="grid" style="margin-bottom:10px">
+      <div class="card" style="margin:0;padding:10px"><div class="m">PERT Expected (Beta)</div><div class="stat" style="font-size:22px">${pert.toFixed(2)}</div></div>
+      <div class="card" style="margin:0;padding:10px"><div class="m">Triangular Mean</div><div class="stat" style="font-size:22px">${tri.toFixed(2)}</div></div>
+      <div class="card" style="margin:0;padding:10px"><div class="m">Std Dev (1σ)</div><div class="stat" style="font-size:22px">±${sd.toFixed(2)}</div></div>
+      <div class="card" style="margin:0;padding:10px"><div class="m">Variance (σ²)</div><div class="stat" style="font-size:22px">${vr.toFixed(2)}</div></div>
+    </div>
+    <p class="m" style="font-size:13px">
+      <strong>68.2% (1σ):</strong> ${(pert - sd).toFixed(1)} – ${(pert + sd).toFixed(1)} ·
+      <strong>95.4% (2σ):</strong> ${(pert - 2 * sd).toFixed(1)} – ${(pert + 2 * sd).toFixed(1)} ·
+      <strong>99.7% (3σ):</strong> ${(pert - 3 * sd).toFixed(1)} – ${(pert + 3 * sd).toFixed(1)}
+    </p>
+    <div class="svg-scroll-container">
+      <svg viewBox="0 0 ${w} ${h}" style="width:100%;max-width:620px;height:auto;display:block;margin:0 auto">
+        <rect x="${xZ(-1)}" y="24" width="${xZ(1) - xZ(-1)}" height="${baseY - 24}" fill="var(--hi)" opacity="0.7"/>
+        <path d="${bellPts.join(' ')}" stroke="var(--a)" stroke-width="2.5" fill="none"/>
+        <line x1="${padL}" y1="${baseY}" x2="${w - padR}" y2="${baseY}" stroke="var(--b)" stroke-width="1.5"/>
+        <line x1="${xZ(0)}" y1="24" x2="${xZ(0)}" y2="${baseY}" stroke="var(--a)" stroke-dasharray="4 3"/>
+        <text x="${xZ(0)}" y="${baseY + 16}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--a)">${pert.toFixed(1)} (μ)</text>
+        <text x="${xZ(-1)}" y="${baseY + 16}" text-anchor="middle" font-size="10" fill="var(--m)">${(pert - sd).toFixed(1)} (-1σ)</text>
+        <text x="${xZ(1)}" y="${baseY + 16}" text-anchor="middle" font-size="10" fill="var(--m)">${(pert + sd).toFixed(1)} (+1σ)</text>
+        <text x="${xZ(-2)}" y="${baseY + 16}" text-anchor="middle" font-size="10" fill="var(--m)">${(pert - 2 * sd).toFixed(1)}</text>
+        <text x="${xZ(2)}" y="${baseY + 16}" text-anchor="middle" font-size="10" fill="var(--m)">${(pert + 2 * sd).toFixed(1)}</text>
+      </svg>
+    </div>`;
+
+  const n = +$('commN').value;
+  $('commNVal').textContent = n;
+  const ch = (n * (n - 1)) / 2;
+  const chPlus1 = ((n + 1) * n) / 2;
+  $('commOut').innerHTML = `
+    <div class="stat">${ch} channels</div>
+    <p class="m" style="margin-top:6px">Formula: <code>${n} × (${n} − 1) ÷ 2 = ${ch}</code></p>
+    <p class="m">Adding just <strong>1 stakeholder</strong> adds <strong>+${chPlus1 - ch}</strong> new channels (total ${chPlus1}).</p>`;
+
+  const tc = +$('ptaTC').value || 0, tf = +$('ptaTF').value || 0, cp = +$('ptaCP').value || 0;
+  const bs = Math.min(99, Math.max(1, +$('ptaBS').value || 80)) / 100;
+  const tp = tc + tf;
+  const pta = ((cp - tp) / bs) + tc;
+  $('ptaOut').innerHTML = `
+    <div class="stat" style="font-size:24px">${money(pta)}</div>
+    <p class="m" style="margin-top:6px">Target Price: <strong>${money(tp)}</strong> · Share: <strong>${Math.round(bs * 100)}/${Math.round((1 - bs) * 100)}</strong></p>
+    <p class="m">Above <strong>${money(pta)}</strong> actual cost, the seller absorbs 100% of every extra dollar.</p>`;
+}
+
+V.cpm = () => `
+  <h2>CPM Lab: Critical Path Analysis</h2>
+  <div class="card">
+    <div class="row" style="justify-content:space-between;margin-bottom:8px">
+      <div class="row">
+        <label style="margin:0">Load Project Scenario:</label>
+        <select id="cpmPresetSel" style="width:auto" onchange="loadCPMPreset(this.value)">
+          <option value="software" ${store.cpmPreset === 'software' ? 'selected' : ''}>1. Software Sprint & Release</option>
+          <option value="cloud" ${store.cpmPreset === 'cloud' ? 'selected' : ''}>2. Cloud Data Migration</option>
+          <option value="construction" ${store.cpmPreset === 'construction' ? 'selected' : ''}>3. Commercial Construction</option>
+          <option value="launch" ${store.cpmPreset === 'launch' ? 'selected' : ''}>4. Product Launch Campaign</option>
+        </select>
+      </div>
+      <div class="seg">
+        <button class="${store.cpmTab === 'graph' ? 'active' : ''}" onclick="setCPMTab('graph')">Network Diagram</button>
+        <button class="${store.cpmTab === 'gantt' ? 'active' : ''}" onclick="setCPMTab('gantt')">Gantt View</button>
+        <button class="${store.cpmTab === 'table' ? 'active' : ''}" onclick="setCPMTab('table')">Schedule Table</button>
+      </div>
+    </div>
+    <textarea id="cpmIn">${esc(CPM_PRESETS[store.cpmPreset] || CPM_SAMPLE)}</textarea>
+    <div class="row" style="margin-top:8px">
+      <button class="btn" onclick="runCPM()">Calculate Critical Path</button>
+      <button class="btn2" onclick="loadCPMPreset(store.cpmPreset)">Reset to Preset</button>
+    </div>
+    <div id="cpmOut" style="margin-top:14px"></div>
+  </div>
+  <div class="card"><h3>Calculation Method</h3>
+    <p class="m"><strong>Forward Pass:</strong> Early Start (ES) = max(EF of predecessors); Early Finish (EF) = ES + duration.<br>
+    <strong>Backward Pass:</strong> Late Finish (LF) = min(LS of successors); Late Start (LS) = LF − duration.<br>
+    <strong>Total Float:</strong> LS − ES (or LF − EF). Zero float indicates tasks on the <strong>Critical Path</strong>.</p>
+  </div>`;
+
+function loadCPMPreset(key) {
+  store.cpmPreset = key;
+  $('cpmIn').value = CPM_PRESETS[key] || CPM_SAMPLE;
+  save();
+  playSound('click');
+  runCPM();
+}
+function setCPMTab(t) {
+  store.cpmTab = t; save(); runCPM();
+}
+
+function runCPM() {
+  const tasks = parseTasks($('cpmIn').value);
+  const res = cpm(tasks);
+  if (res.error) { $('cpmOut').innerHTML = `<p class="neg" style="font-weight:600">${esc(res.error)}</p>`; return; }
+  const crit = res.order.filter(id => res.R[id].TF === 0);
+  let mainContent = '';
+
+  if (store.cpmTab === 'graph') {
+    mainContent = generateCPMGraphSVG(res);
+  } else if (store.cpmTab === 'gantt') {
+    mainContent = generateCPMGanttSVG(res);
+  } else {
+    mainContent = `
+      <div style="overflow-x:auto"><table>
+      <tr><th>ID</th><th>Task Name</th><th>Duration</th><th>ES</th><th>EF</th><th>LS</th><th>LF</th><th>Total Float</th></tr>
+      ${res.order.map(id => {
+        const r = res.R[id], t = res.by[id];
+        return `<tr class="${r.TF === 0 ? 'crit' : ''}"><td><strong>${esc(id)}</strong></td><td>${esc(t.name)}</td><td>${t.dur} d</td><td>${r.ES}</td><td>${r.EF}</td><td>${r.LS}</td><td>${r.LF}</td><td><span class="${r.TF === 0 ? 'tag crit' : 'm'}">${r.TF === 0 ? '0 (Critical)' : r.TF}</span></td></tr>`;
+      }).join('')}
+      </table></div>
+    `;
+  }
+
+  $('cpmOut').innerHTML = `
+    <div class="row" style="margin-bottom:12px;justify-content:space-between">
+      <span class="tag" style="font-size:14px;padding:4px 10px">Total Duration: ${res.finish} Days</span>
+      <span class="m"><strong>Critical Path:</strong> ${crit.map(c => `<span class="tag crit">${esc(c)}</span>`).join(' → ')}</span>
+    </div>
+    ${mainContent}
+  `;
+}
+
+/* ============ EVM Scenarios & Corrective Engine ============ */
+const EVM_PRESETS = {
+  custom: { bac: 100000, pv: 50000, ev: 45000, ac: 52000 },
+  healthy: { bac: 250000, pv: 100000, ev: 100000, ac: 95000 },
+  behind_under: { bac: 250000, pv: 125000, ev: 100000, ac: 85000 },
+  ahead_over: { bac: 250000, pv: 80000, ev: 100000, ac: 120000 },
+  critical: { bac: 250000, pv: 120000, ev: 80000, ac: 115000 }
+};
+
+function getCorrectiveAction(cpi, spi, cv, sv) {
+  if (cpi >= 1.0 && spi >= 1.0) {
+    return {
+      title: "Target Performance Met",
+      text: "Maintain current team velocity and quality controls. Continue monitoring risk triggers to preserve budget and schedule reserves.",
+      action: "Monitor & Maintain Baselines"
+    };
+  }
+  if (cpi >= 1.0 && spi < 1.0) {
+    return {
+      title: "Under Budget but Behind Schedule",
+      text: "You have financial cushion ($" + money(cv) + " surplus). Evaluate **Crashing** critical path activities (adding resources or paid overtime) to recover schedule without exceeding BAC. Also check if non-critical tasks can be fast-tracked.",
+      action: "Consider Crashing Critical Path"
+    };
+  }
+  if (cpi < 1.0 && spi >= 1.0) {
+    return {
+      title: "Ahead of Schedule but Over Budget",
+      text: "Schedule is advancing well, but expenditure exceeds value earned ($" + money(Math.abs(cv)) + " overrun). Perform cost-driver audit: inspect contractor rates, rework waste, or overtime premiums. Do NOT add resources. Consider resource leveling to smooth costs.",
+      action: "Audit Cost Drivers & Resource Leveling"
+    };
+  }
+  return {
+    title: "Critical Dual Overrun (Behind Schedule & Over Budget)",
+    text: "Dual jeopardy: schedule is delayed and budget is breached. Do NOT crash with overtime (budget is exhausted). Recommended PM steps: 1) Root cause analysis with leads; 2) Zero-cost fast-tracking of parallel activities; 3) Escalate revised EAC to Project Sponsor; 4) Negotiate scope descoping via Change Control Board (CCB).",
+    action: "Escalate to Sponsor & CCB Scope Adjustment"
+  };
+}
+
+V.evm = () => `
+  <h2>Earned Value Management (EVM)</h2>
+  <div class="card">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <div class="row">
+        <label style="margin:0">Load Scenario:</label>
+        <select id="evmSel" style="width:auto" onchange="loadEVMPreset(this.value)">
+          <option value="custom" ${store.evmPreset === 'custom' ? 'selected' : ''}>Custom Inputs</option>
+          <option value="healthy" ${store.evmPreset === 'healthy' ? 'selected' : ''}>Case 1: Healthy & On-Track (CPI 1.05, SPI 1.0)</option>
+          <option value="behind_under" ${store.evmPreset === 'behind_under' ? 'selected' : ''}>Case 2: Behind Schedule, Under Budget (CPI 1.18, SPI 0.80)</option>
+          <option value="ahead_over" ${store.evmPreset === 'ahead_over' ? 'selected' : ''}>Case 3: Ahead of Schedule, Over Budget (CPI 0.83, SPI 1.25)</option>
+          <option value="critical" ${store.evmPreset === 'critical' ? 'selected' : ''}>Case 4: Critical Delay & Overrun (CPI 0.70, SPI 0.67)</option>
+        </select>
+      </div>
+      <div class="seg">
+        <button class="${store.evmTab === 'scurve' ? 'active' : ''}" onclick="store.evmTab='scurve';calcEVM()">S-Curve</button>
+        <button class="${store.evmTab === 'gauges' ? 'active' : ''}" onclick="store.evmTab='gauges';calcEVM()">Dials</button>
+        <button class="${store.evmTab === 'bars' ? 'active' : ''}" onclick="store.evmTab='bars';calcEVM()">Bars</button>
+      </div>
+    </div>
+    <div class="grid">
+      <div><label>Budget at Completion (BAC)</label><input id="bac" type="number" value="${EVM_PRESETS[store.evmPreset]?.bac || 100000}" oninput="calcEVM()"></div>
+      <div><label>Planned Value (PV)</label><input id="pv" type="number" value="${EVM_PRESETS[store.evmPreset]?.pv || 50000}" oninput="calcEVM()"></div>
+      <div><label>Earned Value (EV)</label><input id="ev" type="number" value="${EVM_PRESETS[store.evmPreset]?.ev || 45000}" oninput="calcEVM()"></div>
+      <div><label>Actual Cost (AC)</label><input id="ac" type="number" value="${EVM_PRESETS[store.evmPreset]?.ac || 52000}" oninput="calcEVM()"></div>
+    </div>
+    <div id="evmOut" style="margin-top:16px"></div>
+  </div>
+  <div class="card"><h3>Formulas Reference</h3><table>
+    <tr><th>Metric</th><th>Formula</th><th>Interpretation</th></tr>
+    ${FORMULAS.map(([a, b, c]) => `<tr><td><strong>${esc(a)}</strong></td><td><code>${esc(b)}</code></td><td class="m">${esc(c)}</td></tr>`).join('')}
+  </table></div>`;
+
+function loadEVMPreset(key) {
+  store.evmPreset = key;
+  const p = EVM_PRESETS[key] || EVM_PRESETS.custom;
+  $('bac').value = p.bac;
+  $('pv').value = p.pv;
+  $('ev').value = p.ev;
+  $('ac').value = p.ac;
+  save();
+  playSound('click');
+  calcEVM();
+}
+
+function calcEVM() {
+  const n = id => parseFloat($(id).value) || 0;
+  const BAC = n('bac'), PV = n('pv'), EV = n('ev'), AC = n('ac');
+  const CV = EV - AC;
+  const SV = EV - PV;
+  const CPI = AC ? EV / AC : 0;
+  const SPI = PV ? EV / PV : 0;
+  const EACt = CPI > 0 ? BAC / CPI : BAC;
+  const EACa = AC + (BAC - EV);
+  const VAC = BAC - EACt;
+  const TCPI = (BAC - AC) > 0 ? (BAC - EV) / (BAC - AC) : NaN;
+  const f = x => isFinite(x) ? x.toFixed(2) : '—';
+
+  let healthPill = '';
+  if (CV >= 0 && SV >= 0) healthPill = '<span class="tag" style="background:rgba(16,185,129,0.15);color:var(--ok);font-size:13px">🟢 Ahead of Schedule & Under Budget</span>';
+  else if (CV >= 0 && SV < 0) healthPill = '<span class="tag" style="background:rgba(245,158,11,0.15);color:var(--warn);font-size:13px">🟡 Behind Schedule but Under Budget</span>';
+  else if (CV < 0 && SV >= 0) healthPill = '<span class="tag" style="background:rgba(245,158,11,0.15);color:var(--warn);font-size:13px">🟡 Ahead of Schedule but Over Budget</span>';
+  else healthPill = '<span class="tag crit" style="font-size:13px">🔴 Behind Schedule & Over Budget</span>';
+
+  const tab = store.evmTab || 'scurve';
+  let chartView = '';
+  if (tab === 'scurve') {
+    chartView = generateSCurveSVG(BAC, PV, EV, AC, EACt);
+  } else if (tab === 'gauges') {
+    chartView = generateRadialGaugesSVG(CPI, SPI);
+  } else {
+    const maxVal = Math.max(BAC, PV, EV, AC, EACt, 1);
+    const barH = 110, svgW = 480, barW = 50;
+    const items = [
+      { label: 'PV', val: PV, col: 'var(--m)' },
+      { label: 'EV', val: EV, col: 'var(--a)' },
+      { label: 'AC', val: AC, col: CV < 0 ? 'var(--bad)' : 'var(--ok)' },
+      { label: 'BAC', val: BAC, col: 'var(--t)' },
+      { label: 'EAC', val: EACt, col: EACt > BAC ? 'var(--bad)' : 'var(--ok)' }
+    ];
+    let barsSvg = '';
+    items.forEach((item, idx) => {
+      const h = (item.val / maxVal) * 80;
+      const x = 30 + idx * 90;
+      const y = 90 - h;
+      barsSvg += `
+        <rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="4" fill="${item.col}" opacity="0.85" />
+        <text x="${x + barW / 2}" y="${y - 6}" font-size="10" font-weight="600" fill="var(--t)" text-anchor="middle">${money(item.val)}</text>
+        <text x="${x + barW / 2}" y="105" font-size="11" font-weight="600" fill="var(--m)" text-anchor="middle">${item.label}</text>
+      `;
+    });
+    chartView = `
+      <div style="text-align:center;margin:12px 0">
+        <svg width="100%" height="${barH}" viewBox="0 0 ${svgW} ${barH}" style="max-width:500px;background:var(--bg);border-radius:10px;padding:4px">
+          ${barsSvg}
+        </svg>
+      </div>
+    `;
+  }
+
+  const advice = getCorrectiveAction(CPI, SPI, CV, SV);
+  const row = (k, v, note, cls = '') => `<tr><td><strong>${k}</strong></td><td class="${cls}"><strong>${v}</strong></td><td class="m">${note}</td></tr>`;
+  $('evmOut').innerHTML = `
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      ${healthPill}
+      <span class="m">Forecast at Completion (EAC): <strong>${money(EACt)}</strong></span>
+    </div>
+    ${chartView}
+
+    <div class="card" style="background:var(--bg);border-left:4px solid var(--a);margin:14px 0">
+      <h3 style="margin:0 0 6px;color:var(--a)">🎯 PMBOK Corrective Action Advisor: ${esc(advice.title)}</h3>
+      <p style="margin:0;font-size:13px;line-height:1.6">${advice.text}</p>
+      <div style="margin-top:8px"><span class="tag">${esc(advice.action)}</span></div>
+    </div>
+
+    <table>
+      ${row('Cost Variance (CV)', money(CV), CV < 0 ? 'Over budget (' + money(Math.abs(CV)) + ')' : 'Under budget', CV < 0 ? 'neg' : 'pos')}
+      ${row('Schedule Variance (SV)', money(SV), SV < 0 ? 'Behind schedule (' + money(Math.abs(SV)) + ')' : 'Ahead of schedule', SV < 0 ? 'neg' : 'pos')}
+      ${row('Cost Performance Index (CPI)', f(CPI), CPI < 1 ? 'Cost inefficient ($' + f(CPI) + ' earned per $1 spent)' : 'Cost efficient', CPI < 1 ? 'neg' : 'pos')}
+      ${row('Schedule Performance Index (SPI)', f(SPI), SPI < 1 ? 'Schedule inefficient (' + Math.round(SPI * 100) + '% of planned rate)' : 'Progressing on/ahead of plan', SPI < 1 ? 'neg' : 'pos')}
+      ${row('EAC (Typical)', money(EACt), 'Expected cost assuming current CPI continues (BAC ÷ CPI)')}
+      ${row('EAC (Atypical)', money(EACa), 'Expected cost if future work adheres to original budget (AC + BAC − EV)')}
+      ${row('Variance at Completion (VAC)', money(VAC), VAC < 0 ? 'Projected overrun: ' + money(Math.abs(VAC)) : 'Projected savings: ' + money(VAC), VAC < 0 ? 'neg' : 'pos')}
+      ${row('TCPI (to BAC)', f(TCPI), TCPI > 1 ? 'Must achieve efficiency of ' + f(TCPI) + ' to stay within BAC' : 'Efficiency required: ' + f(TCPI))}
+    </table>
+  `;
+}
+
+V.risk = () => {
+  const list = risks().map((r, i) => ({ ...r, i, emv: r.p * r.c })).sort((a, b) => b.emv - a.emv);
+  const total = list.reduce((s, r) => s + r.emv, 0);
+  const band = v => v >= 20000 ? 'neg' : v >= 5000 ? 'warn' : 'pos';
+  const tab = store.riskTab || 'mc';
+
+  const mc = runMonteCarlo(list, 1000);
+
+  return `
+  <h2>Risk Lab: Quantitative Analysis & Monte Carlo</h2>
+  <div class="card">
+    <div class="grid">
+      <div><div class="m">Expected Monetary Value (EMV)</div><div class="stat ${band(total)}">${money(total)}</div><div class="m" style="font-size:11px">Mean expected exposure</div></div>
+      <div><div class="m">P80 Contingency Target</div><div class="stat neg">${money(mc.p80)}</div><div class="m" style="font-size:11px">80% statistical confidence buffer</div></div>
+      <div><div class="m">P50 Median Loss</div><div class="stat">${money(mc.p50)}</div><div class="m" style="font-size:11px">50% probability threshold</div></div>
+      <div><div class="m">P95 Worst-Case Loss</div><div class="stat">${money(mc.p95)}</div><div class="m" style="font-size:11px">Conservative upper bound</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <h3>Risk Analysis Engine</h3>
+      <div class="seg">
+        <button class="${tab === 'mc' ? 'active' : ''}" onclick="store.riskTab='mc';save();render()">Monte Carlo (1,000 Trials)</button>
+        <button class="${tab === 'heatmap' ? 'active' : ''}" onclick="store.riskTab='heatmap';save();render()">5×5 Heatmap Matrix</button>
+        <button class="${tab === 'table' ? 'active' : ''}" onclick="store.riskTab='table';save();render()">Risk Register</button>
+      </div>
+    </div>
+
+    ${tab === 'mc' ? `
+      <div class="row" style="justify-content:space-between">
+        <p class="m" style="margin:0;font-size:13px">1,000-iteration probability distribution. P80 represents the recommended contingency reserve.</p>
+        <button class="btn2" onclick="render()">🎲 Rerun 1,000 Trials</button>
+      </div>
+      ${generateMonteCarloSVG(mc)}
+      <div class="card" style="margin:10px 0;background:var(--bg)">
+        <p style="margin:0;font-size:12px;line-height:1.5">
+          <strong>Why P80 matters:</strong> Traditional EMV ($${money(total)}) represents the mathematical average, meaning there is roughly a 50% chance the actual risk loss will exceed this budget. Sizing the contingency reserve at <strong>P80 ($${money(mc.p80)})</strong> ensures an 80% confidence level that the reserve will cover all incurred risks without needing executive management reserve escalation.
+        </p>
+      </div>
+    ` : tab === 'heatmap' ? `
+      ${generateRiskHeatmapSVG(list)}
+      <p class="m" style="text-align:center;font-size:12px">Click any risk bubble (R1, R2, ...) to view detailed probability, impact, and EMV exposure.</p>
+    ` : `
+      <div style="overflow-x:auto"><table>
+      <tr><th>Risk Description</th><th>Probability</th><th>Impact</th><th>EMV</th><th>Suggested Response</th><th>Action</th></tr>
+      ${list.map(r => `<tr><td><strong>${esc(r.n)}</strong></td><td>${Math.round(r.p * 100)}%</td><td>${money(r.c)}</td><td class="${band(r.emv)}"><strong>${money(r.emv)}</strong></td>
+        <td><span class="pill">${r.p >= 0.4 ? 'Mitigate' : r.c >= 50000 ? 'Transfer' : 'Accept'}</span></td>
+        <td><button class="btn2" onclick="delRisk(${r.i})" title="Delete risk">×</button></td></tr>`).join('')}
+      </table></div>
+    `}
+  </div>
+
+  <div class="card"><h3>Add New Risk</h3>
+    <div class="g2">
+      <div><label>Risk Name</label><input id="rn" placeholder="e.g. Subcontractor delay"></div>
+      <div><label>Probability (0.0 to 1.0)</label><input id="rp" type="number" step="0.05" min="0" max="1" value="0.2"></div>
+      <div><label>Impact (Cost)</label><input id="rc" type="number" value="10000"></div>
+      <div style="align-self:end"><button class="btn" onclick="addRisk()">Add to Register</button></div>
+    </div></div>`;
+};
+function addRisk() {
+  const n = $('rn').value.trim(); if (!n) return;
+  const p = Math.min(1, Math.max(0, parseFloat($('rp').value) || 0));
+  const c = parseFloat($('rc').value) || 0;
+  persistRisks([...risks(), { n, p, c }]);
+  playSound('click');
+  render();
+}
+function delRisk(i) {
+  persistRisks(risks().filter((_, k) => k !== i));
+  playSound('click');
+  render();
+}
+
+V.stake = () => `
+  <h2>Stakeholder Power/Interest Matrix</h2>
+  <div class="card">
+    <p class="m">Visual 2×2 grid: adjust sliders to reposition stakeholders in real-time.</p>
+    ${generateStakeMatrixSVG()}
+    ${stakes().map((s, i) => { const [qn, qs] = quadrant(s.pw, s.in); return `
+      <div style="padding:12px 0;border-bottom:1px solid var(--b)">
+        <div class="row" style="justify-content:space-between"><strong>${i + 1}. ${esc(s.n)}</strong><span class="tag" id="sq${i}">${qn}</span></div>
+        <div class="g2" style="margin-top:6px">
+          <div><label>Power Level: <strong id="sp${i}">${s.pw}</strong> / 5</label><input type="range" min="1" max="5" value="${s.pw}" oninput="stakeUpd(${i})"></div>
+          <div><label>Interest Level: <strong id="si${i}">${s.in}</strong> / 5</label><input type="range" min="1" max="5" value="${s.in}" oninput="stakeUpd(${i})"></div>
+        </div>
+        <div class="m" id="ss${i}" style="margin-top:4px">${qs}</div>
+      </div>`; }).join('')}
+  </div>
+  <div class="card"><h3>Standard Engagement Strategies</h3><table>
+    <tr><th>Quadrant</th><th>Engagement Strategy</th></tr>
+    <tr><td><strong>Manage Closely</strong> (High Power, High Interest)</td><td>Active collaboration; involve directly in governance and key decisions.</td></tr>
+    <tr><td><strong>Keep Satisfied</strong> (High Power, Low Interest)</td><td>Meet their needs; avoid surprises; seek sign-offs without overwhelming.</td></tr>
+    <tr><td><strong>Keep Informed</strong> (Low Power, High Interest)</td><td>Provide regular status updates; consult on operational concerns.</td></tr>
+    <tr><td><strong>Monitor</strong> (Low Power, Low Interest)</td><td>Periodic review for shifts in authority or stakeholder interest.</td></tr></table></div>`;
+
+function stakeUpd(i) {
+  const list = stakes().map(s => ({ ...s }));
+  const ranges = document.querySelectorAll('#app input[type=range]');
+  const pw = +ranges[i * 2].value;
+  const inf = +ranges[i * 2 + 1].value;
+  list[i].pw = pw; list[i].in = inf;
+  store.stakes = list; save();
+  render();
+}
+
+V.glossary = () => `
+  <h2>Glossary of Terms</h2>
+  <div class="card"><input id="gq" placeholder="Filter terms or definitions..." oninput="filterGloss(this.value)"></div>
+  <div id="gl">${glossHTML(GLOSSARY)}</div>`;
+const glossHTML = list => list.map(([t, d]) => `
+  <div class="card" style="margin:8px 0;display:flex;justify-content:space-between;align-items:flex-start">
+    <div>
+      <strong>${esc(t)}</strong>
+      <div class="m" style="margin-top:4px">${esc(d)}</div>
+    </div>
+    <button class="btn2" style="padding:4px 8px;font-size:12px;margin-left:8px" onclick="speakText('${esc(t)}. ${esc(d)}')">🔊</button>
+  </div>
+`).join('');
+
+function filterGloss(v) {
+  const q = v.toLowerCase();
+  $('gl').innerHTML = glossHTML(GLOSSARY.filter(([t, d]) => (t + d).toLowerCase().includes(q)));
+}
+
+V.flash = () => {
+  const isBrowse = store.fcMode === 'browse';
+  const queue = dueQueue();
+  const now = Date.now();
+  const next = Object.values(store.srs).map(c => c.due).filter(d => d > now).sort((a, b) => a - b)[0];
+  const mastered = Object.values(store.srs).filter(c => c.r >= 3).length;
+
+  let cardIdx = 0;
+  if (isBrowse) {
+    store.fcIdx = Math.max(0, Math.min(GLOSSARY.length - 1, store.fcIdx));
+    cardIdx = store.fcIdx;
+  } else {
+    if (!queue.length) {
+      return `
+        <h2>Flashcards</h2>
+        <div class="row" style="margin-bottom:12px">
+          <div class="seg">
+            <button class="active" onclick="store.fcMode='srs';save();render()">SRS Due (0)</button>
+            <button onclick="store.fcMode='browse';save();render()">Browse All (${GLOSSARY.length})</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🎉 All Caught Up!</h3>
+          <p class="m">${next ? 'Next spaced review scheduled for: ' + new Date(next).toLocaleString() : 'All cards reviewed.'}</p>
+          <p class="m">Mastered: <strong>${mastered} / ${GLOSSARY.length}</strong> cards.</p>
+          <button class="btn" onclick="store.fcMode='browse';save();render()">Browse All Cards Now →</button>
+        </div>
+      `;
+    }
+    cardIdx = queue[0];
+  }
+
+  const [t, d] = GLOSSARY[cardIdx];
+
+  return `
+    <h2>Flashcards</h2>
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <div class="seg">
+        <button class="${!isBrowse ? 'active' : ''}" onclick="store.fcMode='srs';save();render()">SRS Due (${queue.length})</button>
+        <button class="${isBrowse ? 'active' : ''}" onclick="store.fcMode='browse';save();render()">Browse All (${GLOSSARY.length})</button>
+      </div>
+      <div class="row">
+        <button class="btn2" style="padding:4px 10px;font-size:12px" onclick="speakText('${esc(t)}. ${esc(d)}')">🔊 Listen</button>
+        <span class="m">Mastered: ${mastered} / ${GLOSSARY.length}</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <span class="m">${isBrowse ? ('Card ' + (cardIdx + 1) + ' of ' + GLOSSARY.length) : ('Due Queue: ' + queue.length + ' remaining')}</span>
+        <span class="kbd">Space to flip</span>
+      </div>
+
+      <div class="flip-container" onclick="flipCard()">
+        <div class="flip-card ${FC.flip ? 'flipped' : ''}">
+          <div class="flip-face">
+            <span class="tag" style="margin-bottom:8px">TERM</span>
+            <strong style="font-size:22px">${esc(t)}</strong>
+            <span class="m" style="margin-top:12px;font-size:12px">Click to flip</span>
+          </div>
+          <div class="flip-face flip-back">
+            <span class="tag" style="margin-bottom:8px">DEFINITION</span>
+            <p style="font-size:16px;line-height:1.6">${esc(d)}</p>
+          </div>
+        </div>
+      </div>
+
+      ${!isBrowse ? `
+        <div class="row" style="justify-content:center;margin-top:14px">
+          ${FC.flip ? `
+            <button class="btn2" onclick="rate(1)">Again <span class="kbd">1</span></button>
+            <button class="btn2" onclick="rate(3)">Hard <span class="kbd">2</span></button>
+            <button class="btn2" onclick="rate(4)">Good <span class="kbd">3</span></button>
+            <button class="btn2" onclick="rate(5)">Easy <span class="kbd">4</span></button>
+          ` : `
+            <button class="btn" onclick="flipCard()">Show Answer <span class="kbd">Space</span></button>
+          `}
+        </div>
+      ` : `
+        <div class="row" style="justify-content:space-between;margin-top:14px">
+          <button class="btn2" onclick="store.fcIdx--;FC.flip=false;save();render()" ${cardIdx === 0 ? 'disabled' : ''}>← Previous</button>
+          <button class="btn" onclick="flipCard()">${FC.flip ? 'Show Term' : 'Show Definition'}</button>
+          <button class="btn2" onclick="store.fcIdx++;FC.flip=false;save();render()" ${cardIdx === GLOSSARY.length - 1 ? 'disabled' : ''}>Next →</button>
+        </div>
+      `}
+    </div>
+  `;
+};
+function flipCard() { FC.flip = !FC.flip; playSound('click'); render(); }
+
+V.quiz = () => {
+  if (!QZ.mode) return `
+    <h2>Interactive Quiz</h2>
+    <div class="card"><p class="m">Test your comprehension by knowledge area, performance domain, or targeted chapter.</p>
+    <div class="row" style="margin-bottom:12px">
+      <select id="qc" style="width:auto">
+        ${[...new Set(QUIZ.map(q => q.c).filter(Boolean))].sort((a, b) => a - b).map(c => `<option value="${c}">Chapter ${c}: ${CHN[c] || ''}</option>`).join('')}
+      </select>
+      <button class="btn2" onclick="startQuiz('c:' + $('qc').value)">Start Chapter Quiz</button>
+    </div>
+    <div class="grid">
+      <button class="btn" onclick="startQuiz('all')">All Questions (${QUIZ.length})</button>
+      <button class="btn2" onclick="startQuiz('P')">Process Domain (${QUIZ.filter(q => q.d === 'P').length})</button>
+      <button class="btn2" onclick="startQuiz('E')">People Domain (${QUIZ.filter(q => q.d === 'E').length})</button>
+      <button class="btn2" onclick="startQuiz('B')">Business Environment (${QUIZ.filter(q => q.d === 'B').length})</button>
+      <button class="btn2" onclick="startQuiz('s')">Situational Scenarios (${QUIZ.filter(q => q.s).length})</button>
+      <button class="btn2" onclick="startQuiz('missed')" ${store.missed.length ? '' : 'disabled'}>Review Missed (${store.missed.length})</button>
+    </div></div>`;
+
+  if (QZ.i >= QZ.pool.length) {
+    const pct = Math.round(QZ.score / QZ.pool.length * 100);
+    if (QZ.mode === 'all' && pct > store.quizBest) { store.quizBest = pct; save(); }
+    return `<h2>Quiz Results</h2><div class="card">
+      <div class="stat">${QZ.score} / ${QZ.pool.length} · ${pct}%</div>
+      <p class="m">Saved in Missed queue: <strong>${store.missed.length}</strong> questions.</p>
+      <div class="row"><button class="btn" onclick="startQuiz('${QZ.mode}')">Retry This Set</button><button class="btn2" onclick="QZ.mode=null;render()">Choose Another Set</button></div></div>`;
+  }
+
+  const qi = QZ.pool[QZ.i], q = QUIZ[qi];
+  return `<h2>Quiz</h2>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <span class="m">${QZ.i + 1} of ${QZ.pool.length} <span class="tag">${DNAME[q.d]}${q.c ? ' · Ch.' + q.c : ''}${q.s ? ' · Scenario' : ''}</span></span>
+      <span class="m">Score: <strong>${QZ.score}</strong></span>
+    </div>
+    <p style="font-size:16px;margin:12px 0;line-height:1.5"><strong>${esc(q.q)}</strong></p>
+    ${q.o.map((o, i) => {
+      let c = '';
+      if (QZ.ans !== null) { if (i === q.a) c = 'ok'; else if (i === QZ.ans) c = 'bad'; }
+      return `<button class="opt ${c}" ${QZ.ans !== null ? 'disabled' : ''} onclick="answerQ(${i})"><span class="kbd">${i + 1}</span> ${esc(o)}</button>`;
+    }).join('')}
+    ${QZ.ans !== null ? `
+      <div class="card" style="margin-top:12px;background:var(--bg)">
+        <p style="margin:0"><strong>Explanation:</strong> ${esc(q.e)}</p>
+      </div>
+      <button class="btn" style="margin-top:10px" onclick="nextQ()">${QZ.i + 1 < QZ.pool.length ? 'Next Question' : 'View Summary'} <span class="kbd">Enter</span></button>
+    ` : ''}
+  </div>`;
+};
+
+V.guide = () => {
+  const rows = [
+    ['I', 1, 'Project Management Framework', 3, 'Principles', '#learn'],
+    ['I', 2, 'Project Environment', 45, 'Glossary', '#glossary'],
+    ['I', 3, 'Initiating the Project', 87, 'Process groups', '#process'],
+    ['II', 4, 'Planning Project and Scope', 115, 'Process groups', '#process'],
+    ['II', 5, 'Planning for Project Schedule Management', 155, 'CPM Lab', '#cpm'],
+    ['II', 6, 'Planning Resources, Cost, and Procurement', 199, 'Earned value', '#evm'],
+    ['II', 7, 'Planning Quality and Risk Management', 251, 'Risk Lab', '#risk'],
+    ['II', 8, 'Planning Communication and Stakeholder Management', 313, 'Stakeholders', '#stake'],
+    ['III', 9, 'Managing Execution of Project Work', 345, 'Methods', '#method'],
+    ['III', 10, 'Managing Project Resources', 381, 'Quiz (People)', '#quiz'],
+    ['III', 11, 'Managing Communication and Stakeholder Engagement', 419, 'Stakeholders', '#stake'],
+    ['IV', 12, 'Monitoring and Controlling the Project Work', 439, 'Quiz', '#quiz'],
+    ['IV', 13, 'Monitoring Scope, Schedule, and Resources', 479, 'Earned value', '#evm'],
+    ['IV', 14, 'Monitoring Stakeholder Engagement and Communication', 519, 'Stakeholders', '#stake'],
+    ['V', 15, 'Closing the Project', 537, 'Revise', '#revise']
+  ];
+  return `
+  <h2>Chapter Curriculum Map</h2>
+  <p class="m">Visual learning roadmap: click any chapter stop on the subway route to practice.</p>
+  ${generateRoadmapSVG()}
+  <div class="card"><div style="overflow-x:auto"><table>
+    <tr><th>Part</th><th>Ch.</th><th>Topic Title</th><th>Practice Hub</th></tr>
+    ${rows.map(([p, c, t, pg, l, h]) => `<tr><td><strong>${p}</strong></td><td>${c}</td><td>${esc(t)}</td><td><a href="${h}">${esc(l)} →</a></td></tr>`).join('')}
+  </table></div></div>`;
+};
+
+let EX = null, EXT = null;
+const EXMIN = 1.3;
+const fmtT = ms => { const t = Math.max(0, Math.round(ms / 1000)); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); };
+
+function startExam(n) {
+  const idx = QUIZ.map((_, i) => i).sort(() => Math.random() - 0.5).slice(0, Math.min(n, QUIZ.length));
+  EX = {
+    pool: idx,
+    i: 0,
+    ans: {},
+    flag: {},
+    warn: 0,
+    done: false,
+    paused: false,
+    filter: 'all',
+    start: Date.now(),
+    end: Date.now() + Math.round(idx.length * EXMIN * 60000)
+  };
+  clearInterval(EXT);
+  EXT = setInterval(tickExam, 1000);
+  render();
+}
+function tickExam() {
+  if (!EX || EX.done || EX.paused) return;
+  if (Date.now() >= EX.end) { finishExam(); return; }
+  const el = $('exT');
+  if (el) el.textContent = fmtT(EX.end - Date.now());
+}
+function togglePauseExam() {
+  if (!EX || EX.done) return;
+  EX.paused = !EX.paused;
+  if (EX.paused) {
+    EX.pausedAt = Date.now();
+  } else {
+    EX.end += (Date.now() - EX.pausedAt);
+  }
+  render();
+}
+function exAnswer(k) { EX.ans[EX.i] = k; EX.warn = 0; playSound('click'); render(); }
+function exGo(i) { EX.i = Math.max(0, Math.min(EX.pool.length - 1, i)); EX.warn = 0; render(); }
+function exFlag() { EX.flag[EX.i] = !EX.flag[EX.i]; playSound('click'); render(); }
+function exSubmit() {
+  const un = EX.pool.length - Object.keys(EX.ans).length;
+  if (un && !EX.warn) { EX.warn = un; playSound('bad'); render(); return; }
+  finishExam();
+}
+function finishExam() {
+  if (!EX || EX.done) return;
+  EX.done = true; clearInterval(EXT);
+  let score = 0;
+  EX.pool.forEach((qi, i) => {
+    recordResult(QUIZ[qi], EX.ans[i] === QUIZ[qi].a);
+    if (EX.ans[i] === QUIZ[qi].a) { score++; store.missed = store.missed.filter(x => x !== qi); }
+    else if (!store.missed.includes(qi)) store.missed.push(qi);
+  });
+  store.exams ??= [];
+  store.exams.push({ t: Date.now(), n: EX.pool.length, score, secs: Math.round((Date.now() - EX.start) / 1000) });
+  store.exams = store.exams.slice(-10);
+  save();
+  playSound(score >= EX.pool.length * 0.75 ? 'ok' : 'bad');
+  render();
+}
+
+function exportExamReport() {
+  if (!EX || !EX.done) return;
+  const res = EX.pool.map((qi, i) => ({ qi, got: EX.ans[i], ok: EX.ans[i] === QUIZ[qi].a }));
+  const score = res.filter(r => r.ok).length, n = res.length;
+  const pct = Math.round(score / n * 100);
+  let text = '=== PM MASTERY EXAM REPORT ===\n';
+  text += 'Date: ' + new Date().toLocaleString() + '\n';
+  text += 'Score: ' + score + ' / ' + n + ' (' + pct + '%)\n\n';
+  text += '--- MISSED QUESTIONS REVIEW ---\n\n';
+  res.filter(r => !r.ok).forEach((r, idx) => {
+    const q = QUIZ[r.qi];
+    text += (idx + 1) + '. ' + q.q + '\n';
+    text += '   Your answer: ' + (r.got !== undefined ? q.o[r.got] : 'Unanswered') + '\n';
+    text += '   Correct answer: ' + q.o[q.a] + '\n';
+    text += '   Explanation: ' + q.e + '\n\n';
+  });
+
+  const blob = new Blob([text], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'PM_Exam_Report_' + new Date().toISOString().slice(0, 10) + '.txt';
+  a.click();
+}
+
+V.exam = () => {
+  if (!EX) {
+    const hist = (store.exams || []).slice().reverse().slice(0, 5);
+    const sizes = [20, 40, 60, QUIZ.length].filter((n, i, a) => n <= QUIZ.length && a.indexOf(n) === i);
+    return `<h2>Exam Simulator</h2>
+    <div class="card"><p class="m">Realistic timed simulation across Process, People, and Business domains. No immediate feedback until submission. Flag questions for review.</p>
+      <div class="row">${sizes.map(n => `<button class="${n === 40 ? 'btn' : 'btn2'}" onclick="startExam(${n})">${n === QUIZ.length ? 'All ' + n : n} Questions (${Math.round(n * EXMIN)} min)</button>`).join('')}</div></div>
+    ${hist.length ? `<div class="card"><h3>Recent Attempts</h3><table><tr><th>Date</th><th>Score</th><th>Time Used</th></tr>${hist.map(h => `<tr><td>${new Date(h.t).toLocaleDateString()}</td><td><strong>${h.score} / ${h.n}</strong> (${Math.round(h.score / h.n * 100)}%)</td><td class="m">${fmtT(h.secs * 1000)}</td></tr>`).join('')}</table></div>` : ''}`;
+  }
+  if (!EX.done) {
+    const q = QUIZ[EX.pool[EX.i]], sel = EX.ans[EX.i];
+    const answered = Object.keys(EX.ans).length;
+    const filter = EX.filter || 'all';
+    const filteredList = EX.pool.map((qi, i) => i).filter(i => {
+      if (filter === 'flag') return EX.flag[i];
+      if (filter === 'un') return EX.ans[i] === undefined;
+      return true;
+    });
+
+    return `<h2>Exam Simulator</h2>
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <span class="m">Question <strong>${EX.i + 1}</strong> of ${EX.pool.length} · Answered: ${answered}</span>
+        <div class="row">
+          <span class="tag" style="font-size:14px" id="exT">${EX.paused ? 'PAUSED' : fmtT(EX.end - Date.now())}</span>
+          <button class="btn2" onclick="togglePauseExam()">${EX.paused ? '▶ Resume' : '⏸ Pause'}</button>
+        </div>
+      </div>
+      ${EX.paused ? `
+        <div class="card" style="text-align:center;padding:30px;background:var(--bg)">
+          <h3>Exam Paused</h3>
+          <p class="m">Timer is frozen. Click Resume to continue.</p>
+          <button class="btn" onclick="togglePauseExam()">Resume Exam</button>
+        </div>
+      ` : `
+        <p style="font-size:16px;margin:12px 0;line-height:1.5"><strong>${esc(q.q)}</strong></p>
+        ${q.o.map((o, i) => `<button class="opt ${sel === i ? 'sel' : ''}" onclick="exAnswer(${i})"><span class="kbd">${i + 1}</span> ${esc(o)}</button>`).join('')}
+        <div class="row" style="margin-top:12px">
+          <button class="btn2" onclick="exGo(${EX.i - 1})" ${EX.i === 0 ? 'disabled' : ''}>← Prev</button>
+          <button class="btn2" onclick="exGo(${EX.i + 1})" ${EX.i === EX.pool.length - 1 ? 'disabled' : ''}>Next →</button>
+          <button class="btn2" onclick="exFlag()">${EX.flag[EX.i] ? '⚑ Unflag' : '⚐ Flag'}</button>
+          <button class="btn" onclick="exSubmit()">Submit Exam</button>
+        </div>
+        ${EX.warn ? `<p class="neg" style="margin-top:8px;font-weight:600">⚠️ ${EX.warn} questions are unanswered. Click 'Submit Exam' again to confirm submission.</p>` : ''}
+      `}
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between;margin-bottom:8px">
+        <div class="seg">
+          <button class="${filter === 'all' ? 'active' : ''}" onclick="EX.filter='all';render()">All (${EX.pool.length})</button>
+          <button class="${filter === 'flag' ? 'active' : ''}" onclick="EX.filter='flag';render()">Flagged (${Object.values(EX.flag).filter(Boolean).length})</button>
+          <button class="${filter === 'un' ? 'active' : ''}" onclick="EX.filter='un';render()">Unanswered (${EX.pool.length - answered})</button>
+        </div>
+      </div>
+      <div class="row">
+        ${filteredList.map(i => `
+          <button class="btn2" style="padding:4px 8px;font-size:12px;${EX.ans[i] !== undefined ? 'background:var(--hi);' : ''}${i === EX.i ? 'border-color:var(--a);font-weight:700;' : ''}" onclick="exGo(${i})">
+            ${i + 1}${EX.flag[i] ? '⚑' : ''}
+          </button>
+        `).join('')}
+      </div>
+    </div>`;
+  }
+
+  const res = EX.pool.map((qi, i) => ({ qi, got: EX.ans[i], ok: EX.ans[i] === QUIZ[qi].a }));
+  const score = res.filter(r => r.ok).length, n = res.length;
+  const pct = Math.round(score / n * 100);
+  const by = {};
+  res.forEach(r => { const d = QUIZ[r.qi].d; by[d] ??= [0, 0]; by[d][1]++; if (r.ok) by[d][0]++; });
+  const wrong = res.filter(r => !r.ok);
+
+  return `<h2>Exam Results</h2>
+  <div class="card"><div class="stat">${score} / ${n} · ${pct}%</div>
+    <p class="m">${Object.entries(by).map(([k, [c, t]]) => `${DNAME[k]}: ${c}/${t} (${Math.round(c/t*100)}%)`).join(' · ')}</p>
+    <p class="m">${wrong.length} missed question${wrong.length === 1 ? '' : 's'} saved to Missed drill queue.</p>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="EX=null;render()">Start New Exam</button>
+      <button class="btn2" onclick="exportExamReport()">📄 Export Exam Report</button>
+      <a href="#quiz" class="btn2">Review Missed in Quiz →</a>
+    </div></div>
+  ${wrong.map(r => {
+    const q = QUIZ[r.qi];
+    return `<div class="card" style="margin:8px 0">
+      <strong>${esc(q.q)}</strong>
+      <div class="m" style="margin-top:6px">Your answer: <span class="neg">${r.got === undefined ? 'Unanswered' : esc(q.o[r.got])}</span></div>
+      <div class="pos">Correct answer: <strong>${esc(q.o[q.a])}</strong></div>
+      <div class="m" style="margin-top:4px">${esc(q.e)}</div>
+    </div>`;
+  }).join('')}`;
+};
+
+V.lessons = () => `
+  <h2>High-Yield Study Lessons</h2>
+  <p class="m">Condensed notes aligned to PMBOK® Performance Domains and Knowledge Areas.</p>
+  <h3>Performance Domains</h3>
+  ${DOM_DEEP.map(([t, d]) => `<details class="card"><summary><strong>${esc(t)}</strong></summary><p style="margin-top:8px">${esc(d)}</p></details>`).join('')}
+  <h3>Chapter Deep-Dives</h3>
+  ${CH_LESSONS.map(([n, t, d]) => `<details class="card"><summary><strong>Ch. ${n}: ${esc(t)}</strong></summary><p style="margin-top:8px">${esc(d)}</p><button class="btn2" onclick="practiceChapter(${n})">Practise Chapter ${n} Questions</button></details>`).join('')}`;
+
+V.ref = () => `
+  <h2>Reference & ITTO Hub</h2>
+  <p class="m">Key process inputs, outputs, models, methods, and artifacts.</p>
+  <h3>Process Inputs and Outputs</h3>
+  <div class="card"><input id="ioq" placeholder="Filter processes..." oninput="ioFilter(this.value)"><div id="iot" style="overflow-x:auto;margin-top:10px">${ioTable(IO)}</div></div>
+  <h3>Tailoring Guidelines</h3>
+  <div class="card"><table>${TAILOR.map(([t, d]) => `<tr><th style="width:28%">${esc(t)}</th><td>${esc(d)}</td></tr>`).join('')}</table></div>
+  <h3>Models, Methods, and Artifacts</h3>
+  <div class="card"><table>${MMA.map(([t, d]) => `<tr><th style="width:22%">${esc(t)}</th><td>${esc(d)}</td></tr>`).join('')}</table></div>`;
+const ioTable = list => `<table><tr><th>Process</th><th>Key Inputs</th><th>Key Outputs</th></tr>${list.map(([p, i, o]) => `<tr><td><strong>${esc(p)}</strong></td><td>${esc(i)}</td><td>${esc(o)}</td></tr>`).join('')}</table>`;
+function ioFilter(v) { const q = v.toLowerCase(); $('iot').innerHTML = ioTable(IO.filter(r => r.join(' ').toLowerCase().includes(q))); }
+
+V.ai = () => `
+  <h2>AI in Project Management</h2>
+  <p class="m">AI prompt templates, best practices, and governance guardrails.</p>
+  <div class="grid">${AI_TOPICS.map(([t, d]) => `<div class="card"><h3>${esc(t)}</h3><p class="m">${esc(d)}</p></div>`).join('')}</div>
+  <div class="card"><h3>Master Prompt Template</h3>
+    <textarea readonly onclick="this.select()">ROLE: Senior PMO Analyst & PMP-certified Project Manager.
+CONTEXT: [Project type, industry, methodology, current phase, key constraints].
+TASK: [Specific deliverable, e.g. Draft WBS, Risk Register with EMV, Stakeholder Engagement Matrix].
+CONSTRAINTS: Explicitly flag assumptions. No invented statistics. Highlight uncertain elements.
+FORMAT: Structured Markdown table with columns: item, rationale, owner, risk level, confidence.</textarea>
+  </div>`;
+
+V.revise = () => {
+  const done = REVISE.filter((_, i) => store.checks['r' + i]).length;
+  const pct = Math.round(done / REVISE.length * 100);
+  return `
+  <h2>Revision Checklist & Data Hub</h2>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <span>Completed Items: <strong>${done} / ${REVISE.length}</strong></span>
+      <span class="tag">${pct}%</span>
+    </div>
+    <div class="bar" style="margin:10px 0"><span style="width:${pct}%"></span></div>
+    ${REVISE.map((t, i) => `<label class="chk"><input type="checkbox" ${store.checks['r' + i] ? 'checked' : ''} onchange="store.checks['r${i}']=this.checked;save();render()"><span>${esc(t)}</span></label>`).join('')}
+  </div>
+  <div class="card"><h3>Backup & Progress Sync</h3>
+    <p class="m">Export your flashcard intervals, quiz history, and risk register to keep on another computer or mobile device.</p>
+    <div class="row" style="margin-bottom:12px">
+      <button class="btn" onclick="exportDataFile()">💾 Download Backup File (.json)</button>
+      <label class="btn2" style="cursor:pointer">
+        📂 Upload Backup File
+        <input type="file" accept=".json" onchange="importDataFile(event)" style="display:none">
+      </label>
+    </div>
+    <textarea readonly onclick="this.select()">${esc(JSON.stringify(store))}</textarea>
+    <textarea id="imp" placeholder="Or paste raw JSON backup string here..." style="margin-top:8px"></textarea>
+    <div class="row" style="margin-top:8px">
+      <button class="btn2" onclick="importData()">Restore from Text</button>
+      <button class="btn2" onclick="resetAll(this)">Reset All Progress</button>
+    </div>
+  </div>`;
+};
+
+function exportDataFile() {
+  const blob = new Blob([JSON.stringify(store, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'PM_Mastery_Backup_' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+}
+function importDataFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    try {
+      const data = JSON.parse(evt.target.result);
+      Object.assign(store, data);
+      save();
+      playSound('ok');
+      alert('Backup imported successfully!');
+      render();
+    } catch (err) {
+      alert('Invalid backup JSON file.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function importData() {
+  try {
+    const d = JSON.parse($('imp').value);
+    Object.assign(store, d);
+    save();
+    playSound('ok');
+    render();
+  } catch (e) {
+    $('imp').value = '';
+    $('imp').placeholder = 'Invalid backup string. Please paste valid JSON.';
+    playSound('bad');
+  }
+}
+let resetArmed = false;
+function resetAll(btn) {
+  if (!resetArmed) {
+    resetArmed = true;
+    btn.textContent = 'Click again to confirm data reset';
+    btn.style.color = 'var(--bad)';
+    return;
+  }
+  try { localStorage.removeItem('pmm'); } catch (e) {}
+  location.reload();
+}
+
+V.search = () => {
+  const q = SEARCH.q.trim().toLowerCase();
+  if (!q) return `<h2>Search</h2><div class="card m">Type in the search box above (press <span class="kbd">Esc</span> to return).</div>`;
+  const hits = buildIndex().filter(x => (x.t + ' ' + x.d).toLowerCase().includes(q));
+  return `<h2>Search: “${esc(SEARCH.q)}” <span class="m" style="font-size:14px">(${hits.length} matches)</span></h2>
+  ${hits.length ? hits.slice(0, 60).map(h => `<div class="card" style="margin:8px 0"><a href="#${h.v}"><strong>${esc(h.t)}</strong></a> <span class="tag">${h.v}</span><div class="m" style="margin-top:4px">${esc(h.d)}</div></div>`).join('') : `<div class="card m">No matches found.</div>`}`;
+};
+
+/* ============ shell ============ */
+function applyTheme() {
+  document.documentElement.dataset.theme = store.theme === 'auto' ? '' : store.theme;
+  $('theme').textContent = store.theme === 'auto' ? 'Theme: Auto' : 'Theme: ' + store.theme;
+}
+function toggleTheme() {
+  store.theme = store.theme === 'auto' ? 'dark' : store.theme === 'dark' ? 'light' : 'auto';
+  save(); applyTheme();
+}
+
+function render() {
+  const key = cur();
+  const view = V[key] || V.dash;
+  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + key));
+  $('app').innerHTML = view();
+  if (key === 'evm') calcEVM();
+  if (key === 'formulas') calcFormulas();
+  if (key === 'method') { recMethod(); calcBurndown(); }
+  if (key === 'cpm') runCPM();
+  if (key !== 'search' && $('q')) $('q').value = '';
+  updateSoundBtn();
+  window.scrollTo(0, 0);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input,textarea,select')) {
+    if (e.key === 'Escape' && e.target.id === 'q') {
+      e.target.blur();
+      if (cur() === 'search') go(SEARCH.prev || 'dash');
+    }
+    return;
+  }
+  if (e.key === '/') { e.preventDefault(); $('q').focus(); return; }
+  if (e.key === 'Escape' && cur() === 'search') { go(SEARCH.prev || 'dash'); return; }
+
+  const v = cur();
+  if (v === 'flash') {
+    if (e.key === ' ') { e.preventDefault(); flipCard(); }
+    if (store.fcMode !== 'browse' && FC.flip && ['1', '2', '3', '4'].includes(e.key)) {
+      rate([1, 3, 4, 5][+e.key - 1]);
+    }
+  }
+  if (v === 'quiz' && QZ.mode) {
+    if (QZ.ans === null && ['1', '2', '3', '4'].includes(e.key)) answerQ(+e.key - 1);
+    if (QZ.ans !== null && e.key === 'Enter') nextQ();
+  }
+});
+window.addEventListener('hashchange', render);
+applyTheme();
+render();
+
+</script>
+</body>
+</html>
