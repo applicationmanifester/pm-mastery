@@ -38,7 +38,7 @@ export function generateDomainSynergyMapSVG() {
 
     linesSvg += `<line x1="${cx}" y1="${cy}" x2="${nx}" y2="${ny}" stroke="var(--b)" stroke-width="1.5" stroke-dasharray="3,3" />`;
     nodesSvg += `
-      <g style="cursor:pointer" onclick="window.showInspector && window.showInspector('Details', '${esc(name)}: \n\n${esc(desc)}')">
+      <g style="cursor:pointer" onclick="window.showInspector && window.showInspector('${esc(name)}', '<p style=&quot;margin:0&quot;>${esc(desc)}</p>')">
         <circle cx="${nx}" cy="${ny}" r="20" fill="var(--s)" stroke="var(--a)" stroke-width="2" />
         <text x="${nx}" y="${ny + 4}" font-size="10" font-weight="700" fill="var(--a)" text-anchor="middle">${i + 1}</text>
         <text x="${nx}" y="${ny > cy ? ny + 26 : ny - 22}" font-size="10" font-weight="600" fill="var(--t)" text-anchor="middle">${esc(name.split(' ')[0])}</text>
