@@ -1822,6 +1822,78 @@ const PM_SCENARIOS = [
   }
 ];
 
+const RCA_PRESETS = {
+  fishbone: {
+    product: {
+      head: 'D7 Retention Dropped 12%',
+      causes: {
+        People: ['Support team lacked onboarding FAQ', 'No dedicated onboarding PM'],
+        Process: ['Skipped usability test on v2 flow', 'Forced 6-step setup before value'],
+        Tech: ['Slow CSV import (>15s timeout)', 'Mobile push opt-in broken on iOS'],
+        Data: ['Cohort tracking missed guest users', 'No funnel drop-off alerts']
+      }
+    },
+    delivery: {
+      head: 'Sprint Velocity Dropped 30%',
+      causes: {
+        People: ['2 senior devs pulled to Sev-1s', 'New hire onboarding overhead'],
+        Process: ['Unrefined stories entered sprint', 'Mid-sprint scope creep from Sales'],
+        Tech: ['Flaky E2E test suite (25m runs)', 'Staging DB out of sync'],
+        Data: ['Story points underestimated API work', 'Hidden third-party dependency']
+      }
+    }
+  },
+  fiveWhys: {
+    symptom: 'Enterprise customers are abandoning trial setup at Step 3 (Data Import).',
+    whys: [
+      'Because 65% of CSV uploads fail with a generic "Invalid format" error.',
+      'Because our parser rejects ISO-8601 timestamps and trailing spaces.',
+      'Because the import validator was built only for internal US sample files.',
+      'Because QA test fixtures didn’t include real customer exports from EU/APAC.',
+      'Because we lack an automated schema-linting & sample-fixture pipeline for customer data.'
+    ],
+    root: 'Missing customer-representative test fixtures and forgiving schema normalization in the importer.',
+    action: 'Add auto-trimming + flexible date parsing, show row-level error hints, and add 10 anonymized customer CSVs to CI.'
+  },
+  pareto: [
+    { name: 'Checkout Timeout / 504', count: 48 },
+    { name: 'Unclear Pricing / Fees', count: 31 },
+    { name: 'SSO Login Failure', count: 14 },
+    { name: 'Slow Search Results', count: 9 },
+    { name: 'Missing Dark Mode', count: 4 },
+    { name: 'Typos in Help Docs', count: 2 }
+  ]
+};
+
+const STRATEGY_PRESETS = {
+  roadmap: [
+    { col: 'Now', title: '1-Click CSV Importer', outcome: '+15% Trial Activation', conf: 'High' },
+    { col: 'Now', title: 'Checkout Latency Fix', outcome: '-40% Cart Abandonment', conf: 'High' },
+    { col: 'Next', title: 'AI Weekly Executive Digest', outcome: '+20% WAU Engagement', conf: 'Med' },
+    { col: 'Next', title: 'Self-Serve SSO (SAML)', outcome: 'Unblock Enterprise ARR', conf: 'Med' },
+    { col: 'Later', title: 'Marketplace Integrations', outcome: 'Expand Ecosystem NRR', conf: 'Low' }
+  ],
+  raci: {
+    roles: ['PM', 'Eng Lead', 'Design', 'Sponsor'],
+    rows: [
+      { task: 'Product Roadmap & Scope', assign: ['A', 'C', 'C', 'I'] },
+      { task: 'Technical Architecture', assign: ['I', 'A', 'I', 'I'] },
+      { task: 'UX Prototypes & Research', assign: ['C', 'C', 'A', 'I'] },
+      { task: 'Go-Live & Budget Sign-off', assign: ['R', 'C', 'I', 'A'] }
+    ]
+  },
+  experiment: {
+    hypothesis: 'If we replace the 6-step onboarding form with a 1-click sample workspace, then D7 retention will increase by +10% because users experience core value in under 60 seconds.',
+    primary: 'D7 Retention Rate (Target: ≥ 32%)',
+    guardrail: 'Support Ticket Rate (< 3%) & Paid Conversion (no drop)',
+    criteria: 'Ship if D7 lifts ≥ +6% with p < 0.05 over 14 days and guardrails hold; otherwise iterate on guided import.'
+  },
+  premortem: [
+    { risk: 'Enterprise SSO delayed by IdP edge cases', like: 4, imp: 5, signal: 'Sandbox auth errors > 5%', mit: 'Run 2-day Spike in Sprint 1; ship Okta/AzureAD first.' },
+    { risk: 'Users ignore AI digest due to noisy alerts', like: 3, imp: 4, signal: 'Email open rate < 20%', mit: 'Add frequency controls + 5-user beta before GA.' }
+  ]
+};
+
 
 /* === src/data/quiz_extended.js === */
 // Extended Market-Standard PMP® Question Bank
@@ -4766,7 +4838,7 @@ const PILLARS = [
   { id: 'learn', label: 'Learn', views: [{ id: 'learn', label: 'Principles & Domains' }, { id: 'guide', label: 'Chapter Map' }, { id: 'lessons', label: 'Lessons' }] },
   { id: 'labs', label: 'Labs', views: [{ id: 'cpm', label: 'CPM Network' }, { id: 'evm', label: 'EVM & Advisor' }, { id: 'risk', label: 'Monte Carlo & Risk' }, { id: 'method', label: 'Agile & Kanban' }, { id: 'formulas', label: 'Formulas' }, { id: 'stake', label: 'Stakeholders' }] },
   { id: 'practise', label: 'Practise', views: [{ id: 'flash', label: 'Flashcards' }, { id: 'quiz', label: 'Quiz Drills' }, { id: 'exam', label: 'Exam Simulator' }] },
-  { id: 'product', label: 'Product Mastery', views: [{ id: 'pm-hub', label: 'Frameworks & Deep Dives' }, { id: 'pm-prio', label: 'Prioritization Studio' }, { id: 'pm-metrics', label: 'Metrics & Growth Lab' }, { id: 'pm-cases', label: 'Cases & Drills' }] },
+  { id: 'product', label: 'Product Mastery', views: [{ id: 'pm-hub', label: 'Frameworks & Deep Dives' }, { id: 'pm-prio', label: 'Prioritization Studio' }, { id: 'pm-metrics', label: 'Metrics & Growth Lab' }, { id: 'pm-rca', label: 'Root Cause Lab' }, { id: 'pm-strat', label: 'Strategy & Execution' }, { id: 'pm-cases', label: 'Cases & Drills' }] },
   { id: 'ref', label: 'Reference', views: [{ id: 'process', label: '49-Process Grid' }, { id: 'ref', label: 'ITTOs, Frameworks & Resources' }, { id: 'glossary', label: 'Glossary' }, { id: 'ai', label: 'AI Coach & Prompts' }] }
 ];
 
@@ -6359,6 +6431,355 @@ function renderHeartTable() {
   </table>`;
 }
 
+/* ---- 3b. Root Cause Lab (Ishikawa · 5 Whys · Pareto) ---- */
+V['pm-rca'] = () => `
+  <h2>Root Cause &amp; Cause-and-Effect Lab</h2>
+  <p class="m" style="font-size:13px;margin-top:0">Diagnose systemic failures instead of symptoms using an interactive <strong>Ishikawa (Fishbone) Diagram</strong>, <strong>5 Whys Post-Mortem</strong>, and <strong>Pareto (80/20) Analyzer</strong>.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <h3 style="margin:0">1. Interactive Ishikawa (Fishbone) Diagram</h3>
+      <div class="row" style="gap:6px;flex-wrap:wrap">
+        <button class="btn" onclick="loadFishbonePreset('product')">Product Retention Example</button>
+        <button class="btn" onclick="loadFishbonePreset('delivery')">Delivery Velocity Example</button>
+        <button class="btn" onclick="clearFishbone()">Clear</button>
+      </div>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin:10px 0">
+      <div><label>Problem Statement (Head)</label><input id="fb-head" placeholder="e.g., D7 Retention Dropped 12%" oninput="updateFishboneHead(this.value)"></div>
+      <div><label>Category</label><select id="fb-cat"><option>People</option><option>Process</option><option>Tech</option><option>Data</option></select></div>
+      <div><label>Contributing Cause</label><input id="fb-cause" placeholder="e.g., Slow CSV import (>15s)"></div>
+    </div>
+    <button class="btn primary" onclick="addFishboneCause()">+ Add Cause to Branch</button>
+    <div id="fb-svg" style="margin-top:12px;overflow-x:auto"></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <h3 style="margin:0">2. 5 Whys Causal Chain &amp; Blameless Post-Mortem</h3>
+      <div class="row" style="gap:6px">
+        <button class="btn" onclick="loadFiveWhysPreset()">Load Example</button>
+        <button class="btn" onclick="clearFiveWhys()">Clear</button>
+        <button class="btn primary" id="fw-pm-copy" onclick="copyPostMortem()">Copy Post-Mortem</button>
+      </div>
+    </div>
+    <div id="five-whys-body" style="margin-top:10px"></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <h3 style="margin:0">3. Pareto (80/20) Vital-Few Analyzer</h3>
+      <div class="row" style="gap:6px">
+        <button class="btn" onclick="loadParetoPreset()">Load Example</button>
+        <button class="btn" onclick="clearPareto()">Clear</button>
+      </div>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin:10px 0">
+      <div><label>Defect / Churn Cause</label><input id="pa-name" placeholder="e.g., Checkout Timeout"></div>
+      <div><label>Incident / Ticket Count</label><input id="pa-cnt" type="number" min="1" value="25"></div>
+    </div>
+    <button class="btn primary" onclick="addParetoItem()">+ Add &amp; Plot</button>
+    <div id="pa-svg" style="margin-top:12px;overflow-x:auto"></div>
+  </div>
+`;
+
+let fishboneData = store.fishboneData || JSON.parse(JSON.stringify(RCA_PRESETS.fishbone.product));
+window.loadFishbonePreset = function (k) { fishboneData = JSON.parse(JSON.stringify(RCA_PRESETS.fishbone[k])); store.fishboneData = fishboneData; save(); renderFishbone(); };
+window.clearFishbone = function () { fishboneData = { head: 'Problem Statement', causes: { People: [], Process: [], Tech: [], Data: [] } }; store.fishboneData = fishboneData; save(); renderFishbone(); };
+window.updateFishboneHead = function (v) { fishboneData.head = v; store.fishboneData = fishboneData; save(); renderFishbone(true); };
+window.addFishboneCause = function () {
+  const cat = $('fb-cat')?.value || 'Process';
+  const c = ($('fb-cause')?.value || '').trim();
+  if (!c) return;
+  fishboneData.causes[cat] = fishboneData.causes[cat] || [];
+  fishboneData.causes[cat].push(c);
+  store.fishboneData = fishboneData; save();
+  if ($('fb-cause')) $('fb-cause').value = '';
+  renderFishbone();
+};
+window.delFishboneCause = function (cat, idx) {
+  fishboneData.causes[cat].splice(idx, 1);
+  store.fishboneData = fishboneData; save(); renderFishbone();
+};
+function renderFishbone(skipInput) {
+  const headEl = $('fb-head');
+  if (headEl && !skipInput) headEl.value = fishboneData.head || '';
+  const el = $('fb-svg');
+  if (!el) return;
+  const branches = [
+    ['People', 170, true, '#2563eb'],
+    ['Process', 410, true, '#7c3aed'],
+    ['Tech', 170, false, '#059669'],
+    ['Data', 410, false, '#d97706']
+  ];
+  const svgBranches = branches.map(([cat, bx, top, col]) => {
+    const items = fishboneData.causes[cat] || [];
+    const yEnd = top ? 28 : 272;
+    const xEnd = bx - 55;
+    const bones = items.slice(0, 4).map((txt, i) => {
+      const t = (i + 1) / (Math.min(4, items.length) + 1);
+      const px = bx - 55 * t, py = 150 + (yEnd - 150) * t;
+      const short = txt.length > 26 ? txt.slice(0, 24) + '…' : txt;
+      return `<line x1="${px}" y1="${py}" x2="${px - 80}" y2="${py}" stroke="${col}" stroke-opacity="0.55" stroke-width="1.3"/><text x="${px - 84}" y="${py + 4}" text-anchor="end" font-size="10.5" fill="currentColor" style="cursor:pointer" onclick="delFishboneCause('${cat}',${i})">${esc(short)} ✕</text>`;
+    }).join('');
+    return `<line x1="${bx}" y1="150" x2="${xEnd}" y2="${yEnd}" stroke="${col}" stroke-width="2.2"/>
+      <rect x="${xEnd - 44}" y="${top ? 6 : 274}" width="88" height="22" rx="6" fill="${col}" fill-opacity="0.14" stroke="${col}"/>
+      <text x="${xEnd}" y="${top ? 21 : 289}" text-anchor="middle" font-size="11.5" font-weight="700" fill="${col}">${cat}</text>${bones}`;
+  }).join('');
+  el.innerHTML = `<svg viewBox="0 0 740 302" style="width:100%;min-width:560px;background:var(--bg);border:1px solid var(--b);border-radius:10px">
+    <line x1="30" y1="150" x2="545" y2="150" stroke="currentColor" stroke-width="3" stroke-opacity="0.7"/>
+    <polygon points="545,143 560,150 545,157" fill="currentColor" opacity="0.7"/>
+    <rect x="562" y="118" width="166" height="64" rx="10" fill="#dc2626" fill-opacity="0.12" stroke="#dc2626" stroke-width="1.8"/>
+    <text x="645" y="145" text-anchor="middle" font-size="11" font-weight="700" fill="#dc2626">PROBLEM</text>
+    <text x="645" y="163" text-anchor="middle" font-size="11" fill="currentColor">${esc((fishboneData.head || 'Problem').slice(0, 24))}</text>
+    ${svgBranches}
+  </svg><p class="m" style="font-size:11px;margin:4px 0 0">Tip: Click any cause label on the diagram to remove it.</p>`;
+}
+
+let fiveWhysData = store.fiveWhysData || JSON.parse(JSON.stringify(RCA_PRESETS.fiveWhys));
+window.loadFiveWhysPreset = function () { fiveWhysData = JSON.parse(JSON.stringify(RCA_PRESETS.fiveWhys)); store.fiveWhysData = fiveWhysData; save(); renderFiveWhys(); };
+window.clearFiveWhys = function () { fiveWhysData = { symptom: '', whys: ['', '', '', '', ''], root: '', action: '' }; store.fiveWhysData = fiveWhysData; save(); renderFiveWhys(); };
+window.updFiveWhys = function (field, idx, val) {
+  if (field === 'whys') fiveWhysData.whys[idx] = val; else fiveWhysData[field] = val;
+  store.fiveWhysData = fiveWhysData; save();
+};
+window.copyPostMortem = function () {
+  const txt = `BLAMELESS POST-MORTEM (5 WHYS)\nSymptom: ${fiveWhysData.symptom}\n\n` +
+    fiveWhysData.whys.map((w, i) => `Why ${i + 1}: ${w}`).join('\n') +
+    `\n\nRoot Cause: ${fiveWhysData.root}\nPreventive Action: ${fiveWhysData.action}`;
+  navigator.clipboard?.writeText(txt);
+  const b = $('fw-pm-copy'); if (b) { b.textContent = 'Copied!'; setTimeout(() => { b.textContent = 'Copy Post-Mortem'; }, 1500); }
+};
+function renderFiveWhys() {
+  const el = $('five-whys-body');
+  if (!el) return;
+  el.innerHTML = `<div style="margin-bottom:8px"><label><strong>Symptom / Incident</strong></label><input value="${esc(fiveWhysData.symptom)}" oninput="updFiveWhys('symptom',0,this.value)" placeholder="What broke or regressed?"></div>` +
+    fiveWhysData.whys.map((w, i) => `<div style="margin-bottom:6px;padding-left:${i * 10}px"><label>Why #${i + 1}?</label><input value="${esc(w)}" oninput="updFiveWhys('whys',${i},this.value)" placeholder="Because..."></div>`).join('') +
+    `<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:8px">
+      <div><label><strong>Systemic Root Cause</strong></label><textarea rows="2" oninput="updFiveWhys('root',0,this.value)">${esc(fiveWhysData.root)}</textarea></div>
+      <div><label><strong>Preventive Action &amp; Owner</strong></label><textarea rows="2" oninput="updFiveWhys('action',0,this.value)">${esc(fiveWhysData.action)}</textarea></div>
+    </div>`;
+}
+
+let paretoData = store.paretoData || RCA_PRESETS.pareto.map(x => ({ ...x }));
+window.loadParetoPreset = function () { paretoData = RCA_PRESETS.pareto.map(x => ({ ...x })); store.paretoData = paretoData; save(); renderPareto(); };
+window.clearPareto = function () { paretoData = []; store.paretoData = paretoData; save(); renderPareto(); };
+window.addParetoItem = function () {
+  const name = ($('pa-name')?.value || '').trim();
+  const count = Math.max(1, +($('pa-cnt')?.value || 1));
+  if (!name) return;
+  paretoData.push({ name, count }); store.paretoData = paretoData; save();
+  if ($('pa-name')) $('pa-name').value = '';
+  renderPareto();
+};
+function renderPareto() {
+  const el = $('pa-svg');
+  if (!el) return;
+  if (!paretoData.length) { el.innerHTML = '<p class="m" style="font-size:13px">No causes yet. Add one or click Load Example.</p>'; return; }
+  const sorted = paretoData.slice().sort((a, b) => b.count - a.count);
+  const total = sorted.reduce((s, x) => s + x.count, 0) || 1;
+  const maxC = sorted[0].count || 1;
+  const W = 620, H = 230, padL = 42, padR = 42, padB = 54, padT = 20, plotW = W - padL - padR, plotH = H - padT - padB;
+  const bw = Math.min(64, (plotW / sorted.length) - 10);
+  let cum = 0, pts = [], vital = [];
+  const bars = sorted.map((d, i) => {
+    cum += d.count;
+    const cumPct = (cum / total) * 100;
+    if (cumPct <= 82 || vital.length === 0) vital.push(d.name);
+    const x = padL + (i + 0.5) * (plotW / sorted.length) - bw / 2;
+    const bh = (d.count / maxC) * plotH;
+    const y = padT + plotH - bh;
+    const cy = padT + plotH - (cumPct / 100) * plotH;
+    pts.push(`${x + bw / 2},${cy}`);
+    const isVital = vital.includes(d.name);
+    return `<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="4" fill="${isVital ? '#2563eb' : '#64748b'}" fill-opacity="0.82"/>
+      <text x="${x + bw / 2}" y="${y - 4}" text-anchor="middle" font-size="10" fill="currentColor">${d.count}</text>
+      <text x="${x + bw / 2}" y="${H - padB + 14}" text-anchor="middle" font-size="9.5" fill="currentColor">${esc(d.name.slice(0, 11))}</text>`;
+  }).join('');
+  const y80 = padT + plotH * 0.2;
+  el.innerHTML = `<div class="note" style="margin-bottom:8px"><strong>Vital Few (~80% of impact):</strong> ${vital.map(v => esc(v)).join(', ')}</div>
+    <svg viewBox="0 0 ${W} ${H}" style="width:100%;min-width:480px;background:var(--bg);border:1px solid var(--b);border-radius:10px">
+      <line x1="${padL}" y1="${y80}" x2="${W - padR}" y2="${y80}" stroke="#dc2626" stroke-dasharray="4" stroke-opacity="0.6"/>
+      <text x="${W - padR + 4}" y="${y80 + 4}" font-size="10" fill="#dc2626">80%</text>
+      ${bars}
+      <polyline points="${pts.join(' ')}" fill="none" stroke="#f59e0b" stroke-width="2.2"/>
+      ${pts.map(p => `<circle cx="${p.split(',')[0]}" cy="${p.split(',')[1]}" r="3.5" fill="#f59e0b"/>`).join('')}
+    </svg>`;
+}
+
+/* ---- 3c. Strategy & Execution (Roadmap · RACI · Experiment · Pre-Mortem) ---- */
+V['pm-strat'] = () => `
+  <h2>Strategy, Alignment &amp; Execution</h2>
+  <p class="m" style="font-size:13px;margin-top:0">Build outcome-driven <strong>Now/Next/Later Roadmaps</strong>, validate <strong>RACI Governance</strong>, design <strong>A/B Experiments</strong>, and run <strong>Pre-Mortems</strong>.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <h3 style="margin:0">1. Now / Next / Later Outcome Roadmap</h3>
+      <div class="row" style="gap:6px">
+        <button class="btn" onclick="loadRoadmapPreset()">Load Example</button>
+        <button class="btn" onclick="clearRoadmap()">Clear</button>
+      </div>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin:10px 0">
+      <div><label>Initiative</label><input id="rm-title" placeholder="e.g., 1-Click CSV Import"></div>
+      <div><label>Target Outcome</label><input id="rm-out" placeholder="e.g., +15% Activation"></div>
+      <div><label>Horizon</label><select id="rm-col"><option>Now</option><option>Next</option><option>Later</option></select></div>
+      <div><label>Confidence</label><select id="rm-conf"><option>High</option><option>Med</option><option>Low</option></select></div>
+    </div>
+    <button class="btn primary" onclick="addRoadmapItem()">+ Add to Roadmap</button>
+    <div id="rm-board" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:12px"></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <h3 style="margin:0">2. Interactive RACI Governance Validator</h3>
+      <div class="row" style="gap:6px">
+        <button class="btn" onclick="loadRaciPreset()">Load Example</button>
+        <button class="btn" onclick="clearRaci()">Clear</button>
+      </div>
+    </div>
+    <p class="m" style="font-size:12px;margin:4px 0 8px">Click any cell to cycle <strong>R → A → C → I → –</strong>. Every deliverable must have exactly <strong>one Accountable (A)</strong> owner.</p>
+    <div class="row" style="gap:8px;margin-bottom:8px;flex-wrap:wrap">
+      <input id="rc-task" placeholder="New deliverable or decision..." style="flex:1;min-width:180px">
+      <button class="btn primary" onclick="addRaciRow()">+ Add Row</button>
+    </div>
+    <div id="raci-out" class="table-wrap"></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <h3 style="margin:0">3. Experiment &amp; A/B Test Canvas</h3>
+      <div class="row" style="gap:6px">
+        <button class="btn" onclick="loadExpPreset()">Load Example</button>
+        <button class="btn" onclick="clearExp()">Clear</button>
+        <button class="btn primary" id="exp-copy-btn" onclick="copyExp()">Copy Canvas</button>
+      </div>
+    </div>
+    <div id="exp-body" style="margin-top:10px"></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <h3 style="margin:0">4. Pre-Mortem Failure Matrix</h3>
+      <div class="row" style="gap:6px">
+        <button class="btn" onclick="loadPremortemPreset()">Load Example</button>
+        <button class="btn" onclick="clearPremortem()">Clear</button>
+      </div>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:10px 0">
+      <div><label>Failure Mode ("How did it fail?")</label><input id="pmo-risk" placeholder="e.g., IdP edge-case delay"></div>
+      <div><label>Likelihood (1–5)</label><input id="pmo-l" type="number" min="1" max="5" value="3"></div>
+      <div><label>Impact (1–5)</label><input id="pmo-i" type="number" min="1" max="5" value="4"></div>
+      <div><label>Mitigation</label><input id="pmo-m" placeholder="Early Spike / Beta"></div>
+    </div>
+    <button class="btn primary" onclick="addPremortem()">+ Add Failure Mode</button>
+    <div id="pmo-out" class="table-wrap" style="margin-top:10px"></div>
+  </div>
+`;
+
+let roadmapItems = store.roadmapItems || STRATEGY_PRESETS.roadmap.map(x => ({ ...x }));
+window.loadRoadmapPreset = function () { roadmapItems = STRATEGY_PRESETS.roadmap.map(x => ({ ...x })); store.roadmapItems = roadmapItems; save(); renderRoadmap(); };
+window.clearRoadmap = function () { roadmapItems = []; store.roadmapItems = roadmapItems; save(); renderRoadmap(); };
+window.addRoadmapItem = function () {
+  const title = ($('rm-title')?.value || '').trim();
+  if (!title) return;
+  roadmapItems.push({ col: $('rm-col')?.value || 'Now', title, outcome: ($('rm-out')?.value || '').trim() || 'Measurable outcome', conf: $('rm-conf')?.value || 'Med' });
+  store.roadmapItems = roadmapItems; save();
+  if ($('rm-title')) $('rm-title').value = '';
+  if ($('rm-out')) $('rm-out').value = '';
+  renderRoadmap();
+};
+window.moveRoadmap = function (idx, col) { roadmapItems[idx].col = col; store.roadmapItems = roadmapItems; save(); renderRoadmap(); };
+function renderRoadmap() {
+  const el = $('rm-board');
+  if (!el) return;
+  const cols = [['Now', '#059669', 'Committed'], ['Next', '#2563eb', 'Validating'], ['Later', '#7c3aed', 'Exploring']];
+  el.innerHTML = cols.map(([c, col, sub]) => {
+    const items = roadmapItems.map((x, i) => ({ ...x, i })).filter(x => x.col === c);
+    return `<div class="card" style="background:var(--bg);margin:0;border-top:3px solid ${col}">
+      <div class="row" style="justify-content:space-between"><strong>${c}</strong><span class="m" style="font-size:11px">${sub}</span></div>
+      ${items.length ? items.map(it => `<div class="card" style="margin:8px 0 0;padding:8px">
+        <strong style="font-size:13px">${esc(it.title)}</strong>
+        <div class="m" style="font-size:12px;margin:2px 0 6px">${esc(it.outcome)} · <span class="tag">${esc(it.conf)}</span></div>
+        <div class="row" style="gap:4px">${['Now', 'Next', 'Later'].filter(x => x !== c).map(nc => `<button class="btn" style="padding:2px 6px;font-size:10.5px;${INACTIVE_BTN}" onclick="moveRoadmap(${it.i},'${nc}')">→ ${nc}</button>`).join('')}</div>
+      </div>`).join('') : '<p class="m" style="font-size:12px;margin-top:8px">Empty</p>'}
+    </div>`;
+  }).join('');
+}
+
+let raciData = store.raciData || JSON.parse(JSON.stringify(STRATEGY_PRESETS.raci));
+window.loadRaciPreset = function () { raciData = JSON.parse(JSON.stringify(STRATEGY_PRESETS.raci)); store.raciData = raciData; save(); renderRaci(); };
+window.clearRaci = function () { raciData = { roles: ['PM', 'Eng Lead', 'Design', 'Sponsor'], rows: [] }; store.raciData = raciData; save(); renderRaci(); };
+window.addRaciRow = function () {
+  const t = ($('rc-task')?.value || '').trim();
+  if (!t) return;
+  raciData.rows.push({ task: t, assign: raciData.roles.map((_, i) => i === 0 ? 'A' : 'C') });
+  store.raciData = raciData; save();
+  if ($('rc-task')) $('rc-task').value = '';
+  renderRaci();
+};
+window.cycleRaci = function (ri, ci) {
+  const seq = ['R', 'A', 'C', 'I', '–'];
+  const curVal = raciData.rows[ri].assign[ci];
+  raciData.rows[ri].assign[ci] = seq[(seq.indexOf(curVal) + 1) % seq.length];
+  store.raciData = raciData; save(); renderRaci();
+};
+function renderRaci() {
+  const el = $('raci-out');
+  if (!el) return;
+  if (!raciData.rows.length) { el.innerHTML = '<p class="m" style="font-size:13px">No deliverables yet. Add one or click Load Example.</p>'; return; }
+  const invalid = raciData.rows.filter(r => r.assign.filter(x => x === 'A').length !== 1).map(r => r.task);
+  el.innerHTML = `<div class="note" style="margin-bottom:8px;border-left:3px solid ${invalid.length ? '#dc2626' : '#059669'}">
+    ${invalid.length ? `<strong>Governance Gap:</strong> Ensure exactly one <strong>A</strong> on: ${invalid.map(esc).join(', ')}` : '<strong>Valid RACI:</strong> Every deliverable has exactly one Accountable (A) owner.'}
+  </div><table><tr><th>Deliverable / Decision</th>${raciData.roles.map(r => `<th>${esc(r)}</th>`).join('')}<th>Status</th></tr>
+    ${raciData.rows.map((r, ri) => {
+      const aCnt = r.assign.filter(x => x === 'A').length;
+      return `<tr><td>${esc(r.task)}</td>${r.assign.map((v, ci) => `<td><button class="btn" style="padding:3px 10px;font-size:12px;${v === 'A' ? '' : INACTIVE_BTN}" onclick="cycleRaci(${ri},${ci})">${v}</button></td>`).join('')}<td>${aCnt === 1 ? '✅' : '⚠️'}</td></tr>`;
+    }).join('')}
+  </table>`;
+}
+
+let expData = store.expData || { ...STRATEGY_PRESETS.experiment };
+window.loadExpPreset = function () { expData = { ...STRATEGY_PRESETS.experiment }; store.expData = expData; save(); renderExperiment(); };
+window.clearExp = function () { expData = { hypothesis: '', primary: '', guardrail: '', criteria: '' }; store.expData = expData; save(); renderExperiment(); };
+window.updExp = function (k, v) { expData[k] = v; store.expData = expData; save(); };
+window.copyExp = function () {
+  const t = `EXPERIMENT CANVAS\nHypothesis: ${expData.hypothesis}\nPrimary Metric: ${expData.primary}\nGuardrail: ${expData.guardrail}\nDecision Rule: ${expData.criteria}`;
+  navigator.clipboard?.writeText(t);
+  const b = $('exp-copy-btn'); if (b) { b.textContent = 'Copied!'; setTimeout(() => { b.textContent = 'Copy Canvas'; }, 1500); }
+};
+function renderExperiment() {
+  const el = $('exp-body');
+  if (!el) return;
+  el.innerHTML = `<div style="margin-bottom:8px"><label>Hypothesis (If we… then… because…)</label><textarea rows="2" oninput="updExp('hypothesis',this.value)">${esc(expData.hypothesis)}</textarea></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px">
+      <div><label>Primary Success Metric</label><input value="${esc(expData.primary)}" oninput="updExp('primary',this.value)"></div>
+      <div><label>Guardrail Metric</label><input value="${esc(expData.guardrail)}" oninput="updExp('guardrail',this.value)"></div>
+    </div>
+    <div style="margin-top:8px"><label>Ship / Iterate / Kill Decision Rule</label><input value="${esc(expData.criteria)}" oninput="updExp('criteria',this.value)"></div>`;
+}
+
+let premortemData = store.premortemData || STRATEGY_PRESETS.premortem.map(x => ({ ...x }));
+window.loadPremortemPreset = function () { premortemData = STRATEGY_PRESETS.premortem.map(x => ({ ...x })); store.premortemData = premortemData; save(); renderPremortem(); };
+window.clearPremortem = function () { premortemData = []; store.premortemData = premortemData; save(); renderPremortem(); };
+window.addPremortem = function () {
+  const risk = ($('pmo-risk')?.value || '').trim();
+  if (!risk) return;
+  premortemData.push({ risk, like: Math.min(5, Math.max(1, +$('pmo-l').value || 3)), imp: Math.min(5, Math.max(1, +$('pmo-i').value || 3)), signal: 'Monitor weekly', mit: ($('pmo-m')?.value || '').trim() || 'Define owner' });
+  store.premortemData = premortemData; save();
+  if ($('pmo-risk')) $('pmo-risk').value = '';
+  renderPremortem();
+};
+function renderPremortem() {
+  const el = $('pmo-out');
+  if (!el) return;
+  if (!premortemData.length) { el.innerHTML = '<p class="m" style="font-size:13px">No failure modes yet. Add one or click Load Example.</p>'; return; }
+  const sorted = premortemData.slice().sort((a, b) => (b.like * b.imp) - (a.like * a.imp));
+  el.innerHTML = `<table><tr><th>Score</th><th>Failure Mode</th><th>Mitigation</th></tr>
+    ${sorted.map(r => `<tr><td><strong>${r.like * r.imp}</strong> <span class="m" style="font-size:11px">(${r.like}×${r.imp})</span></td><td>${esc(r.risk)}</td><td>${esc(r.mit)}</td></tr>`).join('')}
+  </table>`;
+}
+
 /* ---- 4. Cases & Drills ---- */
 V['pm-cases'] = () => `
   <h2>Product Cases &amp; Scenario Drills</h2>
@@ -7413,6 +7834,8 @@ function render() {
   if (key === 'frameworks') { renderPrioTable(); renderFwWorksheet(); }
   if (key === 'pm-prio') { renderPrioTable(); renderMatrix2x2(); renderMoscow(); }
   if (key === 'pm-metrics') { calcAARRR(); calcPMF(); renderHeartTable(); }
+  if (key === 'pm-rca') { renderFishbone(); renderFiveWhys(); renderPareto(); }
+  if (key === 'pm-strat') { renderRoadmap(); renderRaci(); renderExperiment(); renderPremortem(); }
   if (key === 'pm-cases') { renderCaseWorksheet(); renderPmScenario(); }
   if (key !== 'search' && $('q')) $('q').value = '';
   updateSoundBtn();

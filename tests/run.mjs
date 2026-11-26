@@ -8,7 +8,7 @@ import {
   FIELD_GUIDES, PRINCIPLE_DETAILS, STUDY_RESOURCES, PRINCIPLES
 } from '../src/data/knowledge.js';
 import { QUIZ } from '../src/data/quiz.js';
-import { PM_LIFECYCLE, PM_DEEP_DIVES, PM_CASE_PROMPTS, PM_SCENARIOS } from '../src/data/product.js';
+import { PM_LIFECYCLE, PM_DEEP_DIVES, PM_CASE_PROMPTS, PM_SCENARIOS, RCA_PRESETS, STRATEGY_PRESETS } from '../src/data/product.js';
 import {
   CPM_PRESETS, parseTasks, cpm, calcEVMMetrics, runMonteCarlo,
   calcPert, calcPTA, sm2Rate, sampleECOExam, buildAdaptivePlan,
@@ -178,4 +178,6 @@ test('Product Mastery dataset integrity', () => {
   PM_SCENARIOS.forEach(s => {
     assert.ok(s.q && Array.isArray(s.opts) && s.opts.length === 4 && Number.isInteger(s.ans) && s.why);
   });
+  assert.ok(RCA_PRESETS.fishbone.product.head && RCA_PRESETS.fiveWhys.whys.length === 5 && RCA_PRESETS.pareto.length >= 4);
+  assert.ok(STRATEGY_PRESETS.roadmap.length >= 4 && STRATEGY_PRESETS.raci.rows.length >= 3 && STRATEGY_PRESETS.experiment.hypothesis);
 });

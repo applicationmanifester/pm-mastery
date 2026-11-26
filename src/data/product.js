@@ -245,3 +245,75 @@ export const PM_SCENARIOS = [
     why: 'A timeboxed Spike resolves technical uncertainty quickly without blowing up the Sprint Goal, and having a ready backup story keeps flow predictable.'
   }
 ];
+
+export const RCA_PRESETS = {
+  fishbone: {
+    product: {
+      head: 'D7 Retention Dropped 12%',
+      causes: {
+        People: ['Support team lacked onboarding FAQ', 'No dedicated onboarding PM'],
+        Process: ['Skipped usability test on v2 flow', 'Forced 6-step setup before value'],
+        Tech: ['Slow CSV import (>15s timeout)', 'Mobile push opt-in broken on iOS'],
+        Data: ['Cohort tracking missed guest users', 'No funnel drop-off alerts']
+      }
+    },
+    delivery: {
+      head: 'Sprint Velocity Dropped 30%',
+      causes: {
+        People: ['2 senior devs pulled to Sev-1s', 'New hire onboarding overhead'],
+        Process: ['Unrefined stories entered sprint', 'Mid-sprint scope creep from Sales'],
+        Tech: ['Flaky E2E test suite (25m runs)', 'Staging DB out of sync'],
+        Data: ['Story points underestimated API work', 'Hidden third-party dependency']
+      }
+    }
+  },
+  fiveWhys: {
+    symptom: 'Enterprise customers are abandoning trial setup at Step 3 (Data Import).',
+    whys: [
+      'Because 65% of CSV uploads fail with a generic "Invalid format" error.',
+      'Because our parser rejects ISO-8601 timestamps and trailing spaces.',
+      'Because the import validator was built only for internal US sample files.',
+      'Because QA test fixtures didn’t include real customer exports from EU/APAC.',
+      'Because we lack an automated schema-linting & sample-fixture pipeline for customer data.'
+    ],
+    root: 'Missing customer-representative test fixtures and forgiving schema normalization in the importer.',
+    action: 'Add auto-trimming + flexible date parsing, show row-level error hints, and add 10 anonymized customer CSVs to CI.'
+  },
+  pareto: [
+    { name: 'Checkout Timeout / 504', count: 48 },
+    { name: 'Unclear Pricing / Fees', count: 31 },
+    { name: 'SSO Login Failure', count: 14 },
+    { name: 'Slow Search Results', count: 9 },
+    { name: 'Missing Dark Mode', count: 4 },
+    { name: 'Typos in Help Docs', count: 2 }
+  ]
+};
+
+export const STRATEGY_PRESETS = {
+  roadmap: [
+    { col: 'Now', title: '1-Click CSV Importer', outcome: '+15% Trial Activation', conf: 'High' },
+    { col: 'Now', title: 'Checkout Latency Fix', outcome: '-40% Cart Abandonment', conf: 'High' },
+    { col: 'Next', title: 'AI Weekly Executive Digest', outcome: '+20% WAU Engagement', conf: 'Med' },
+    { col: 'Next', title: 'Self-Serve SSO (SAML)', outcome: 'Unblock Enterprise ARR', conf: 'Med' },
+    { col: 'Later', title: 'Marketplace Integrations', outcome: 'Expand Ecosystem NRR', conf: 'Low' }
+  ],
+  raci: {
+    roles: ['PM', 'Eng Lead', 'Design', 'Sponsor'],
+    rows: [
+      { task: 'Product Roadmap & Scope', assign: ['A', 'C', 'C', 'I'] },
+      { task: 'Technical Architecture', assign: ['I', 'A', 'I', 'I'] },
+      { task: 'UX Prototypes & Research', assign: ['C', 'C', 'A', 'I'] },
+      { task: 'Go-Live & Budget Sign-off', assign: ['R', 'C', 'I', 'A'] }
+    ]
+  },
+  experiment: {
+    hypothesis: 'If we replace the 6-step onboarding form with a 1-click sample workspace, then D7 retention will increase by +10% because users experience core value in under 60 seconds.',
+    primary: 'D7 Retention Rate (Target: ≥ 32%)',
+    guardrail: 'Support Ticket Rate (< 3%) & Paid Conversion (no drop)',
+    criteria: 'Ship if D7 lifts ≥ +6% with p < 0.05 over 14 days and guardrails hold; otherwise iterate on guided import.'
+  },
+  premortem: [
+    { risk: 'Enterprise SSO delayed by IdP edge cases', like: 4, imp: 5, signal: 'Sandbox auth errors > 5%', mit: 'Run 2-day Spike in Sprint 1; ship Okta/AzureAD first.' },
+    { risk: 'Users ignore AI digest due to noisy alerts', like: 3, imp: 4, signal: 'Email open rate < 20%', mit: 'Add frequency controls + 5-user beta before GA.' }
+  ]
+};
