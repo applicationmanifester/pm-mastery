@@ -120,9 +120,9 @@ function openAbout() {
       <strong>How to Use This App</strong>
       <ol style="margin:8px 0 0 18px;padding:0;display:flex;flex-direction:column;gap:6px">
         <li><strong>Today (Dashboard):</strong> Set your target exam date &amp; daily goal (<code>⚙ Study Goal</code>), track ECO domain readiness (People 42% · Process 50% · Business Env 8%), and follow your Adaptive Study Plan.</li>
-        <li><strong>Learn:</strong> Study the 12 Principles (click any card for practical application &amp; exam traps), 8 Performance Domains, 15 Chapter Deep-Dives, and interactive People Domain Mini-Cases.</li>
-        <li><strong>Labs:</strong> Practise hands-on with CPM Network, EVM &amp; Advisor, Monte Carlo Risk, Agile/Kanban, PERT/PTA Formulas, and Stakeholder Matrix. Each lab has an expandable <em>Fields Explained</em> guide at the bottom.</li>
-        <li><strong>Practise:</strong> Drill SM-2 spaced-repetition Flashcards, domain/chapter Quiz Drills, and timed ECO-weighted Exam Simulations.</li>
+        <li><strong>Learn:</strong> Study the 12 Principles (click any card for practical application &amp; exam traps), 8 Performance Domains (click any node on the Synergy Map to inspect), 15 Chapter Deep-Dives, and interactive People Domain Mini-Cases.</li>
+        <li><strong>Labs:</strong> Practise hands-on with CPM Network (quick-add tasks, inline duration editing in Schedule Table, CSV export), EVM &amp; Advisor (currency selector &amp; what-if adjustments), Monte Carlo Risk (500–10,000 trials), Agile/Kanban (customizable WIP limits), PERT/PTA Formulas, and Stakeholder Matrix.</li>
+        <li><strong>Practise:</strong> Drill SM-2 spaced-repetition Flashcards (with custom decks &amp; CSV export), domain/chapter Quiz Drills, and timed ECO-weighted or Custom Exam Simulations (custom question count, time limit, and domain filter).</li>
         <li><strong>Reference:</strong> Click any of the 49 processes in the Process Grid for full ITTOs &amp; exam tips, browse Tailoring &amp; Official Resources, search the Glossary, or use the AI Prompt Builder.</li>
       </ol>
     </div>
