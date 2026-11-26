@@ -1,0 +1,20 @@
+{
+  "name": "PM Mastery: Learn, Revise, Practise",
+  "short_name": "PM Mastery",
+  "description": "Interactive PMP & Project Management study hub with CPM, EVM, Monte Carlo, Kanban, Flashcards, and Exam Simulator.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f8fafc",
+  "theme_color": "#3b82f6",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

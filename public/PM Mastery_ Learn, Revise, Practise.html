@@ -3,6 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3b82f6">
+<meta name="description" content="PM Mastery: Interactive PMP & Project Management study hub with CPM, EVM, Monte Carlo, Kanban, Flashcards, and Exam Simulator.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PM Mastery">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
 <title>PM Mastery: Learn, Revise, Practise</title>
 <style>
 :root {
@@ -225,16 +233,122 @@ label { display: block; font-size: 13px; color: var(--m); margin-bottom: 4px; }
 }
 
 @media print {
-  header, nav, #q, #theme, #snd, .btn, .btn2, input, select, textarea, .seg, .kbd { display: none !important; }
+  header, nav, #bottom-nav, #tab-drawer, #q, #theme, #snd, #installBtn, #menuBtn, .btn, .btn2, input, select, textarea, .seg, .kbd { display: none !important; }
   main { max-width: 100% !important; padding: 0 !important; }
   .card { border: 1px solid #ccc !important; box-shadow: none !important; page-break-inside: avoid; margin: 8px 0 !important; }
   body { background: #fff !important; color: #000 !important; }
+}
+
+/* Multi-Device Responsive & Tab Optimization */
+html, body { overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+.top-bar { display: flex; align-items: center; gap: 8px; width: 100%; flex-wrap: nowrap; }
+.top-actions { display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0; }
+#installBtn { display: none; background: var(--ok); color: #fff; border-color: var(--ok); }
+#menuBtn { display: none; }
+#bottom-nav { display: none; }
+#tab-drawer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  align-items: flex-end;
+  justify-content: center;
+}
+#tab-drawer.open { display: flex; }
+.drawer-sheet {
+  width: 100%;
+  max-width: 640px;
+  max-height: 82vh;
+  overflow-y: auto;
+  background: var(--s);
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  border: 1px solid var(--b);
+  padding: 16px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.25);
+}
+.drawer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 6px; }
+.drawer-grid a {
+  display: flex; align-items: center; gap: 6px; padding: 10px 12px;
+  border: 1px solid var(--b); border-radius: 10px; background: var(--bg);
+  color: var(--t); font-size: 13px; font-weight: 500; text-decoration: none;
+}
+.drawer-grid a.on { border-color: var(--a); background: var(--hi); color: var(--a); font-weight: 600; }
+
+@media (max-width: 960px) {
+  header { padding: 8px 12px; gap: 6px; }
+  #nav {
+    order: 3;
+    flex: 1 0 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x proximity;
+    padding: 2px 0 4px;
+    border-top: 1px solid var(--b);
+    margin-top: 2px;
+  }
+  #nav::-webkit-scrollbar { display: none; }
+  #nav a { scroll-snap-align: center; padding: 6px 11px; flex-shrink: 0; }
+  #menuBtn { display: inline-flex; align-items: center; justify-content: center; }
+  .table-wrap, table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+
+@media (max-width: 768px) {
+  main { padding: 14px 12px calc(92px + env(safe-area-inset-bottom, 0px)); }
+  .card { padding: 14px; border-radius: 10px; }
+  .btn, .btn2, .opt { min-height: 40px; }
+  .seg { max-width: 100%; overflow-x: auto; }
+  #q { width: 135px; flex: 1 1 120px; min-width: 95px; }
+  #snd .btn-lbl, #theme .btn-lbl { display: none; }
+  #bottom-nav {
+    display: flex;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 40;
+    background: var(--s);
+    border-top: 1px solid var(--b);
+    padding: 4px 4px calc(4px + env(safe-area-inset-bottom, 0px));
+    justify-content: space-around;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
+  }
+  #bottom-nav a, #bottom-nav button {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 6px 2px;
+    font-size: 11px;
+    color: var(--m);
+    background: none;
+    border: 0;
+    text-decoration: none;
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  #bottom-nav a.on { color: var(--a); font-weight: 600; background: var(--hi); }
+  #bottom-nav span.ico { font-size: 17px; line-height: 1; }
 }
 </style>
 </head>
 <body>
 <header>
-  <h1>PM Mastery</h1>
+  <div class="top-bar">
+    <h1>PM Mastery</h1>
+    <div class="top-actions">
+      <input id="q" placeholder="Search (/)" oninput="doSearch(this.value)">
+      <button class="btn2" id="installBtn" onclick="installPWA()" title="Install App">📲 Install</button>
+      <button class="btn2" id="snd" onclick="toggleSound()" title="Toggle Sound">🔊</button>
+      <button class="btn2" id="theme" onclick="toggleTheme()" title="Switch Theme">Theme</button>
+      <button class="btn2" id="menuBtn" onclick="toggleTabDrawer(true)" title="All Tabs">☰ Tabs</button>
+    </div>
+  </div>
   <nav id="nav">
     <a href="#dash">Dashboard</a>
     <a href="#learn">Principles</a>
@@ -255,11 +369,54 @@ label { display: block; font-size: 13px; color: var(--m); margin-bottom: 4px; }
     <a href="#ai">AI in PM</a>
     <a href="#revise">Revise</a>
   </nav>
-  <input id="q" placeholder="Search all (/ or Esc)" oninput="doSearch(this.value)">
-  <button class="btn2" id="snd" onclick="toggleSound()">🔊 Sound</button>
-  <button class="btn2" id="theme" onclick="toggleTheme()">Theme</button>
 </header>
 <main id="app"></main>
+<nav id="bottom-nav" aria-label="Quick Navigation">
+  <a href="#dash"><span class="ico">🏠</span><span>Home</span></a>
+  <a href="#learn"><span class="ico">📖</span><span>Learn</span></a>
+  <a href="#formulas"><span class="ico">🧮</span><span>Labs</span></a>
+  <a href="#flash"><span class="ico">⚡</span><span>Flash</span></a>
+  <a href="#quiz"><span class="ico">📝</span><span>Quiz</span></a>
+  <button type="button" onclick="toggleTabDrawer(true)"><span class="ico">☰</span><span>All</span></button>
+</nav>
+<div id="tab-drawer" onclick="if(event.target===this)toggleTabDrawer(false)">
+  <div class="drawer-sheet">
+    <div class="row" style="justify-content:space-between;margin-bottom:8px">
+      <strong style="font-size:16px">All Study Modules (18)</strong>
+      <button class="btn2" onclick="toggleTabDrawer(false)">✕ Close</button>
+    </div>
+    <h3 style="margin-top:6px">Core Study</h3>
+    <div class="drawer-grid">
+      <a href="#dash" onclick="toggleTabDrawer(false)">🏠 Dashboard</a>
+      <a href="#learn" onclick="toggleTabDrawer(false)">🎯 Principles</a>
+      <a href="#guide" onclick="toggleTabDrawer(false)">🗺️ Chapter Map</a>
+      <a href="#process" onclick="toggleTabDrawer(false)">🔄 Processes</a>
+      <a href="#lessons" onclick="toggleTabDrawer(false)">📘 Lessons</a>
+    </div>
+    <h3>Interactive Labs</h3>
+    <div class="drawer-grid">
+      <a href="#method" onclick="toggleTabDrawer(false)">📊 Methods &amp; Agile</a>
+      <a href="#cpm" onclick="toggleTabDrawer(false)">🌐 CPM Lab</a>
+      <a href="#evm" onclick="toggleTabDrawer(false)">📈 EVM Lab</a>
+      <a href="#formulas" onclick="toggleTabDrawer(false)">🧮 Formulas Lab</a>
+      <a href="#risk" onclick="toggleTabDrawer(false)">🎲 Risk Lab</a>
+      <a href="#stake" onclick="toggleTabDrawer(false)">🧭 Stakeholders</a>
+    </div>
+    <h3>Practice &amp; Exam</h3>
+    <div class="drawer-grid">
+      <a href="#flash" onclick="toggleTabDrawer(false)">⚡ Flashcards</a>
+      <a href="#quiz" onclick="toggleTabDrawer(false)">📝 Quiz</a>
+      <a href="#exam" onclick="toggleTabDrawer(false)">⏱️ Exam Sim</a>
+      <a href="#revise" onclick="toggleTabDrawer(false)">✅ Revise</a>
+    </div>
+    <h3>Reference &amp; AI</h3>
+    <div class="drawer-grid">
+      <a href="#ref" onclick="toggleTabDrawer(false)">📚 ITTO Reference</a>
+      <a href="#glossary" onclick="toggleTabDrawer(false)">🔤 Glossary</a>
+      <a href="#ai" onclick="toggleTabDrawer(false)">🤖 AI in PM</a>
+    </div>
+  </div>
+</div>
 
 <script>
 
@@ -2911,16 +3068,54 @@ V.search = () => {
 function applyTheme() {
   document.documentElement.dataset.theme = store.theme === 'auto' ? '' : store.theme;
   $('theme').textContent = store.theme === 'auto' ? 'Theme: Auto' : 'Theme: ' + store.theme;
+  const metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (metaTheme) {
+    const dark = store.theme === 'dark' || (store.theme === 'auto' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    metaTheme.setAttribute('content', dark ? '#0f172a' : '#3b82f6');
+  }
 }
 function toggleTheme() {
   store.theme = store.theme === 'auto' ? 'dark' : store.theme === 'dark' ? 'light' : 'auto';
   save(); applyTheme();
 }
 
+function toggleTabDrawer(open) {
+  const d = $('tab-drawer');
+  if (d) d.classList.toggle('open', open);
+}
+
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = $('installBtn');
+  if (btn) btn.style.display = 'inline-flex';
+});
+async function installPWA() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  const btn = $('installBtn');
+  if (btn) btn.style.display = 'none';
+}
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
 function render() {
   const key = cur();
   const view = V[key] || V.dash;
-  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + key));
+  document.querySelectorAll('#nav a, #bottom-nav a, .drawer-grid a').forEach(a => {
+    const active = a.getAttribute('href') === '#' + key;
+    a.classList.toggle('on', active);
+    if (active && a.closest('#nav')) {
+      a.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  });
+  toggleTabDrawer(false);
   $('app').innerHTML = view();
   if (key === 'evm') calcEVM();
   if (key === 'formulas') calcFormulas();
@@ -2940,7 +3135,10 @@ document.addEventListener('keydown', e => {
     return;
   }
   if (e.key === '/') { e.preventDefault(); $('q').focus(); return; }
-  if (e.key === 'Escape' && cur() === 'search') { go(SEARCH.prev || 'dash'); return; }
+  if (e.key === 'Escape') {
+    toggleTabDrawer(false);
+    if (cur() === 'search') { go(SEARCH.prev || 'dash'); return; }
+  }
 
   const v = cur();
   if (v === 'flash') {
