@@ -4690,6 +4690,14 @@ V.dash = () => {
   const solvedCount = Object.keys(store.challenges || {}).length;
   const badges = getEarnedBadges(store);
   const isFresh = Object.keys(store.activity || {}).length === 0 && Object.keys(store.srs || {}).length === 0 && Object.keys(store.domStats || {}).length === 0;
+  const gpSteps = [
+    { id: 'learn', title: '1. Principles & Domains', sub: 'PMBOK 7 mindset foundation →', href: '#learn', done: Object.keys(store.checks || {}).length > 0 || (store.activity && Object.keys(store.activity).length > 0) },
+    { id: 'process', title: '2. 49-Process Grid', sub: 'Lifecycle & ITTO mapping →', href: '#process', done: Object.keys(store.checks || {}).some(k => k.startsWith('p')) || solvedCount > 0 },
+    { id: 'flash', title: '3. SM-2 Flashcards', sub: 'Active recall on key terms →', href: '#flash', done: Object.keys(store.srs || {}).length > 0 },
+    { id: 'quiz', title: '4. Practice Quiz', sub: 'Unlock ECO domain readiness →', href: '#quiz', done: Object.keys(store.domStats || {}).length > 0 || store.quizBest > 0 }
+  ];
+  const gpDone = gpSteps.filter(s => s.done).length;
+  const gpPct = Math.round((gpDone / gpSteps.length) * 100);
 
   return `
   <div class="row" style="justify-content:space-between;margin-bottom:8px">
@@ -4710,18 +4718,22 @@ V.dash = () => {
       <button class="btn2" onclick="clearSampleData()">Clear Sample Data</button>
     </div>` : ''}
 
-  ${isFresh ? `
+  ${gpDone < 4 ? `
     <div class="card" style="border-left:4px solid var(--ok)">
-      <div class="row" style="justify-content:space-between;margin-bottom:6px">
-        <h3 style="margin:0">👋 Start Here: 4-Step Guided Path</h3>
-        <button class="btn2" style="font-size:12px;padding:4px 10px" onclick="loadSampleData()">Preview Sample Data</button>
+      <div class="row" style="justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:8px">
+        <div class="row" style="gap:8px">
+          <h3 style="margin:0">👋 Start Here: 4-Step Guided Path</h3>
+          <span class="tag ok">${gpDone} / 4 Completed</span>
+        </div>
+        ${isFresh ? `<button class="btn2" style="font-size:12px;padding:4px 10px" onclick="loadSampleData()">Preview Sample Data</button>` : ''}
       </div>
-      <p class="m" style="font-size:13px;margin:0 0 10px">New to PM Mastery? Follow this sequence to build momentum fast:</p>
+      <div class="bar" style="margin-bottom:10px"><span style="width:${gpPct}%"></span></div>
       <div class="grid">
-        <a class="card" style="margin:0;padding:12px;text-decoration:none" href="#learn"><strong>1. Principles &amp; Domains</strong><div class="m" style="font-size:12px">PMBOK 7 mindset foundation →</div></a>
-        <a class="card" style="margin:0;padding:12px;text-decoration:none" href="#process"><strong>2. 49-Process Grid</strong><div class="m" style="font-size:12px">Lifecycle &amp; ITTO mapping →</div></a>
-        <a class="card" style="margin:0;padding:12px;text-decoration:none" href="#flash"><strong>3. SM-2 Flashcards</strong><div class="m" style="font-size:12px">Active recall on key terms →</div></a>
-        <a class="card" style="margin:0;padding:12px;text-decoration:none" href="#quiz"><strong>4. Practice Quiz</strong><div class="m" style="font-size:12px">Unlock ECO domain readiness →</div></a>
+        ${gpSteps.map(s => `
+          <a class="card" style="margin:0;padding:12px;text-decoration:none;${s.done ? 'border-color:var(--ok);background:var(--bg)' : ''}" href="${s.href}">
+            <div class="row" style="justify-content:space-between"><strong>${s.title}</strong><span>${s.done ? '✅' : '○'}</span></div>
+            <div class="m" style="font-size:12px;margin-top:4px">${s.done ? 'Completed' : s.sub}</div>
+          </a>`).join('')}
       </div>
     </div>` : ''}
 
@@ -4760,6 +4772,13 @@ V.dash = () => {
       <div class="stat">${solvedCount}/${LAB_CHALLENGES.length} Labs · ${pct}%</div>
       <div class="m" style="font-size:12px;margin-top:4px">Quiz Best: <strong>${store.quizBest}%</strong></div>
       <div class="bar" style="margin-top:8px"><span style="width:${pct}%"></span></div>
+      <div class="row" style="gap:6px;margin-top:8px;flex-wrap:wrap">
+        ${LAB_CHALLENGES.map(c => {
+          const ok = !!(store.challenges && store.challenges[c.id]);
+          const href = c.id === 'cpm_crash' ? '#cpm' : c.id === 'evm_recover' ? '#evm' : c.id === 'risk_p80' ? '#risk' : '#method';
+          return `<a href="${href}" class="tag ${ok ? 'ok' : ''}" style="text-decoration:none;font-size:11px">${ok ? '✅' : '○'} ${esc(c.title.split(' ')[0])}</a>`;
+        }).join('')}
+      </div>
     </div>
   </div>
 
