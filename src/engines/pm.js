@@ -401,7 +401,7 @@ export function getEarnedBadges(store, now = Date.now()) {
     { id: 'card_25', icon: '🃏', title: 'Card Collector', desc: 'Master 25+ SM-2 flashcards', earned: mastered >= 25 },
     { id: 'lab_master', icon: '🧪', title: 'Lab Explorer', desc: 'Solve 3+ interactive lab challenges', earned: solvedLabs >= 3 },
     { id: 'quiz_ace', icon: '🎯', title: 'Quiz Ace', desc: 'Score 80%+ on a full quiz', earned: (store.quizBest || 0) >= 80 },
-    { id: 'eco_ready', icon: '🏅', title: 'ECO Grinder', desc: 'Answer 20+ ECO-tagged questions', earned: totalAnswered >= 20 }
+    { id: 'eco_ready', icon: '🏅', title: 'Domain Explorer', desc: 'Answer 20+ ECO-tagged questions', earned: totalAnswered >= 20 }
   ];
 }
 
