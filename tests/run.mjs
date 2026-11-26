@@ -158,7 +158,7 @@ test('Built public/index.html meets accessibility and PWA standards', () => {
   assert.ok(html.includes('<button type="button" id="cert-badge"'));
   // Icon buttons have aria-label
   assert.ok(html.includes('id="installBtn" onclick="installPWA()" title="Install App" aria-label="Install App"'));
-  assert.ok(html.includes('id="snd" onclick="toggleSound()" title="Toggle Sound" aria-label="Toggle Sound"'));
+  assert.ok(html.includes('id="snd" onclick="openSoundSettings()" title="Sound &amp; Voice Settings" aria-label="Sound and Voice Settings"'));
   assert.ok(html.includes('id="theme" onclick="toggleTheme()" title="Switch Theme" aria-label="Switch Theme"'));
   // SW update prompt is wired
   assert.ok(html.includes('Update available'));

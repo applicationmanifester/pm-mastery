@@ -218,24 +218,25 @@ function playSound(type) {
     gain.connect(ctx.destination);
     const now = ctx.currentTime;
     const vol = store.soundVol ?? 1;
+    const style = store.soundStyle || 'chime';
     if (vol <= 0) return;
     if (type === 'ok') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(523.25, now);
-      osc.frequency.setValueAtTime(659.25, now + 0.08);
-      gain.gain.setValueAtTime(0.08 * vol, now);
+      osc.type = style === 'retro' ? 'square' : 'sine';
+      osc.frequency.setValueAtTime(style === 'soft' ? 440 : 523.25, now);
+      osc.frequency.setValueAtTime(style === 'soft' ? 554.37 : 659.25, now + 0.08);
+      gain.gain.setValueAtTime((style === 'soft' ? 0.05 : 0.08) * vol, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
       osc.start(now); osc.stop(now + 0.25);
     } else if (type === 'bad') {
-      osc.type = 'triangle';
+      osc.type = style === 'retro' ? 'sawtooth' : 'triangle';
       osc.frequency.setValueAtTime(220, now);
       osc.frequency.setValueAtTime(175, now + 0.1);
       gain.gain.setValueAtTime(0.1 * vol, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
       osc.start(now); osc.stop(now + 0.3);
     } else {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(420, now);
+      osc.type = style === 'retro' ? 'square' : 'sine';
+      osc.frequency.setValueAtTime(style === 'soft' ? 360 : 420, now);
       gain.gain.setValueAtTime(0.03 * vol, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
       osc.start(now); osc.stop(now + 0.07);
@@ -273,6 +274,7 @@ function openSoundSettings() {
   const vol = Math.round((store.soundVol ?? 1) * 100);
   const rate = store.voiceRate ?? 0.96;
   const pitch = store.voicePitch ?? 1;
+  const style = store.soundStyle || 'chime';
   const vOpts = voices.length
     ? `<option value="">System Default Voice</option>` + voices.map(v => `<option value="${esc(v.voiceURI)}" ${store.voiceURI === v.voiceURI ? 'selected' : ''}>${esc(v.name)} (${esc(v.lang)})</option>`).join('')
     : '<option value="">Browser Default (Voices loading…)</option>';
@@ -282,6 +284,14 @@ function openSoundSettings() {
       <div class="row" style="justify-content:space-between;margin:8px 0">
         <span>Effects (${store.sound ? 'Enabled' : 'Muted'})</span>
         <button class="btn" onclick="toggleSound();openSoundSettings()">${store.sound ? '🔊 Mute' : '🔇 Unmute'}</button>
+      </div>
+      <div style="margin:8px 0">
+        <label>Tone Style</label>
+        <select onchange="store.soundStyle=this.value;save();playSound('ok')">
+          <option value="chime" ${style === 'chime' ? 'selected' : ''}>Chime (Default)</option>
+          <option value="soft" ${style === 'soft' ? 'selected' : ''}>Soft &amp; Subtle</option>
+          <option value="retro" ${style === 'retro' ? 'selected' : ''}>Retro Arcade</option>
+        </select>
       </div>
       <label>Volume: <strong id="sv-vol-lbl">${vol}%</strong></label>
       <input type="range" min="0" max="100" value="${vol}" oninput="store.soundVol=this.value/100;save();$('sv-vol-lbl').textContent=this.value+'%'">
@@ -301,9 +311,10 @@ function openSoundSettings() {
       <input type="range" min="0.6" max="1.6" step="0.05" value="${rate}" oninput="store.voiceRate=+this.value;save();$('sv-rate-lbl').textContent=this.value+'×'">
       <label style="margin-top:8px;display:block">Pitch: <strong id="sv-pitch-lbl">${pitch}</strong></label>
       <input type="range" min="0.7" max="1.4" step="0.05" value="${pitch}" oninput="store.voicePitch=+this.value;save();$('sv-pitch-lbl').textContent=this.value">
-      <div class="row" style="gap:6px;margin-top:10px">
+      <div class="row" style="gap:6px;margin-top:10px;flex-wrap:wrap">
         <button class="btn primary" onclick="speakText('Welcome to PM Mastery! Ready to practise your project and product skills?')">▶ Test Voice</button>
         <button class="btn" onclick="window.speechSynthesis?.cancel()">⏹ Stop</button>
+        <button class="btn" onclick="store.sound=true;store.soundVol=1;store.soundStyle='chime';store.voiceURI='';store.voiceRate=0.96;store.voicePitch=1;save();updateSoundBtn();openSoundSettings()">Reset Defaults</button>
       </div>
     </div>
   `);
